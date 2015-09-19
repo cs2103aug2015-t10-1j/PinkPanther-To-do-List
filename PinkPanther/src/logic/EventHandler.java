@@ -8,17 +8,16 @@ import common.*;
 
 public class EventHandler {
 	ArrayList<Event>eventList;
-	EventStorage storage;
 	
 	public EventHandler(){
 		
-		storage=new EventStorage();
-		eventList=storage.getEvents();
+		eventList=EventStorage.readFromFile();
 	}
 	
 	public String addEvent(Event event){
 		eventList.add(event);
 		Collections.sort(eventList);
+		EventStorage.writeToFile(eventList);
 		return event.getName()+" is added";
 	}
 	
