@@ -21,7 +21,18 @@ public class EventHandler {
 		return event.getName()+" is added";
 	}
 	
-	public Event searchEventByIndexAndDate(LocalDate date,int eventNumber){
+	public String deleteEvent(LocalDate date, ArrayList<Integer>indices){
+		String output="";
+		Collections.sort(indices);
+		for(Integer index:indices){
+			Event event=eventList.get(searchEventByIndexAndDate(date,index));
+			output=event.getName()+" is deleted\n"+output;
+			eventList.remove(event);
+		}
+		return output;
+	}
+	
+	public int searchEventByIndexAndDate(LocalDate date,int eventNumber){
 		int startDateIndex=0;
 		for(Event event:eventList){
 			if(event.getDate().equals(date)){
@@ -29,8 +40,10 @@ public class EventHandler {
 			}
 			startDateIndex++;
 		}
-		int eventIndex=startDateIndex+eventNumber-1;
-		return eventList.get(eventIndex);
+		
+		return startDateIndex+eventNumber-1;
 		
 	}
+	
+	
 }
