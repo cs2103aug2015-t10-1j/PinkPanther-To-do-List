@@ -14,14 +14,34 @@ public class EventHandler {
 		eventList=EventStorage.readFromFile();
 	}
 	
-	public String addEvent(Event event){
+	public void addEvent(Event event){
 		eventList.add(event);
 		Collections.sort(eventList);
 		EventStorage.writeToFile(eventList);
-		return event.getName()+" is added";
 	}
 	
-	public Event searchEventByIndexAndDate(LocalDate date,int eventNumber){
+	public void addEvents(ArrayList<Event>events){
+		for(Event event:events){
+			eventList.add(event);
+		}
+		Collections.sort(eventList);
+		EventStorage.writeToFile(eventList);
+	}
+	
+	public void deleteEvent(Event event){
+		eventList.remove(event);
+		EventStorage.writeToFile(eventList);
+	}
+	
+	
+	public void deleteEvents(ArrayList<Event> events){
+		for(Event event:events){
+			eventList.remove(event);
+		}
+		EventStorage.writeToFile(eventList);
+	}
+	
+	public Event searchEventByIndexAndDate(LocalDate date,int eventIndex){
 		int startDateIndex=0;
 		for(Event event:eventList){
 			if(event.getDate().equals(date)){
@@ -29,8 +49,9 @@ public class EventHandler {
 			}
 			startDateIndex++;
 		}
-		int eventIndex=startDateIndex+eventNumber-1;
-		return eventList.get(eventIndex);
 		
+		return eventList.get(startDateIndex+eventIndex-1);	
 	}
+	
+	
 }

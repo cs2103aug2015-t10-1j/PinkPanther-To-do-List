@@ -24,14 +24,12 @@ public class Event extends Item implements Comparable<Event>{
 		this.date=date;
 	}
 	
-	public void setTime(LocalTime time){
+	public void setStartTime(LocalTime time){
 		this.startTime=time;
-		this.endTime=time;
 	}
 	
-	public void setTime(LocalTime startTime,LocalTime endTime){
-		this.startTime=startTime;
-		this.endTime=endTime;
+	public void setEndTime(LocalTime time){
+		this.endTime=time;
 	}
 	
 	public LocalDate getDate(){
@@ -45,6 +43,7 @@ public class Event extends Item implements Comparable<Event>{
 	public LocalTime getEndTime(){
 		return endTime;
 	}
+	
 	
 	public int compareTo(Event other){
 		int dateDiff=this.getDate().compareTo(other.getDate());

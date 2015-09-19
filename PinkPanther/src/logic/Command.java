@@ -1,5 +1,6 @@
 package logic;
 
-public class Command {
-
+public interface Command {
+	public void undo();
+	public void redo();
 }
