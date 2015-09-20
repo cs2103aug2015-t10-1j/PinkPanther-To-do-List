@@ -13,7 +13,7 @@ import common.Event;
 
 public class EventStorage {
 	private static Gson gson=new Gson();
-	private static File file=new File("");
+	private static File file=new File("storage.txt");
 	
 	
 	public static void writeToFile(ArrayList<Event>eventList){
