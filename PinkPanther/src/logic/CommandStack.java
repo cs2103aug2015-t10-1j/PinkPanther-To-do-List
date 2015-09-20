@@ -1,5 +1,7 @@
 package logic;
-
+/*
+ * add class description
+ */
 import java.util.LinkedList;
 
 public class CommandStack {

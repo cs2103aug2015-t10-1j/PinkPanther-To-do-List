@@ -1,5 +1,8 @@
 package common;
 
+/*
+ * Add class description
+ */
 public class Item {
 	String name;
 	boolean isDone;

@@ -3,7 +3,9 @@ package logic;
 import java.time.LocalDate;
 
 import common.Event;
-
+/*
+ * Add class description
+ */
 public class ModifyCommand implements Command{
 	EventHandler handler;
 	Event unmodified;

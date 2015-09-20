@@ -5,7 +5,9 @@ import java.util.Collections;
 
 import storage.EventStorage;
 import common.*;
-
+/*
+ * Add class description
+ */
 public class EventHandler {
 	ArrayList<Event>eventList;
 	

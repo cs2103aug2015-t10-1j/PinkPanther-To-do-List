@@ -1,7 +1,9 @@
 package common;
 import java.time.LocalDate;
 import java.time.LocalTime;
-
+/*
+ * Add class description
+ */
 public class Event extends Item implements Comparable<Event>{
 	
 	LocalDate date;

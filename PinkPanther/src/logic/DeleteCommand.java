@@ -4,7 +4,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import common.Event;
-
+/*
+ * Add class description
+ */
 public class DeleteCommand implements Command{
 	EventHandler handler;
 	ArrayList<Event> eventRef;

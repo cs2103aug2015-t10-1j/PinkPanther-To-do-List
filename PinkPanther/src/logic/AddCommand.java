@@ -1,7 +1,9 @@
 package logic;
 
 import common.Event;
-
+/*
+ * Add class description
+ */
 public class AddCommand implements Command{
 	EventHandler handler;
 	Event eventRef;
