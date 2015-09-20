@@ -43,6 +43,7 @@ public class EventHandler {
 		EventStorage.writeToFile(eventList);
 	}
 	
+	
 	public Event searchEventByIndexAndDate(LocalDate date,int eventIndex){
 		int startDateIndex=0;
 		for(Event event:eventList){
