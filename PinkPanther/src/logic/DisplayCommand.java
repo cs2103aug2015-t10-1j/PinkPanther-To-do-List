@@ -1,6 +1,7 @@
 package logic;
 
-import common.Event;
+import common.Task;
+
 import java.util.ArrayList;
 import java.time.LocalDate;
 /*
@@ -10,13 +11,13 @@ public class DisplayCommand {
 	TaskHandler handler;
 	Event eventRef;
 	
-	public DisplayCommand(EventHandler handler) {
+	public DisplayCommand(TaskHandler handler) {
 		this.handler = handler;
 	}
 	
-	public ArrayList<ArrayList<Event>> executeDatedTasks() {
-		ArrayList<Event> taskList = this.handler.getTaskList();
-		ArrayList<ArrayList<Event>> overallContainer;
+	public ArrayList<ArrayList<Task>> executeDatedTasks() {
+		ArrayList<Task> taskList = this.handler.getTodoList();
+		ArrayList<ArrayList<Task>> overallContainer;
 		
 		ArrayList<LocalDate> dates = obtainDates(taskList); //Get the various dates in eventList.
 		
@@ -30,14 +31,14 @@ public class DisplayCommand {
 		return overallContainer;
 	}
 	
-	public ArrayList<ArrayList<Event>> executeFloatingTasks() {
+	public ArrayList<ArrayList<Task>> executeFloatingTasks() {
 		return this.handler.getFloatingList();
 	}
 
-	protected ArrayList<Event> packageEventsWithSameDate(LocalDate currentDate, ArrayList<Event> taskList) {
-		ArrayList<Event> packagedList = new ArrayList<Event>();
+	protected ArrayList<Task> packageEventsWithSameDate(LocalDate currentDate, ArrayList<Task> taskList) {
+		ArrayList<Task> packagedList = new ArrayList<Task>();
 		
-		for (Event event: taskList) {
+		for (Task event: taskList) {
 			if (event.getDate().equals(currentDate)) {
 				packagedList.add(event);
 			}
@@ -46,7 +47,7 @@ public class DisplayCommand {
 		return packagedList;
 	}
 
-	protected static ArrayList<LocalDate> obtainDates(ArrayList<Event> eventList) {
+	protected static ArrayList<LocalDate> obtainDates(ArrayList<Task> eventList) {
 		ArrayList<LocalDate> dates = new ArrayList<LocalDate>();
 		int eventListSize = eventList.size();
 		
