@@ -11,9 +11,9 @@ public class TextedColorDayBox extends StackPane{
 	public TextedColorDayBox(String name){
 		ColoredDayBox box = new ColoredDayBox();
 		Text text = new Text(name);
-		text.setFont(Font.font("Tahoma", FontWeight.NORMAL, 30));
+		text.setFont(Font.font("Tahoma", FontWeight.NORMAL, 25));
 		text.setTextAlignment(TextAlignment.CENTER);
-		text.setFill(Color.WHITE);
+		text.setFill(Color.DIMGRAY);
 		this.getChildren().addAll(box, text);
 	}
 }
