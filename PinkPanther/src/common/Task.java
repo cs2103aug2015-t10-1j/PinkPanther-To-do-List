@@ -93,6 +93,13 @@ public class Task {
 		}
 		return endDate;
 	}
+	
+	public LocalTime getTime(){
+		if(startTime!=null){
+			return startTime;
+		}
+		return endTime;
+	}
 		
 	public TaskType getTaskType(){
 		return type;
