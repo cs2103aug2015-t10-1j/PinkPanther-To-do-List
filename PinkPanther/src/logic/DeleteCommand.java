@@ -1,7 +1,6 @@
 package logic;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 import common.Task;
 /*
