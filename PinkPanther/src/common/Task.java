@@ -12,6 +12,7 @@ public class Task {
 	private LocalDate endDate;
 	private LocalTime startTime;
 	private LocalTime endTime;
+	private boolean isDone;
 	
 	public Task(String name){
 		this.name=name;
@@ -58,6 +59,10 @@ public class Task {
 		this.endTime=time;
 	}
 	
+	public void setCompleteState(boolean isDone){
+		this.isDone=isDone;
+	}
+	
 	public LocalDate getStartDate(){
 		return startDate;
 	}
@@ -80,10 +85,13 @@ public class Task {
 		}
 		return endDate;
 	}
-	
-	
+		
 	public TaskType getTaskType(){
 		return type;
+	}
+	
+	public boolean getCompleteState(){
+		return isDone;
 	}
 	
 }
