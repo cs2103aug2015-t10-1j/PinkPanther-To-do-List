@@ -11,7 +11,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 public class TextedTaskBox extends StackPane{
-	public TextedTaskBox(String name, String time){
+	public TextedTaskBox(String name, String startTime, String endTime){
 		ColoredTextBox box = new ColoredTextBox();
 		
 		
@@ -28,12 +28,19 @@ public class TextedTaskBox extends StackPane{
 		Text text = new Text(name);
 		text.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 		text.setTextAlignment(TextAlignment.LEFT);
-		text.setFill(Color.WHITE);
+		text.setFill(Color.DIMGRAY);
 
 		GridPane.setConstraints(text, 0, 2);
 		grid.add(text, 0, 2);
 		
-		TextedTimeBox timeBox = new TextedTimeBox(time);
+		if (!startTime.equals("")){
+			TextedTimeBox startTimeBox = new TextedTimeBox(startTime);
+			GridPane.setConstraints(startTimeBox , 0, 3);
+
+			grid.add(startTimeBox, 0, 3);
+		}
+		
+		TextedTimeBox timeBox = new TextedTimeBox(endTime);
 
 		GridPane.setConstraints(timeBox , 5, 3);
 		grid.add(timeBox, 5, 3);
