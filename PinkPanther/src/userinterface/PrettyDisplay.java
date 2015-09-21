@@ -49,6 +49,12 @@ public class PrettyDisplay extends Application {
         grid1.setVgap(10);
         grid1.setPadding(new Insets(25, 25, 25, 25));
         
+
+        ScrollPane s1 = new ScrollPane();
+        s1.setPrefSize(1080, 660);
+        s1.setContent(grid);
+        s1.setStyle("-fx-background-color: transparent;");
+        
         GridPane grid2 = new GridPane();
         grid2.setAlignment(Pos.TOP_LEFT);
         grid2.setHgap(10);
@@ -56,7 +62,7 @@ public class PrettyDisplay extends Application {
         grid2.setPadding(new Insets(25, 25, 25, 25));
 
         grid1.add(grid, 0, 0);
-        grid2.add(grid1,0,0);
+        grid2.add(s1,0,0);
         
         TextField userTextField = new TextField("Input Command");
         userTextField.setStyle(""
@@ -64,13 +70,15 @@ public class PrettyDisplay extends Application {
         + "-fx-font-weight: bold;"
         + "-fx-font-family: Tahoma;"
         + "-fx-text-fill: DIMGRAY;"
+        + "-fx-border-width: 6px;"
+        + "-fx-border-color: DIMGRAY;"
         + "-fx-background-color: PINK");
         grid2.add(userTextField, 0, 1);
         
         //text that displays after-action (e.g added x event)
         Text actiontarget = new Text(newInput);
         grid2.add(actiontarget, 0, 2);
-        actiontarget.setFont(Font.font("Tahoma", FontWeight.BOLD, 15));
+        actiontarget.setFont(Font.font("Tahoma", FontWeight.BOLD, 25));
         actiontarget.setFill(Color.WHITE);      
         
         //add button
@@ -85,7 +93,8 @@ public class PrettyDisplay extends Application {
         hbBtn.getChildren().addAll(btn, scrollUpButton, scrollDownButton);
         grid2.add(hbBtn, 0, 2);
 
-        Scene scene = new Scene(grid2, 1080, 900);
+        Scene scene = new Scene(grid2, 1080, 850);
+       
         
         populateGrid(grid);
  
@@ -93,14 +102,17 @@ public class PrettyDisplay extends Application {
        	 
         	@Override
             public void handle(ActionEvent e) {
-                if ((userTextField.getText() != null && !userTextField.getText().isEmpty())) {
+        		if ((userTextField.getText() != null && !userTextField.getText().isEmpty())) {
                     actiontarget.setFill(Color.WHITE);                	
                 	actiontarget.setText(userTextField.getText());
+                	userTextField.clear();
+            		grid.getChildren().clear();
+                    populateGrid(grid);
                 	
                 } else {
-                    actiontarget.setFill(Color.WHITE);
+                    actiontarget.setFill(Color.FIREBRICK);
                     actiontarget.setText("No input detected!");
-                }
+                };
              }
          });
 
@@ -108,8 +120,7 @@ public class PrettyDisplay extends Application {
        	 
         	@Override
             public void handle(ActionEvent e) {
-        		grid.getChildren().clear();
-                populateGrid(grid);
+        		s1.setVvalue(s1.getVvalue() - 0.2f);
              }
          });
         
@@ -117,8 +128,7 @@ public class PrettyDisplay extends Application {
           	 
         	@Override
             public void handle(ActionEvent e) {
-        		grid.getChildren().clear();
-                populateGrid(grid);
+        		s1.setVvalue(s1.getVvalue() + 0.2f);
              }
          });
         
@@ -133,6 +143,7 @@ public class PrettyDisplay extends Application {
                         actiontarget.setFill(Color.WHITE);                	
                     	actiontarget.setText(userTextField.getText());
                 		grid.getChildren().clear();
+                    	userTextField.clear();
                         populateGrid(grid);
                     	
                     } else {
@@ -143,36 +154,23 @@ public class PrettyDisplay extends Application {
                 
                 else if (ke.getCode().equals(KeyCode.DOWN))
                 {
-                	if ((userTextField.getText() != null && !userTextField.getText().isEmpty())) {
-                        actiontarget.setFill(Color.WHITE);                	
-                    	actiontarget.setText(userTextField.getText());
-                		grid.getChildren().clear();
-                        populateGrid(grid);
-                    	
-                    } else {
-                        actiontarget.setFill(Color.FIREBRICK);
-                        actiontarget.setText("No input detected!");
-                    };
+            		s1.setVvalue(s1.getVvalue() + 0.05f);
+                }
+                else if (ke.getCode().equals(KeyCode.UP))
+                {
+            		s1.setVvalue(s1.getVvalue() - 0.05f);
                 }
             }
         });
         
         
-        
-       
+        primaryStage.setResizable(false);
         primaryStage.setScene(scene);
 
-        scene.setFill(Color.RED);
-    //    String css = this.getClass().getResource("a.css").toExternalForm();
         scene.getStylesheets().clear();
-     //   scene.getStylesheets().add("/resources/css/yourStyle.css");
-     //   System.out.println(scene.getStylesheets().toString());
-       scene.getStylesheets().add(HelloWorld.class.getResource("a.css").toExternalForm());
-     //   scene.getStylesheets().add("a.css");
-        
-
-        
-       primaryStage.show();
+        scene.getStylesheets().add(HelloWorld.class.getResource("a.css").toExternalForm());
+      
+        primaryStage.show();
         
     }
     
@@ -184,16 +182,17 @@ public class PrettyDisplay extends Application {
         scenetitle.setFill(Color.DIMGRAY);
         grid.add(scenetitle, 1, 0);
         
-		TextedTaskBox taskBoxx = new TextedTaskBox(" " , "", "");
-		grid.add(taskBoxx,2,0);
+		
+		TransparentRect tRect = new TransparentRect();
+		grid.add(tRect, 2, 0);
 
         //for the actual calendar items
         TextedColorDayBox daydBox = new TextedColorDayBox("Float");
     	grid.add(daydBox, 0, currentYPos++);
     	
-    	for (int i=1; i<6; i++){
+    	for (int i=1; i<14; i++){
         	Random ran = new Random();
-        	int randomNumTasks = ran.nextInt(2);
+        	int randomNumTasks = ran.nextInt(5);
         	if (randomNumTasks!=0){
 	        	TextedColorDayBox dayBox = new TextedColorDayBox("Day\n"+ i);
 	        	grid.add(dayBox, 0, currentYPos);
