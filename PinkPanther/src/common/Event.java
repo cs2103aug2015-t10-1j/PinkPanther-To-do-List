@@ -1,41 +1,53 @@
 package common;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
+
 /*
  * Add class description
  */
-public class Event extends Item implements Comparable<Event>{
-	
-	LocalDate date;
-	LocalTime startTime;
-	LocalTime endTime;
+public class Event extends Task implements Comparable<Event>{
+	private LocalDate startDate;
+	private LocalDate endDate;
+	private LocalTime startTime;
+	private LocalTime endTime;
 	
 	public Event(String name,LocalDate date,LocalTime time){
 		super(name);
-		this.startTime=time;
-		this.endTime=time;
-		this.date=date;
+		this.startDate=startDate;
+		this.startTime=startTime;
 	}
 	
-	public Event(String name,LocalDate date,LocalTime startTime,LocalTime endTime){
-		this(name,date,startTime);
+	public Event(String name,LocalDate startDate, LocalDate endDate, 
+			LocalTime startTime,LocalTime endTime){
+		
+		this(name,startDate,startTime);
+		this.endTime=endTime;
+		this.endDate=endDate;
+	}
+	
+	public void setStartDate(LocalDate startDate){
+		this.startDate=startDate;
+	}
+	
+	public void setEndDate(LocalDate endDate){
+		this.endDate=endDate;
+	}
+	
+	public void setStartTime(LocalTime startTime){
+		this.startTime=startTime;
+	}
+	
+	public void setEndTime(LocalTime endTime){
 		this.endTime=endTime;
 	}
 	
-	public void setDate(LocalDate date){
-		this.date=date;
+	public LocalDate getStartDate(){
+		return startDate;
 	}
 	
-	public void setStartTime(LocalTime time){
-		this.startTime=time;
-	}
-	
-	public void setEndTime(LocalTime time){
-		this.endTime=time;
-	}
-	
-	public LocalDate getDate(){
-		return date;
+	public LocalDate getEndDate(){
+		return endDate;
 	}
 	
 	public LocalTime getStartTime(){
@@ -48,17 +60,12 @@ public class Event extends Item implements Comparable<Event>{
 	
 	
 	public int compareTo(Event other){
-		int dateDiff=this.getDate().compareTo(other.getDate());
+		int dateDiff=this.getStartDate().compareTo(other.getStartDate());
 		if(dateDiff==0){
 			return this.getStartTime().compareTo(other.getStartTime());
 		}
 		return dateDiff;
 	}
 	
-	
-	
-	
-	
-	
-	
+
 }
