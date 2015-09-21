@@ -1,6 +1,7 @@
 package logic;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import storage.TaskStorage;
@@ -28,10 +29,12 @@ public class TaskHandler {
 	
 	private void sortTodoList(LocalDate date){
 		ArrayList<Task>tasks=todoList.get(date);
-		
+		Collections.sort(tasks,(Task t1,Task t2)->t1.getTime().compareTo(t2.getTime()));
+		Collections.sort(tasks,(Task t1,Task t2)->t1.getTaskType().compareTo(t2.getTaskType()));
 	}
 	
 	private void sortFloatingList(){
+		Collections.sort(floatingList,(Task t1,Task t2) -> t1.getName().compareTo(t2.getName()));
 	}
 	
 	

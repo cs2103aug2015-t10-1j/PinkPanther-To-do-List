@@ -16,7 +16,7 @@ public class DeleteCommand implements Command{
 	}
 	
 	public String execute(LocalDate date,int deleteIndex){
-		taskRef=handler.searchTodoByIndexAndDate(date, deleteIndex);
+		taskRef=handler.searchTaskByIndexAndDate(date, deleteIndex);
 		handler.deleteTask(taskRef);
 		return taskRef.getName()+" is deleted";
 	}

@@ -4,9 +4,7 @@ import java.time.LocalDate;
 
 import common.Task;
 import common.TaskType;
-/*
- * Add class description
- */
+
 public class EditCommand implements Command{
 	TaskHandler handler;
 	Task unmodified;
