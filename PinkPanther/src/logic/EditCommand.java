@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package logic;
 
 import java.time.LocalDate;
@@ -156,4 +155,3 @@ public class EditCommand implements Command{
 		handler.addTask(modified);
 	}
 }
->>>>>>> Brayton
