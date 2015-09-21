@@ -3,11 +3,17 @@ package logic;
 import java.time.LocalDate;
 import java.util.Scanner;
 
+import common.Task;
+
 public class LogicController {
+
+	private static final int TASK_DATE_HAS_PASSED = -1;
 
 	public static void main(String[] args) {
 		TaskHandler taskHandler = new TaskHandler();
 
+		checkForPassedTasks(taskHandler);
+		
 		while (true) {
 			String[] newInput = getInput();
 
@@ -51,5 +57,16 @@ public class LogicController {
 		splitInput[1] = rawInput.substring(rawInput.indexOf(' ') + 1);
 		
 		return splitInput;
+	}
+	
+	protected void checkForPassedTasks(TaskHandler taskHandler) {
+		for (Task task: taskHandler.getTodoList()) {
+			if (task.getDate(false).isBefore(LocalDate.now())) {
+				task.setIsDone(TASK_DATE_HAS_PASSED);
+			}
+			else {
+				break;
+			}
+		}
 	}
 }
