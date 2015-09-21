@@ -14,8 +14,8 @@ public class Event extends Task implements Comparable<Event>{
 	
 	public Event(String name,LocalDate date,LocalTime time){
 		super(name);
-		this.startDate=startDate;
-		this.startTime=startTime;
+		this.startDate=date;
+		this.startTime=time;
 	}
 	
 	public Event(String name,LocalDate startDate, LocalDate endDate, 
