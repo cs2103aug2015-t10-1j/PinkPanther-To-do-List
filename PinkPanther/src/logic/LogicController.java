@@ -11,6 +11,7 @@ public class LogicController {
 
 	public static void main(String[] args) {
 		TaskHandler taskHandler = new TaskHandler();
+		CommandStack commandStack = new CommandStack();
 
 		checkForPassedTasks(taskHandler);
 		
@@ -22,6 +23,7 @@ public class LogicController {
 				Task newTask = InputParser.addTask(newInput[1]);
 				AddCommand newCommand = new AddCommand(taskHandler);
 				newCommand.execute(newTask);
+				commandStack.addCommand(newCommand);
 
 				break;
 			case "edit":
@@ -29,13 +31,23 @@ public class LogicController {
 				StubClass newEditStub = InputParser.EditTask(newInput[1]);	
 				EditCommand newEditCommand = new EditCommand(taskHandler);
 				newEditCommand.execute(newEditStub.getDate(), newEditStub.getTaskIndex(), newEditStub.getTaskWithModifications());
-
+				commandStack.addCommand(newCommand);
+				
 				break;
 			case "delete":
 				StubClass newDeleteStub = InputParser.DeleteTask(newInput[1]);
 				DeleteCommand newDeleteCommand = new DeleteCommand(taskHandler);
 				newDeleteCommand.execute(newDeleteStub.getDate(), newDeleteStub.getTaskIndex());
+				commandStack.addCommand(newCommand);
 
+				break;
+			case "undo":
+				commandStack.undoOperation();
+				
+				break;
+			case "redo":
+				commandStack.redoOperation();
+				
 				break;
 			case "exit":
 				System.exit(1);
