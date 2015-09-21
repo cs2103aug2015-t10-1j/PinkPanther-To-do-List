@@ -14,3 +14,27 @@
 .scroll-pane .corner {
     -fx-background-insets: 0;
 }
+
+.bad{
+	-fx-background-color: red,linear-gradient(to bottom, derive(red,60%) 5%,derive(red,90%) 40%);
+}
+.med{
+	-fx-background-color: orangered,linear-gradient(to bottom, derive(orangered,60%) 5%,derive(orangered,90%) 40%);
+}
+.good{
+	-fx-background-color: orange,linear-gradient(to bottom, derive(orange,60%) 5%,derive(orange,90%) 40%);
+}
+.best{
+	-fx-background-color: green,linear-gradient(to bottom, derive(green,60%) 5%,derive(green,90%) 40%);
+}
+
+.button1{
+    -fx-text-fill: WHITE;
+    -fx-background-color: PINK;
+    -fx-font-family: "Tahoma";
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-padding: 10;
+}

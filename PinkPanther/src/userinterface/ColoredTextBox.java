@@ -9,7 +9,7 @@ public class ColoredTextBox extends Rectangle{
 	private static int currCol = 0;
 	
 	public ColoredTextBox() {
-        setWidth(440);
+        setWidth(400);
         setHeight(60);
         setArcWidth(20);
         setArcHeight(20);                
