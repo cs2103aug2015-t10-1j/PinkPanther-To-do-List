@@ -14,7 +14,7 @@ public class PopulateLists {
 		this.handler = handler;
 	}
 	
-	public ArrayList<ArrayList<Task>> executeDatedTasks() {
+	public ArrayList<ArrayList<Task>> populateTodoList() {
 		ArrayList<Task> taskList = this.handler.getTodoList();
 		ArrayList<ArrayList<Task>> overallContainer;
 		
@@ -30,7 +30,7 @@ public class PopulateLists {
 		return overallContainer;
 	}
 	
-	public ArrayList<ArrayList<Task>> executeFloatingTasks() {
+	public ArrayList<ArrayList<Task>> populateFloatingList() {
 		return this.handler.getFloatingList();
 	}
 
