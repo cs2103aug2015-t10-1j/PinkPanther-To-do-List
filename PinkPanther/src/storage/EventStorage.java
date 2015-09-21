@@ -9,46 +9,19 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import com.google.gson.Gson;
-import common.Event;
+import common.Task;
 
 public class EventStorage {
 	private static Gson gson=new Gson();
 	private static File file=new File("storage.txt");
 	
 	
-	public static void writeToFile(ArrayList<Event>eventList){
-		try{
-			BufferedWriter bw=new BufferedWriter(new FileWriter(file));
-			for(Event event:eventList){
-				String json=gson.toJson(event)+"\n";
-				bw.write(json);
-			}
-			bw.close();
-		}
-		
-		catch (IOException e) {
-			e.printStackTrace();
-		}
+	public static void writeToFile(ArrayList<Task>taskList){
 		
 	}
 	
-	public static ArrayList<Event> readFromFile(){
-		ArrayList<Event>eventList=new ArrayList<Event>();
-		String line="";
-		try{
-			BufferedReader br=new BufferedReader(new FileReader(file));
-			while((line=br.readLine())!=null){
-				eventList.add(gson.fromJson(line, Event.class));
-			}
-			br.close();
-		}
-		catch (FileNotFoundException e){
-			//do nothing since file does not exist
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-		return eventList;
+	public static ArrayList<Task> readFromFile(){
+		
 	}
 	
 
