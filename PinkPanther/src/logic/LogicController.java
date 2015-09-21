@@ -1,27 +1,44 @@
 package logic;
 
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class LogicController {
 
 	public static void main(String[] args) {
 		TaskHandler taskHandler = new TaskHandler();
-		
-		String[] newInput = getInput();
-		
-		switch (newInput[0].toLowerCase()) {
-		case "add":
-			AddCommand newCommand = new AddCommand(taskHandler);
-			newCommand.execute(InputParser.addTask(newInput[1]));
-		case "edit":
-			
-			InputParser.editTask(newInput[1]);
-		case "delete":
-			return InputParser.deleteTask(newInput[1]);
-		case "
+
+		while (true) {
+			String[] newInput = getInput();
+
+			switch (newInput[0].toLowerCase()) {
+			case "add":
+				Task newTask = InputParser.addTask(newInput[1]);
+				AddCommand newCommand = new AddCommand(taskHandler);
+				newCommand.execute(newTask);
+
+				break;
+			case "edit":
+			case "complete":
+				StubClass newEditStub = InputParser.EditTask(newInput[1]);	
+				EditCommand newEditCommand = new EditCommand(taskHandler);
+				newEditCommand.execute(newEditStub.getDate(), newEditStub.getTaskIndex(), newEditStub.getTaskWithModifications());
+
+				break;
+			case "delete":
+				StubClass newDeleteStub = InputParser.DeleteTask(newInput[1]);
+				DeleteCommand newDeleteCommand = new DeleteCommand(taskHandler);
+				newDeleteCommand.execute(newDeleteStub.getDate(), newDeleteStub.getTaskIndex());
+
+				break;
+			case "exit":
+				System.exit(1);
+			default:
+				showToUser(INVALID_COMMAND_MESSAGE);
+			}
 		}
-		
-		
+
+
 	}
 	
 	protected static String[] getInput() {
