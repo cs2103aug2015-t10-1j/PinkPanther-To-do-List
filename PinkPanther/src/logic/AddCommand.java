@@ -1,28 +1,29 @@
 package logic;
 
-import common.Event;
+import common.Task;
 /*
  * Add class description
  */
 public class AddCommand implements Command{
-	EventHandler handler;
-	Event eventRef;
+	TaskHandler handler;
+	Task TaskRef;
 	
-	public AddCommand(EventHandler handler){
+	public AddCommand(TaskHandler handler){
 		this.handler=handler;
 	}
 	
-	public String execute(Event event){	
-		handler.addEvent(event);
-		eventRef=event;
-		return event.getName()+" is added";
+	public String execute(Task task){	
+		handler.addTask(task);
+		TaskRef=task;
+		return task.getName()+" is added";
 	}
 	
+	
 	public void undo(){
-		handler.deleteEvent(eventRef);
+		handler.deleteTask(TaskRef);
 	}
 	
 	public void redo(){
-		handler.addEvent(eventRef);
+		handler.addTask(TaskRef);
 	}
 }

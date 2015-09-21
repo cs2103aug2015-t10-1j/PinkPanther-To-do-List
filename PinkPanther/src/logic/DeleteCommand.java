@@ -3,37 +3,29 @@ package logic;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import common.Event;
+import common.Task;
 /*
  * Add class description
  */
 public class DeleteCommand implements Command{
-	EventHandler handler;
-	ArrayList<Event> eventRef;
+	private TaskHandler handler;
+	private Task taskRef;
 	
-	public DeleteCommand(EventHandler handler){
+	public DeleteCommand(TaskHandler handler){
 		this.handler=handler;
 	}
 	
-	public String execute(LocalDate date,ArrayList<Integer>deleteIndex){
-		String output="";
-		
-		for(Integer index:deleteIndex){
-			eventRef.add(handler.searchEventByIndexAndDate(date,index));
-		}
-		
-		for(Event event:eventRef){
-			handler.deleteEvent(event);
-			output=event.getName()+" is deleted\n"+output;
-		}
-		return output;
+	public String execute(LocalDate date,int deleteIndex){
+		taskRef=handler.searchTodoByIndexAndDate(date, deleteIndex);
+		handler.deleteTask(taskRef);
+		return taskRef.getName()+" is deleted";
 	}
 	
 	public void undo(){
-		handler.addEvents(eventRef);
+		handler.addTask(taskRef);
 	}
 	
 	public void redo(){
-		handler.deleteEvents(eventRef);
+		handler.deleteTask(taskRef);
 	}
 }

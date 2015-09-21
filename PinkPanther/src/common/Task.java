@@ -43,6 +43,10 @@ public class Task {
 		this.type=type.EVENT;
 	}
 	
+	public void setName(String name){
+		this.name=name;
+	}
+	
 	public void setStartDate(LocalDate date){
 		this.startDate=date;
 	}
@@ -51,7 +55,7 @@ public class Task {
 		this.startTime=time;
 	}
 	
-	public void setEndtDate(LocalDate date){
+	public void setEndDate(LocalDate date){
 		this.endDate=date;
 	}
 	
@@ -61,6 +65,10 @@ public class Task {
 	
 	public void setCompleteState(boolean isDone){
 		this.isDone=isDone;
+	}
+	
+	public String getName(){
+		return name;
 	}
 	
 	public LocalDate getStartDate(){
