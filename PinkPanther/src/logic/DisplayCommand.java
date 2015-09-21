@@ -14,7 +14,7 @@ public class DisplayCommand {
 		this.handler = handler;
 	}
 	
-	public ArrayList<ArrayList<Event>> execute() {
+	public ArrayList<ArrayList<Event>> executeDatedTasks() {
 		ArrayList<Event> taskList = this.handler.getTaskList();
 		ArrayList<ArrayList<Event>> overallContainer;
 		
@@ -28,6 +28,10 @@ public class DisplayCommand {
 		}
 		
 		return overallContainer;
+	}
+	
+	public ArrayList<ArrayList<Event>> executeFloatingTasks() {
+		return this.handler.getFloatingList();
 	}
 
 	protected ArrayList<Event> packageEventsWithSameDate(LocalDate currentDate, ArrayList<Event> taskList) {
