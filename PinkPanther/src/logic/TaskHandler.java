@@ -3,57 +3,75 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import storage.EventStorage;
+import storage.TaskStorage;
 import common.*;
 /*
  * Add class description
  */
-public class EventHandler {
-	ArrayList<Event>eventList;
+public class TaskHandler {
+	private static int TODO_LIST=0;
+	private static int FLOATING_LIST=1;
+	private ArrayList<ArrayList<Task>>taskList;
 	
-	public EventHandler(){
+	public TaskHandler(){
+		taskList=new ArrayList<ArrayList<Task>>();
+		taskList.add(TaskStorage.readFromFile(TODO_LIST));
+		taskList.add(TaskStorage.readFromFile(FLOATING_LIST));
+	}
+	
+	public ArrayList<Task> getTODO_LIST(){
+		return taskList.get(TODO_LIST);
+	}
+	
+	public ArrayList<Task> getFLOATING_LIST(){
+		return taskList.get(FLOATING_LIST);
+	}
+	
+	
+	private void sortTodoList(){
 		
-		eventList=EventStorage.readFromFile();
 	}
 	
-	public void addEvent(Event event){
-		eventList.add(event);
-		Collections.sort(eventList);
-		EventStorage.writeToFile(eventList);
+	private void sortFloatingList(){
+		
 	}
 	
-	public void addEvents(ArrayList<Event>events){
-		for(Event event:events){
-			eventList.add(event);
+	
+	public void addTask(Task task){
+		if(task.getTaskType()==TaskType.FLOATING){
+			taskList.get(FLOATING_LIST).add(task);
+			sortFloatingList();
+			TaskStorage.writeToFile(taskList.get(FLOATING_LIST), FLOATING_LIST);
 		}
-		Collections.sort(eventList);
-		EventStorage.writeToFile(eventList);
-	}
-	
-	public void deleteEvent(Event event){
-		eventList.remove(event);
-		EventStorage.writeToFile(eventList);
-	}
-	
-	
-	public void deleteEvents(ArrayList<Event> events){
-		for(Event event:events){
-			eventList.remove(event);
+		else{
+			taskList.get(TODO_LIST).add(task);
+			sortTodoList();
+			TaskStorage.writeToFile(taskList.get(TODO_LIST), TODO_LIST);
 		}
-		EventStorage.writeToFile(eventList);
+	}
+	
+	public void deleteEvent(Task task){
+		if(task.getTaskType()==TaskType.FLOATING){
+			taskList.get(FLOATING_LIST).remove(task);
+			TaskStorage.writeToFile(taskList.get(FLOATING_LIST), FLOATING_LIST);
+		}
+		else{
+			taskList.get(TODO_LIST).remove(task);
+			TaskStorage.writeToFile(taskList.get(TODO_LIST), TODO_LIST);
+		}
 	}
 	
 	
-	public Event searchEventByIndexAndDate(LocalDate date,int eventIndex){
+	public Task searchTodoByIndexAndDate(LocalDate date,int todoIndex){
 		int startDateIndex=0;
-		for(Event event:eventList){
-			if(event.getDate().equals(date)){
+		for(Task task:taskList.get(TODO_LIST)){
+			if(task.getDate().equals(date)){
 				break;
 			}
 			startDateIndex++;
 		}
 		
-		return eventList.get(startDateIndex+eventIndex-1);	
+		return taskList.get(TODO_LIST).get(startDateIndex+todoIndex-1);	
 	}
 	
 	
