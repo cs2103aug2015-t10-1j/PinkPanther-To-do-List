@@ -9,7 +9,6 @@ import java.time.LocalDate;
  */
 public class DisplayCommand {
 	TaskHandler handler;
-	Event eventRef;
 	
 	public DisplayCommand(TaskHandler handler) {
 		this.handler = handler;
