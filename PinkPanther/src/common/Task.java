@@ -63,6 +63,10 @@ public class Task {
 		this.isDone=isDone;
 	}
 	
+	public String getName(){
+		return name;
+	}
+	
 	public LocalDate getStartDate(){
 		return startDate;
 	}

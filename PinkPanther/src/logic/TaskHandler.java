@@ -50,7 +50,7 @@ public class TaskHandler {
 		}
 	}
 	
-	public void deleteEvent(Task task){
+	public void deleteTask(Task task){
 		if(task.getTaskType()==TaskType.FLOATING){
 			taskList.get(FLOATING_LIST).remove(task);
 			TaskStorage.writeToFile(taskList.get(FLOATING_LIST), FLOATING_LIST);
