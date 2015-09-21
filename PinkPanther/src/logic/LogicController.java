@@ -59,7 +59,7 @@ public class LogicController {
 		return splitInput;
 	}
 	
-	protected void checkForPassedTasks(TaskHandler taskHandler) {
+	protected static void checkForPassedTasks(TaskHandler taskHandler) {
 		for (Task task: taskHandler.getTodoList()) {
 			if (task.getDate(false).isBefore(LocalDate.now())) {
 				task.setIsDone(TASK_DATE_HAS_PASSED);
