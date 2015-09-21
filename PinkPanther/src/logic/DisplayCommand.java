@@ -10,7 +10,7 @@ public class DisplayCommand {
 	TaskHandler handler;
 	Event eventRef;
 	
-	public DisplayCommand(TaskHandler handler) {
+	public DisplayCommand(EventHandler handler) {
 		this.handler = handler;
 	}
 	
