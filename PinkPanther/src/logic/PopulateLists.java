@@ -7,10 +7,10 @@ import java.time.LocalDate;
 /*
  * Add class description
  */
-public class DisplayCommand {
+public class PopulateLists {
 	TaskHandler handler;
 	
-	public DisplayCommand(TaskHandler handler) {
+	public PopulateLists(TaskHandler handler) {
 		this.handler = handler;
 	}
 	
