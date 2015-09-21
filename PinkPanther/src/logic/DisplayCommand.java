@@ -14,26 +14,26 @@ public class DisplayCommand {
 		this.handler = handler;
 	}
 	
-	public ArrayList<ArrayList<Event>> executeDateLineTask() {
-		ArrayList<Event> dateLineList = this.handler.getDateLineList();
+	public ArrayList<ArrayList<Event>> execute() {
+		ArrayList<Event> taskList = this.handler.getTaskList();
 		ArrayList<ArrayList<Event>> overallContainer;
 		
-		ArrayList<LocalDate> dates = obtainDates(dateLineList); //Get the various dates in eventList.
+		ArrayList<LocalDate> dates = obtainDates(taskList); //Get the various dates in eventList.
 		
-		int eventListSize = dateLineList.size();
+		int taskListSize = taskList.size();
 		int numOfDates = dates.size();
 		
 		for (int i = 0; i < numOfDates; i++) {
-			overallContainer.add(packageEventsWithSameDate(dates.get(i), dateLineList));
+			overallContainer.add(packageEventsWithSameDate(dates.get(i), taskList));
 		}
 		
 		return overallContainer;
 	}
 
-	private ArrayList<Event> packageEventsWithSameDate(LocalDate currentDate, ArrayList<Event> dateLineList) {
+	protected ArrayList<Event> packageEventsWithSameDate(LocalDate currentDate, ArrayList<Event> taskList) {
 		ArrayList<Event> packagedList = new ArrayList<Event>();
 		
-		for (Event event: dateLineList) {
+		for (Event event: taskList) {
 			if (event.getDate().equals(currentDate)) {
 				packagedList.add(event);
 			}
