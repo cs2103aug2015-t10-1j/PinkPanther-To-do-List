@@ -30,8 +30,8 @@ public class PopulateLists {
 		return overallContainer;
 	}
 	
-	public ArrayList<ArrayList<Task>> populateFloatingList() {
-		return this.handler.getFloatingList();
+	public ArrayList<Task> populateFloatingList() {
+		return handler.getFloatingList();
 	}
 
 	protected ArrayList<Task> packageEventsWithSameDate(LocalDate currentDate, ArrayList<Task> taskList) {

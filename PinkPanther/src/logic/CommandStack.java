@@ -29,16 +29,24 @@ public class CommandStack {
 		}
 	}
 	
-	public void undoOperation(){
+	public boolean undoOperation(){
+		if(undoStack.peek()==null){
+			return false;
+		}
 		undoStack.peek().undo();
 		redoStack.push(undoStack.pop());
 		undoStackSize--;
+		return true;
 	}
 	
-	public void redoOperation(){
+	public boolean redoOperation(){
+		if(redoStack.peek()==null){
+			return false;
+		}
 		redoStack.peek().redo();
 		undoStack.push(redoStack.pop());
 		undoStackSize++;
+		return true;
 	}
 	
 	

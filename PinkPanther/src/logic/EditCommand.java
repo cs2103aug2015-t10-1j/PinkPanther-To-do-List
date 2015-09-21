@@ -7,17 +7,17 @@ import common.TaskType;
 /*
  * Add class description
  */
-public class ModifyCommand implements Command{
+public class EditCommand implements Command{
 	TaskHandler handler;
 	Task unmodified;
 	Task modified;
 	
-	public ModifyCommand(TaskHandler handler){
+	public EditCommand(TaskHandler handler){
 		this.handler=handler;
 	}
 	
 	public String execute(LocalDate date,int TaskIndex, Task modified){
-		unmodified=handler.searchTodoByIndexAndDate(date, TaskIndex);
+		unmodified=handler.searchTaskByIndexAndDate(date, TaskIndex);
 		modified=applyModification(unmodified,modified);
 		handler.deleteTask(unmodified);
 		handler.addTask(modified);
