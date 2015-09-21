@@ -12,7 +12,7 @@ public class Task {
 	private LocalDate endDate;
 	private LocalTime startTime;
 	private LocalTime endTime;
-	private boolean isDone;
+	private int status;
 	
 	public Task(String name){
 		this.name=name;
@@ -63,8 +63,8 @@ public class Task {
 		this.endTime=time;
 	}
 	
-	public void setCompleteState(boolean isDone){
-		this.isDone=isDone;
+	public void setStatus(int status){
+		this.status=status;
 	}
 	
 	public String getName(){
@@ -93,13 +93,28 @@ public class Task {
 		}
 		return endDate;
 	}
+	
+	public LocalDate getDate(int startOrEnd){
+		if(startOrEnd==0){
+			return startDate;
+		}
+		else return endDate;
+		
+	}
+	
+	public LocalTime getTime(){
+		if(startTime!=null){
+			return startTime;
+		}
+		return endTime;
+	}
 		
 	public TaskType getTaskType(){
 		return type;
 	}
 	
-	public boolean getCompleteState(){
-		return isDone;
+	public int getStatus(){
+		return status;
 	}
 	
 }

@@ -9,7 +9,8 @@ public class ColoredDayBox extends Rectangle{
         setHeight(80);
         setArcWidth(80);
         setArcHeight(80);                
-        setFill(Color.RED.deriveColor(0, 1.2, 1, 0.6));
-        setStroke(Color.RED);
+        setFill(Color.PINK.deriveColor(0, 1.2, 1, 0.6));
+        setStroke(Color.DIMGRAY);
+        setStrokeWidth(4.0f);
      }  
 }

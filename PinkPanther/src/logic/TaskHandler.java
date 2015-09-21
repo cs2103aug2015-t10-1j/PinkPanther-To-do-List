@@ -2,6 +2,7 @@ package logic;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 import storage.TaskStorage;
 import common.*;
@@ -9,69 +10,79 @@ import common.*;
  * Add class description
  */
 public class TaskHandler {
-	private static int TODO_LIST=0;
-	private static int FLOATING_LIST=1;
-	private ArrayList<ArrayList<Task>>taskList;
+	private HashMap<LocalDate,ArrayList<Task>>todoList;
+	private ArrayList<Task>floatingList;
 	
 	public TaskHandler(){
-		taskList=new ArrayList<ArrayList<Task>>();
-		taskList.add(TaskStorage.readFromFile(TODO_LIST));
-		taskList.add(TaskStorage.readFromFile(FLOATING_LIST));
+		todoList=TaskStorage.readFromTodoFile();
+		floatingList=TaskStorage.readFromFloatingFile();
 	}
 	
-	public ArrayList<Task> getTODO_LIST(){
-		return taskList.get(TODO_LIST);
+	public HashMap<LocalDate,ArrayList<Task>> getTodoList(){
+		return todoList;
 	}
 	
-	public ArrayList<Task> getFLOATING_LIST(){
-		return taskList.get(FLOATING_LIST);
+	public ArrayList<Task> getFloatingList(){
+		return floatingList;
 	}
 	
 	
-	private void sortTodoList(){
-		
+	private void sortTodoList(LocalDate date){
+		ArrayList<Task>tasks=todoList.get(date);
+		Collections.sort(tasks,(Task t1,Task t2)->t1.getTime().compareTo(t2.getTime()));
+		Collections.sort(tasks,(Task t1,Task t2)->t1.getTaskType().compareTo(t2.getTaskType()));
 	}
 	
 	private void sortFloatingList(){
-		
+		Collections.sort(floatingList,(Task t1,Task t2) -> t1.getName().compareTo(t2.getName()));
 	}
 	
 	
 	public void addTask(Task task){
 		if(task.getTaskType()==TaskType.FLOATING){
-			taskList.get(FLOATING_LIST).add(task);
+			floatingList.add(task);
 			sortFloatingList();
-			TaskStorage.writeToFile(taskList.get(FLOATING_LIST), FLOATING_LIST);
+			TaskStorage.writeToFile(floatingList);
 		}
 		else{
-			taskList.get(TODO_LIST).add(task);
-			sortTodoList();
-			TaskStorage.writeToFile(taskList.get(TODO_LIST), TODO_LIST);
+			LocalDate date=task.getDate();
+			if(!todoList.containsKey(date)){
+				todoList.put(date, new ArrayList<Task>());
+			}
+			todoList.get(date).add(task);
+			sortTodoList(date);
+			TaskStorage.writeToFile(todoList);
 		}
 	}
 	
 	public void deleteTask(Task task){
 		if(task.getTaskType()==TaskType.FLOATING){
-			taskList.get(FLOATING_LIST).remove(task);
-			TaskStorage.writeToFile(taskList.get(FLOATING_LIST), FLOATING_LIST);
+			floatingList.remove(task);
+			TaskStorage.writeToFile(floatingList);
 		}
 		else{
-			taskList.get(TODO_LIST).remove(task);
-			TaskStorage.writeToFile(taskList.get(TODO_LIST), TODO_LIST);
+			LocalDate date=task.getDate();
+			todoList.get(date).remove(task);
+			TaskStorage.writeToFile(todoList);
 		}
 	}
 	
 	
-	public Task searchTodoByIndexAndDate(LocalDate date,int todoIndex){
-		int startDateIndex=0;
-		for(Task task:taskList.get(TODO_LIST)){
-			if(task.getDate().equals(date)){
-				break;
+	public Task searchTaskByIndexAndDate(LocalDate date,int displayIndex){
+		int actualIndex=displayIndex-1;
+		if(date==null){
+			if(actualIndex>=floatingList.size()){
+				return null;
 			}
-			startDateIndex++;
+			return floatingList.get(actualIndex);
 		}
-		
-		return taskList.get(TODO_LIST).get(startDateIndex+todoIndex-1);	
+		else{
+			if(actualIndex>=todoList.get(date).size()){
+				return null;
+			}
+			return todoList.get(date).get(actualIndex-1);
+		}
+				
 	}
 	
 	
