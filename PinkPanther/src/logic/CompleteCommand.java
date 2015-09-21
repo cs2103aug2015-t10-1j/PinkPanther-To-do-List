@@ -1,6 +1,5 @@
 package logic;
 
-import common.Event;
 import common.Task;
 
 public class CompleteCommand implements Command {
@@ -11,7 +10,7 @@ public class CompleteCommand implements Command {
 	}
 	
 	public String execute(Task task, boolean isComplete) {
-		previousState = task.getCompletionStatus();
+		previousState = task.getCompleteState();
 		
 		if (isComplete) {
 			task.setCompleteState(true);
