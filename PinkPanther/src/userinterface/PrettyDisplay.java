@@ -24,6 +24,8 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.*;
  
 public class PrettyDisplay extends Application {
+	boolean isViewingHelpScreen = false;
+	
     public static void main(String[] args) {
         launch(args);
     }
@@ -37,19 +39,25 @@ public class PrettyDisplay extends Application {
     	Stage primaryStage = new Stage();    	
         primaryStage.setTitle("PinkPanther: The best to-do list");
         
+        //Main Grid: Holds contents for the Calendar
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.TOP_LEFT);
         grid.setHgap(10);
         grid.setVgap(10);
         grid.setPadding(new Insets(10, 10, 10, 10));
 
+        populateGrid(grid);
+        
+        /*
+        //Holds main Grid
         GridPane grid1 = new GridPane();
         grid1.setAlignment(Pos.TOP_LEFT);
         grid1.setHgap(10);
         grid1.setVgap(10);
         grid1.setPadding(new Insets(25, 25, 25, 25));
+        */
         
-
+        //Holds content of Grid together with grid1
         ScrollPane s1 = new ScrollPane();
         s1.setPrefSize(1080, 660);
         s1.setContent(grid);
@@ -61,7 +69,7 @@ public class PrettyDisplay extends Application {
         grid2.setVgap(10);
         grid2.setPadding(new Insets(25, 25, 25, 25));
 
-        grid1.add(grid, 0, 0);
+      //  grid1.add(grid, 0, 0);
         grid2.add(s1,0,0);
         
         TextField userTextField = new TextField("Input Command");
@@ -96,7 +104,6 @@ public class PrettyDisplay extends Application {
         Scene scene = new Scene(grid2, 1080, 850);
        
         
-        populateGrid(grid);
  
     	btn.setOnAction(new EventHandler<ActionEvent>() {
        	 
@@ -160,6 +167,23 @@ public class PrettyDisplay extends Application {
                 {
             		s1.setVvalue(s1.getVvalue() - 0.05f);
                 }
+                else if (ke.getCode().equals(KeyCode.RIGHT))
+                {
+                	if (!isViewingHelpScreen){
+	                	HelpScreen helpScreen = new HelpScreen();
+	                	grid2.getChildren().remove(s1);
+	                	grid2.add(helpScreen, 0, 0);
+	                	isViewingHelpScreen = true;
+                	}
+                	else {
+                		grid2.getChildren().clear();
+                		grid2.add(s1,0,0);
+                        grid2.add(userTextField, 0, 1);
+                        grid2.add(actiontarget, 0, 2);
+                        grid2.add(hbBtn, 0, 2);
+                		isViewingHelpScreen = false;
+                	}
+                }
             }
         });
         
@@ -177,7 +201,7 @@ public class PrettyDisplay extends Application {
     void populateGrid(GridPane grid){
     	int currentYPos = 1;
         //Scene title
-        Text scenetitle = new Text("PinkPanther");
+        Text scenetitle = new Text("Calendar");
         scenetitle.setFont(Font.font("Tahoma", FontWeight.BOLD, 66));
         scenetitle.setFill(Color.DIMGRAY);
         grid.add(scenetitle, 1, 0);
