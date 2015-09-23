@@ -9,15 +9,13 @@ public class DeleteCommand implements Command{
 	private TaskHandler handler;
 	private Task taskRef;
 	
-	public DeleteCommand(TaskHandler handler,Task task){
+	public DeleteCommand(TaskHandler handler){
 		this.handler=handler;
-		execute(task);
 	}
 	
-	public void execute(Task task){
+	public boolean execute(Task task){
 		taskRef=task;
-		handler.deleteTask(taskRef);
-		Display.showFeedBack(taskRef.getName()+" is deleted");
+		return handler.deleteTask(taskRef);
 	}
 	
 	public void undo(){

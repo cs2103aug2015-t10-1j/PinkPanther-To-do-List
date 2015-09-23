@@ -38,7 +38,8 @@ public class TaskHandler {
 	}
 	
 	
-	public void addTask(Task task){
+	public boolean addTask(Task task){
+		boolean canAdd=true;
 		if(task.getTaskType()==TaskType.FLOATING){
 			floatingList.add(task);
 			sortFloatingList();
@@ -49,14 +50,26 @@ public class TaskHandler {
 			if(!todoList.containsKey(date)){
 				todoList.put(date, new ArrayList<Task>());
 			}
-			todoList.get(date).add(task);
+			
+			if(task.getTaskType()==TaskType.EVENT && checkForTimeConflict(task)){
+				canAdd=false;
+			}
+			else{
+				todoList.get(date).add(task);
+			}
+			
 			sortTodoList(date);
 			TaskStorage.writeToFile(todoList);
 		}
+		return canAdd;
 	}
 	
-	public void deleteTask(Task task){
-		if(task.getTaskType()==TaskType.FLOATING){
+	public boolean deleteTask(Task task){
+		boolean canDelete=true;
+		if(task==null){
+			canDelete=false;
+		}
+		else if(task.getTaskType()==TaskType.FLOATING){
 			floatingList.remove(task);
 			TaskStorage.writeToFile(floatingList);
 		}
@@ -65,6 +78,7 @@ public class TaskHandler {
 			todoList.get(date).remove(task);
 			TaskStorage.writeToFile(todoList);
 		}
+		return canDelete;
 	}
 	
 	
@@ -83,6 +97,19 @@ public class TaskHandler {
 			return todoList.get(date).get(actualIndex-1);
 		}
 				
+	}
+	
+	public boolean checkForTimeConflict(Task event){
+		LocalDate date=event.getDate();
+		for(Task task:todoList.get(date)){
+			if(task.getTaskType()==TaskType.EVENT){
+				if((event.getStartTime().isAfter(task.getStartTime()) && event.getStartTime().isBefore(task.getEndTime()))||
+						(event.getEndTime().isAfter(task.getStartTime()) && event.getEndTime().isBefore(task.getEndTime()))){
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	

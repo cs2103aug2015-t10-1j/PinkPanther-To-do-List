@@ -8,15 +8,13 @@ public class AddCommand implements Command{
 	private TaskHandler handler;
 	private Task TaskRef;
 	
-	public AddCommand(TaskHandler handler,Task task){
+	public AddCommand(TaskHandler handler){
 		this.handler=handler;
-		execute(task);
 	}
 	
-	public void execute(Task task){	
-		handler.addTask(task);
+	public boolean execute(Task task){	
 		TaskRef=task;
-		Display.showFeedBack(task.getName()+" is added");
+	    return handler.addTask(task);
 	}
 	
 	
