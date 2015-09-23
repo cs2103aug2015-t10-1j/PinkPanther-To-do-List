@@ -14,9 +14,9 @@ public class EditCommand implements Command{
 		this.handler=handler;
 	}
 	
-	public String execute(LocalDate date,int TaskIndex, Task modified){
+	public String execute(LocalDate date,int TaskIndex, Task modField){
 		unmodified=handler.searchTaskByIndexAndDate(date, TaskIndex);
-		modified=applyModification(unmodified,modified);
+		modified=applyModification(unmodified,modField);
 		handler.deleteTask(unmodified);
 		handler.addTask(modified);
 		return unmodified.getName()+" is modified";
