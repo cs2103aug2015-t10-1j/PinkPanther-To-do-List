@@ -40,11 +40,12 @@ public class TextedTaskBox extends StackPane{
 			grid.add(startTimeBox, 0, 3);
 		}
 		
-		TextedTimeBox timeBox = new TextedTimeBox(endTime);
-
-		GridPane.setConstraints(timeBox , 5, 3);
-		grid.add(timeBox, 5, 3);
-		
+		if (!endTime.equals("")){
+			TextedTimeBox timeBox = new TextedTimeBox(endTime);
+	
+			GridPane.setConstraints(timeBox , 5, 3);
+			grid.add(timeBox, 5, 3);
+		}
 		this.getChildren().addAll(box, grid);
 		
 	}

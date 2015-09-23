@@ -23,7 +23,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.*;
  
-public class HelloWorld extends Application {
+public class PrettyDisplay extends Application {
     public static void main(String[] args) {
         launch(args);
     }
@@ -34,12 +34,7 @@ public class HelloWorld extends Application {
     }
     
     void fillPage(String newInput){
-    	Stage primaryStage = new Stage();
-    	
-    	ScrollPane sp = new ScrollPane();
-    	sp.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-    	sp.setStyle("-fx-background: rgba(0,0,0,0);");
-    	
+    	Stage primaryStage = new Stage();    	
         primaryStage.setTitle("PinkPanther: The best to-do list");
         
         GridPane grid = new GridPane();
@@ -48,7 +43,11 @@ public class HelloWorld extends Application {
         grid.setVgap(10);
         grid.setPadding(new Insets(10, 10, 10, 10));
 
-        sp.setContent(grid);
+        GridPane grid1 = new GridPane();
+        grid1.setAlignment(Pos.TOP_LEFT);
+        grid1.setHgap(10);
+        grid1.setVgap(10);
+        grid1.setPadding(new Insets(25, 25, 25, 25));
         
         GridPane grid2 = new GridPane();
         grid2.setAlignment(Pos.TOP_LEFT);
@@ -56,17 +55,10 @@ public class HelloWorld extends Application {
         grid2.setVgap(10);
         grid2.setPadding(new Insets(25, 25, 25, 25));
 
-        sp.setContent(grid);
+        grid1.add(grid, 0, 0);
+        grid2.add(grid1,0,0);
         
-        grid2.add(sp,0,0);
-        
-        //Input command text label and box
-        int currentYPos = 1;
-  //      Label command = new Label("Input Command:");
-   //     grid.add(command, 0, commandBoxYPos);
         TextField userTextField = new TextField("Input Command");
-        userTextField.setMinHeight(50);
-        userTextField.setMinWidth(1000);
         userTextField.setStyle(""
         + "-fx-font-size: 30px;"
         + "-fx-font-weight: bold;"
@@ -76,7 +68,7 @@ public class HelloWorld extends Application {
         grid2.add(userTextField, 0, 1);
         
         //text that displays after-action (e.g added x event)
-        final Text actiontarget = new Text(newInput);
+        Text actiontarget = new Text(newInput);
         grid2.add(actiontarget, 0, 2);
         actiontarget.setFont(Font.font("Tahoma", FontWeight.BOLD, 15));
         actiontarget.setFill(Color.WHITE);      
@@ -88,53 +80,16 @@ public class HelloWorld extends Application {
         scrollUpButton.getStyleClass().add("button1");
         Button scrollDownButton = new Button("Scroll Down");
         scrollDownButton.getStyleClass().add("button1");
-    //    btn.setStyle("-fx-font: 22 arial; -fx-base: #b6e7c9;");
         HBox hbBtn = new HBox(10);
         hbBtn.setAlignment(Pos.TOP_RIGHT);
         hbBtn.getChildren().addAll(btn, scrollUpButton, scrollDownButton);
         grid2.add(hbBtn, 0, 2);
-            
-        
-        //Scene title
-        Text scenetitle = new Text("PinkPanther Calendar");
-        scenetitle.setFont(Font.font("Tahoma", FontWeight.BOLD, 40));
-        scenetitle.setFill(Color.DIMGRAY);
-        grid.add(scenetitle, 1, 0);
 
-        
-        
         Scene scene = new Scene(grid2, 1080, 900);
-
         
-        //for the actual calendar items
-        TextedColorDayBox daydBox = new TextedColorDayBox("Float");
-    	grid.add(daydBox, 0, currentYPos++);
-        
-    	
-        for (int i=5; i<20; i++){
-        	Random ran = new Random();
-        	int randomNumTasks = ran.nextInt(5);
-        	if (randomNumTasks!=0){
-        	TextedColorDayBox dayBox = new TextedColorDayBox("Day\n"+ i);
-        	grid.add(dayBox, 0, currentYPos);
-
-
-    			int currentXPos = 1;
-	        	for (int j=0; j<randomNumTasks; j++){
-	        		if(j==2){
-	        			currentYPos++;
-	    	        	currentXPos = 1;
-	        		}
-	        		TextedTaskBox taskBox = new TextedTaskBox("Meetin with boss at meeting roomdddddd" , "08:00pm", "09:00pm");
-	        		grid.add(taskBox, currentXPos++, currentYPos);
-	            }
-	        	currentYPos++;
-        	}
-        	
-        }
-        
-        
-        btn.setOnAction(new EventHandler<ActionEvent>() {
+        populateGrid(grid);
+ 
+    	btn.setOnAction(new EventHandler<ActionEvent>() {
        	 
         	@Override
             public void handle(ActionEvent e) {
@@ -153,8 +108,8 @@ public class HelloWorld extends Application {
        	 
         	@Override
             public void handle(ActionEvent e) {
-        		sp.setVvalue(sp.getVvalue() - 0.1);
-        		System.out.println(sp.getVvalue());
+        		grid.getChildren().clear();
+                populateGrid(grid);
              }
          });
         
@@ -162,10 +117,8 @@ public class HelloWorld extends Application {
           	 
         	@Override
             public void handle(ActionEvent e) {
-        		sp.setVvalue(sp.getVvalue() + 0.1);
-        		System.out.println(sp.getVvalue());
-
-            	grid2.getChildren().clear();
+        		grid.getChildren().clear();
+                populateGrid(grid);
              }
          });
         
@@ -177,10 +130,10 @@ public class HelloWorld extends Application {
                 if (ke.getCode().equals(KeyCode.ENTER))
                 {
                 	if ((userTextField.getText() != null && !userTextField.getText().isEmpty())) {
-                        actiontarget.setFill(Color.BLUE);                	
+                        actiontarget.setFill(Color.WHITE);                	
                     	actiontarget.setText(userTextField.getText());
-                    	fillPage(userTextField.getText());
-                    	primaryStage.close();
+                		grid.getChildren().clear();
+                        populateGrid(grid);
                     	
                     } else {
                         actiontarget.setFill(Color.FIREBRICK);
@@ -190,11 +143,16 @@ public class HelloWorld extends Application {
                 
                 else if (ke.getCode().equals(KeyCode.DOWN))
                 {
-                	sp.setVvalue(sp.getVvalue() + 0.2f);
-                }
-                else if (ke.getCode().equals(KeyCode.UP))
-                {
-                	sp.setVvalue(sp.getVvalue() - 0.2f);
+                	if ((userTextField.getText() != null && !userTextField.getText().isEmpty())) {
+                        actiontarget.setFill(Color.WHITE);                	
+                    	actiontarget.setText(userTextField.getText());
+                		grid.getChildren().clear();
+                        populateGrid(grid);
+                    	
+                    } else {
+                        actiontarget.setFill(Color.FIREBRICK);
+                        actiontarget.setText("No input detected!");
+                    };
                 }
             }
         });
@@ -217,7 +175,53 @@ public class HelloWorld extends Application {
        primaryStage.show();
         
     }
+    
+    void populateGrid(GridPane grid){
+    	int currentYPos = 1;
+        //Scene title
+        Text scenetitle = new Text("PinkPanther");
+        scenetitle.setFont(Font.font("Tahoma", FontWeight.BOLD, 66));
+        scenetitle.setFill(Color.DIMGRAY);
+        grid.add(scenetitle, 1, 0);
+        
+		TextedTaskBox taskBoxx = new TextedTaskBox(" " , "", "");
+		grid.add(taskBoxx,2,0);
+
+        //for the actual calendar items
+        TextedColorDayBox daydBox = new TextedColorDayBox("Float");
+    	grid.add(daydBox, 0, currentYPos++);
+    	
+    	for (int i=1; i<6; i++){
+        	Random ran = new Random();
+        	int randomNumTasks = ran.nextInt(2);
+        	if (randomNumTasks!=0){
+	        	TextedColorDayBox dayBox = new TextedColorDayBox("Day\n"+ i);
+	        	grid.add(dayBox, 0, currentYPos);
+	
+	
+	    			int currentXPos = 1;
+		        	for (int j=0; j<randomNumTasks; j++){
+		        		if(j==2){
+		        			currentYPos++;
+		        			TransparentCircle circle = new TransparentCircle();
+		        			grid.add(circle, 0, currentYPos);
+		    	        	currentXPos = 1;
+		        		}
+		        		TextedTaskBox taskBox = new TextedTaskBox("Meetin with boss at meeting roomdddddd" , "08:00pm", "09:00pm");
+		        		grid.add(taskBox, currentXPos++, currentYPos);
+		            }
+		        	currentYPos++;
+		        	
+        	}
+        	System.out.println(i + " " + currentYPos);
+        	if (i == 5 && currentYPos < 8){
+        		for (int k=currentYPos; k<7; k++){
+        			System.out.println("extra circle added at " + k);
+        			TransparentCircle circle = new TransparentCircle();
+        			grid.add(circle, 0, k);
+        		}
+        	
+        	}
+        }
+    }
 }
-
-
-
