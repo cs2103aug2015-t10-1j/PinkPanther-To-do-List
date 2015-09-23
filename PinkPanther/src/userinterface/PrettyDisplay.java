@@ -26,8 +26,8 @@ import javafx.stage.*;
 public class PrettyDisplay extends Application {
 	boolean isViewingHelpScreen = false;
 	
-    public static void main(String[] args) {
-        launch(args);
+    public void runApp() {
+        launch();
     }
      
     @Override

@@ -1,25 +1,28 @@
 package logic;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import common.Task;
 import common.TaskType;
 
 public class EditCommand implements Command{
-	TaskHandler handler;
-	Task unmodified;
-	Task modified;
+	private TaskHandler handler;
+	private Task unmodified;
+	private Task modified;
 	
-	public EditCommand(TaskHandler handler){
+	public EditCommand(TaskHandler handler,ArrayList<Task>inputTasks){
 		this.handler=handler;
+		execute(inputTasks);
 	}
 	
-	public String execute(LocalDate date,int TaskIndex, Task modField){
-		unmodified=handler.searchTaskByIndexAndDate(date, TaskIndex);
-		modified=applyModification(unmodified,modField);
+	public void execute(ArrayList<Task>inputTasks){
+		unmodified=inputTasks.get(0);
+		modified=inputTasks.get(1);
+		modified=applyModification(unmodified,modified);
 		handler.deleteTask(unmodified);
 		handler.addTask(modified);
-		return unmodified.getName()+" is modified";
+		Display.showFeedBack(unmodified.getName()+" is modified");
 		
 	}
 	

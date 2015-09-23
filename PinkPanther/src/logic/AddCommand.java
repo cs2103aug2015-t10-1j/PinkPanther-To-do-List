@@ -5,17 +5,18 @@ import common.Task;
  * Add class description
  */
 public class AddCommand implements Command{
-	TaskHandler handler;
-	Task TaskRef;
+	private TaskHandler handler;
+	private Task TaskRef;
 	
-	public AddCommand(TaskHandler handler){
+	public AddCommand(TaskHandler handler,Task task){
 		this.handler=handler;
+		execute(task);
 	}
 	
-	public String execute(Task task){	
+	public void execute(Task task){	
 		handler.addTask(task);
 		TaskRef=task;
-		return task.getName()+" is added";
+		Display.showFeedBack(task.getName()+" is added");
 	}
 	
 	
