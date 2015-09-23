@@ -37,6 +37,7 @@ public class SingleDateParser {
 	
 	public LocalDate parse(String date) {
 		
+		// if date contains a certain keyword, refer to list(s) and parse separately
 		
 		// for dates
 		date = fixDate(date);

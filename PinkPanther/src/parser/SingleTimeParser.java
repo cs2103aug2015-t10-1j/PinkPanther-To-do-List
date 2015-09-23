@@ -23,6 +23,8 @@ public class SingleTimeParser {
 
 	public LocalTime parse(String time) {
 		
+		// if time contains a certain keyword, refer to a list and parse separately
+		
 		time = time.toUpperCase();
 		for (String timeFormat : validTimeFormats) {
 			LocalTime parsedTime = compareTimeFormat(time, timeFormat);
