@@ -3,6 +3,7 @@ package parser;
 import common.Task;
 import common.TaskType;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class AddStringParser {
@@ -22,30 +23,32 @@ public class AddStringParser {
 	private static final String[] LIST_DEADLINE_MARKERS = {"by", "due", "before"}; 
 	private static final String[] LIST_START_MARKERS = {"at", "after"};
 
-
+	
 	// main functionality
 	public Task parse(String commandContent){
 		
 		clearStores();
 		String[] userInfo = commandContent.split(",");
 		userInfo = trimStringArray(userInfo);
-		
+		int validDateTimes = findValidDateTime(userInfo);
 		// create a floating task
-		if (userInfo.length == 1) {
-			return addFloating(userInfo);
-		}
-		
-		// will overwrite any legit things already parsed into time date stores
-		if (findValidDateTime(userInfo) == 0) {
-			return addFloating(userInfo);
+		if (userInfo.length == 1 || validDateTimes == 0) {
+			return addFloating(commandContent);
 		}
 		
 		// create an event
-		if (findValidDateTime(userInfo) == 2)  {
-			return addEvent(userInfo);
+		// should we catch the exception or be lenient?
+		if (validDateTimes == 2)  {
+			try {
+				return addEvent(userInfo);
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+				//e.printStackTrace();
+			}
+			return null;
 		
 		// create a deadline or to-do
-		} else if (findValidDateTime(userInfo) == 1)  {
+		} else if (validDateTimes == 1)  {
 			return addSingleDated(userInfo);
 		
 		// invalid task to create; no task created
@@ -61,21 +64,16 @@ public class AddStringParser {
 		int dateCounter = 0;
 		int timeCounter = 0;
 		for (int i = INDEX_TASK_DETAIL; i < possiblyDateTime.length; i++) {
-			dateCounter += countValidDates(possiblyDateTime[i]);
-			timeCounter += countValidTimes(possiblyDateTime[i]);
-			
-			// if there is one invalid time or date token - add the whole thing to task contents?
-				// return 0;
-			// if there are more than 2 dates or times - add the whole thing to task contents?
-				// return 0;
-			// case: 2 T 2 D (ok)
-			// case: 2 T 1 D (from time T1-T2 on 1D)
-			// case: 2 T 0 D (from time T1-T2 today)
-			// case: 1 T 2 D (append time to contents? and add dated(i.e. no time) event)
-			// case: 0 T 2 D (add dated event)
-			// case: 1 T 1 D (add todo or deadline)
-			// case: 1 T 0 D (add todo/deadline today)
-			// case: 0 T 1 D (add dated event today)
+			int dateCount = countValidDates(possiblyDateTime[i]);
+			int timeCount = countValidTimes(possiblyDateTime[i]);
+			dateCounter += dateCount;
+			timeCounter += timeCount;
+			if (dateCount == 0 && timeCount == 0 ) {
+				return 0;
+			}
+		}
+		if (Math.max(dateCounter, timeCounter) > 2) {
+			return 0;
 		}
 		return Math.max(dateCounter, timeCounter);
 	}
@@ -91,7 +89,7 @@ public class AddStringParser {
 			if (startDateStore == null) {
 				setStartDate(sdp.parse(dateTimeInfo));
 			} else {
-				setEndDate (sdp.parse(dateTimeInfo));
+				setEndDate(sdp.parse(dateTimeInfo));
 			}
 			return 1;
 		}
@@ -175,19 +173,131 @@ public class AddStringParser {
 
 	
 	private int countValidTimes (String dateTimeInfo) {
+		
+		SingleTimeParser stp = new SingleTimeParser();
+		
+		// itself is a time
+		if (isSingleTime(dateTimeInfo, stp)) {
+			// parse it as start time if start time is not already defined
+			if (startTimeStore == null) {
+				setStartTime(stp.parse(dateTimeInfo));
+			} else {
+				setEndTime (stp.parse(dateTimeInfo));
+			}
+			return 1;
+		}
+		
+		// starts with a time indicator
+		if (isSingleTime(removeFirstWord(dateTimeInfo), stp)) {
+			String timeIndicator = getFirstWord(dateTimeInfo);
+			
+			for (int i = 0; i < LIST_DEADLINE_MARKERS.length; i++) {
+				if (timeIndicator.equalsIgnoreCase(LIST_DEADLINE_MARKERS[i])) {
+					setEndTime(stp.parse(removeFirstWord(dateTimeInfo)));
+					setTaskType(TaskType.DEADLINE);
+					return 1;
+				}
+			}
+			for (int i = 0; i < LIST_START_MARKERS.length; i++) {
+				if (timeIndicator.equalsIgnoreCase(LIST_START_MARKERS[i])) {
+					setStartTime(stp.parse(removeFirstWord(dateTimeInfo)));
+					setTaskType(TaskType.TODO);
+					return 1;
+				}
+			}
+			return 0;
+		}
+		
+		// trying to find 2 times
+		for (int i= 0; i < LIST_TWO_DATE_MARKERS.length; i++) {
+			if (dateTimeInfo.contains(LIST_TWO_DATE_MARKERS[i])) {
+				return findTwoTimes(LIST_TWO_DATE_MARKERS[i], dateTimeInfo);
+			}
+		}
 		return 0;
 	}
-
+	
+	private boolean isSingleTime (String time, SingleTimeParser parser) {
+		
+		if (parser.parse(time) != null) {
+			return true;
+		}
+		return false;
+	}
+	
+	private int findTwoTimes(String delimiter, String times) {
+		int delimOccurrence = times.length() - times.replaceAll(delimiter, "").length();
+		if (delimOccurrence == delimiter.length()) {
+			String[] timeTokens = times.split(delimiter);
+			timeTokens = trimStringArray(timeTokens);
+			
+			if (isValidTimeRange(timeTokens[0], timeTokens[1])) {
+				return 2;
+			}
+		}
+		return 0;
+	}
+	
+	private boolean isValidTimeRange(String time1, String time2) {
+		SingleTimeParser stp2 = new SingleTimeParser();
+		LocalTime earlierTime = stp2.parse(time1);
+		LocalTime laterTime = stp2.parse(time2);
+		
+		// case: need to append "am/pm" to first time
+		if (laterTime != null) {
+			if (time2.contains("pm")) {
+				time1 += "pm";
+			} else if (time2.contains("am")) {
+				time1 += "am";
+			}
+			earlierTime = stp2.parse(time1);
+		}
+		
+		// case: both times are valid times
+		if (earlierTime != null && laterTime != null) {
+			// check chronological
+			if (!earlierTime.isAfter(laterTime)) {
+				setStartTime(earlierTime);
+				setEndTime(laterTime);
+				return true;
+			}
+			return false;
+		}
+		return false;
+	}
 	
 	// task adding methods
-	private Task addFloating(String[] details) {
-		Task floating = new Task(details[INDEX_TASKNAME]);
+	private Task addFloating(String details) {
+		Task floating = new Task(details);
 		return floating;
 	}
 	
-	private Task addEvent(String[] details) {
-		// append time to task name if there is only 1 time
-		// append all details to task name if startDateTime to endDateTime is not chronological
+	private Task addEvent(String[] details) throws Exception {
+		// case: 1 T 2 D (append time to contents? and add dated(i.e. no time) event)
+		// case: 0 T 2 D (add dated event)
+		if (startTimeStore == null || endTimeStore == null) {
+			setStartTime(null);
+			setEndTime(null);
+		}
+		// case: 2 T 0 D (from time T1-T2 today)
+		if (startDateStore == null && endDateStore == null) {
+			setStartDate(LocalDate.now());
+			setEndDate(LocalDate.now());
+		}
+		// case: 2 T 1 D (from time T1-T2 on 1D)
+		if (startDateStore == null || endDateStore == null) {
+			if (startDateStore != null) {
+				setEndDate(startDateStore);
+			} else {
+				setStartDate(endDateStore);
+			}
+		}
+		// case: 2 T 2 D (ok)
+		LocalDateTime earlier = startDateStore.atTime(startTimeStore);
+		LocalDateTime later = endDateStore.atTime(endTimeStore);
+		if (!later.isAfter(earlier)) {
+			throw new Exception("Not chronological!");
+		}
 		Task event = new Task(details[INDEX_TASKNAME], startDateStore, 
 				 startTimeStore, endDateStore, endTimeStore);			
 		return event;
@@ -195,11 +305,20 @@ public class AddStringParser {
 	
 	// throw exception when more than one date or time found?
 	private Task addSingleDated(String[] details) {
+		
+		// case: 1 T 0 D (add todo/deadline today)
+		if (startDateStore == null && endDateStore == null) {
+			setStartDate(LocalDate.now());
+			setEndDate(LocalDate.now());
+		}
+		// case: 1 T 1 D (add todo or deadline)
+		// case: 0 T 1 D (add dated event on 1D)
 		if (taskTypeStore == TaskType.DEADLINE) {
 			Task deadline = new Task(details[INDEX_TASKNAME], endDateStore, endTimeStore,
 					TaskType.DEADLINE );
 			return deadline;
-		} else if (taskTypeStore == TaskType.TODO) {
+		} else if (taskTypeStore == TaskType.TODO 
+				|| (startDateStore != null && startTimeStore != null)) {
 			Task toDoAt = new Task(details[INDEX_TASKNAME], startDateStore, startTimeStore,
 					TaskType.TODO);
 			return toDoAt;
@@ -256,6 +375,10 @@ public class AddStringParser {
 		return endTimeStore;
 	}
 	
+	public TaskType getTaskType() {
+		return taskTypeStore;
+	}
+	
 	// mutators
 	public void setStartDate(LocalDate date) {
 		startDateStore = date;
@@ -276,7 +399,4 @@ public class AddStringParser {
 	public void setTaskType(TaskType type) {
 		taskTypeStore = type;
 	}
-	
-	
 }
-
