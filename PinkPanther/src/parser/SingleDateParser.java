@@ -11,7 +11,6 @@ public class SingleDateParser {
 	
 	private static final int INDEX_DAY = 0;
 	private static final int INDEX_MONTH = 1;
-	private static final int INDEX_YEAR = 2;
 	
 	private static final String[] DATE_DELIMITERS = {"/", "-", " "};
 	private static final List<String> DATE_FORMAT_SLASH = 
@@ -71,7 +70,7 @@ public class SingleDateParser {
 		for (int i = 0; i < DATE_DELIMITERS.length; i++){	
 			String[] dateDetails = date.split(DATE_DELIMITERS[i]);
 			if (dateDetails.length > 1) {
-				dateDetails = CommandParser.trimStringArray(dateDetails);
+				dateDetails = AddStringParser.trimStringArray(dateDetails);
 				fixedDate = dateDetails[INDEX_DAY];
 				
 				// fix month
