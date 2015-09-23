@@ -42,7 +42,7 @@ public class AddStringParser {
 			try {
 				return addEvent(userInfo);
 			} catch (Exception e) {
-				System.out.println(e.getMessage());
+				//System.out.println(e.getMessage());
 				//e.printStackTrace();
 			}
 			return null;
@@ -273,31 +273,37 @@ public class AddStringParser {
 	}
 	
 	private Task addEvent(String[] details) throws Exception {
+		
 		// case: 1 T 2 D (append time to contents? and add dated(i.e. no time) event)
 		// case: 0 T 2 D (add dated event)
 		if (startTimeStore == null || endTimeStore == null) {
 			setStartTime(null);
 			setEndTime(null);
-		}
-		// case: 2 T 0 D (from time T1-T2 today)
-		if (startDateStore == null && endDateStore == null) {
-			setStartDate(LocalDate.now());
-			setEndDate(LocalDate.now());
-		}
-		// case: 2 T 1 D (from time T1-T2 on 1D)
-		if (startDateStore == null || endDateStore == null) {
-			if (startDateStore != null) {
-				setEndDate(startDateStore);
-			} else {
-				setStartDate(endDateStore);
+			if (!endDateStore.isAfter(startDateStore)) {
+				throw new Exception("Not chronological!");
+			}
+		} else {
+			// case: 2 T 0 D (from time T1-T2 today)
+			if (startDateStore == null && endDateStore == null) {
+				setStartDate(LocalDate.now());
+				setEndDate(LocalDate.now());
+			}
+			// case: 2 T 1 D (from time T1-T2 on 1D)
+			if (startDateStore == null || endDateStore == null) {
+				if (startDateStore != null) {
+					setEndDate(startDateStore);
+				} else {
+					setStartDate(endDateStore);
+				}
+			}
+			// case: 2 T 2 D (ok)
+			LocalDateTime earlier = startDateStore.atTime(startTimeStore);
+			LocalDateTime later = endDateStore.atTime(endTimeStore);
+			if (!later.isAfter(earlier)) {
+				throw new Exception("Not chronological!");
 			}
 		}
-		// case: 2 T 2 D (ok)
-		LocalDateTime earlier = startDateStore.atTime(startTimeStore);
-		LocalDateTime later = endDateStore.atTime(endTimeStore);
-		if (!later.isAfter(earlier)) {
-			throw new Exception("Not chronological!");
-		}
+		
 		Task event = new Task(details[INDEX_TASKNAME], startDateStore, 
 				 startTimeStore, endDateStore, endTimeStore);			
 		return event;
