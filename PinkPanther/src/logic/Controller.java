@@ -25,30 +25,24 @@ public class Controller {
 					if(add.execute(addParser.parse(parameterString))){
 						commandStack.addCommand(add);
 					}
-					else{
-						//show error message
-					}
 					break;
 				case "edit":
 					EditCommand edit = new EditCommand(handler);
 					if(edit.execute(editParser.parse(parameterString))){
 						commandStack.addCommand(edit);
 					}
-					else{
-						//show error message
-					}
+					
 					break;
 				case "done":
-					DoneCommand done = new DoneCommand(handler,queryParser.parse(parameterString));
-					commandStack.addCommand(done);
+					DoneCommand done = new DoneCommand();
+					if(done.execute(queryParser.parse(parameterString))){
+						commandStack.addCommand(done);
+					}
 					break;
 				case "delete":
 					DeleteCommand delete = new DeleteCommand(handler);
 					if(delete.execute(queryParser.parse(parameterString))){
 						commandStack.addCommand(delete);
-					}
-					else{
-						//show error message
 					}
 					
 					break;

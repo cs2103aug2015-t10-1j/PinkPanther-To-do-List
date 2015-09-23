@@ -7,15 +7,20 @@ public class DoneCommand implements Command{
 	private Task taskRef;
 	private int previousTaskStatus;
 	
-	public DoneCommand(Task task){
+	public DoneCommand(){
 
 	}
 	
-	public void execute(Task task){
+	public boolean execute(Task task){
 		taskRef=task;
+		if(taskRef==null){
+			Display.setFeedBack("task does not exist");
+			return false;
+		}
 		previousTaskStatus=taskRef.getStatus();
 		taskRef.setStatus(1);
-		Display.showFeedBack(taskRef.getName()+" is marked as done");
+		Display.setFeedBack(taskRef.getName()+" is marked as done");
+		return true;
 	}
 	
 	public void undo(){
