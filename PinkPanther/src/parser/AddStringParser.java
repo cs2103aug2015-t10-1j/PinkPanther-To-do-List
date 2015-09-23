@@ -5,18 +5,15 @@ import common.TaskType;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class CommandParser {
+public class AddStringParser {
 	
 	private LocalDate startDateStore;
 	private LocalDate endDateStore;
 	private LocalTime startTimeStore;
 	private LocalTime endTimeStore;
-	// not sure if need this
 	private TaskType taskTypeStore;
 	
 	// indexes of various arrays
-	private static final int INDEX_COMMAND = 0;
-	private static final int INDEX_COMMAND_CONTENTS = 1;
 	private static final int INDEX_TASKNAME = 0;
 	private static final int INDEX_TASK_DETAIL = 1;
 	
@@ -27,15 +24,7 @@ public class CommandParser {
 
 
 	// main functionality
-	public static String[] inputSplitter(String userInput){
-		String[] splitInput = new String[2];
-		splitInput[INDEX_COMMAND] = getFirstWord(userInput);
-		splitInput[INDEX_COMMAND_CONTENTS] = removeFirstWord(userInput);
-		return splitInput;
-		// remember to handle exceptions here
-	}
-	
-	public Task addTaskParser(String commandContent){
+	public Task parse(String commandContent){
 		
 		clearStores();
 		String[] userInfo = commandContent.split(",");
@@ -290,3 +279,4 @@ public class CommandParser {
 	
 	
 }
+

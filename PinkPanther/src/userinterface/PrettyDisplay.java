@@ -10,6 +10,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -25,46 +26,37 @@ import javafx.stage.*;
  
 public class PrettyDisplay extends Application {
 	boolean isViewingHelpScreen = false;
-	
-    public static void main(String[] args) {
-        launch(args);
-    }
+
+    Text scenetitle = new Text("Calendar");
+    boolean isShortened = false;
     
-    public void runApp(){
-    	launch();
+    public void runApp() {
+        launch();
     }
      
     @Override
     public void start(Stage primaryStage) {
-    	fillPage ("Add <EventName> || Delete <EventIndex> || ");
+    	fillPage ("Input command in the field above");
     }
+    
     
     void fillPage(String newInput){
     	Stage primaryStage = new Stage();    	
         primaryStage.setTitle("PinkPanther: The best to-do list");
         
         //Main Grid: Holds contents for the Calendar
-        GridPane grid = new GridPane();
-        grid.setAlignment(Pos.TOP_LEFT);
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(10, 10, 10, 10));
+        GridPane calendarGrid = new GridPane();
+        calendarGrid.setAlignment(Pos.TOP_LEFT);
+        calendarGrid.setHgap(10);
+        calendarGrid.setVgap(10);
+        calendarGrid.setPadding(new Insets(10, 10, 10, 10));
 
-        populateGrid(grid);
-        
-        /*
-        //Holds main Grid
-        GridPane grid1 = new GridPane();
-        grid1.setAlignment(Pos.TOP_LEFT);
-        grid1.setHgap(10);
-        grid1.setVgap(10);
-        grid1.setPadding(new Insets(25, 25, 25, 25));
-        */
+        populateGrid(calendarGrid);
         
         //Holds content of Grid together with grid1
         ScrollPane s1 = new ScrollPane();
         s1.setPrefSize(1080, 660);
-        s1.setContent(grid);
+        s1.setContent(calendarGrid);
         s1.setStyle("-fx-background-color: transparent;");
         
         GridPane grid2 = new GridPane();
@@ -76,7 +68,7 @@ public class PrettyDisplay extends Application {
       //  grid1.add(grid, 0, 0);
         grid2.add(s1,0,0);
         
-        TextField userTextField = new TextField("Input Command");
+        TextField userTextField = new TextField();
         userTextField.setStyle(""
         + "-fx-font-size: 30px;"
         + "-fx-font-weight: bold;"
@@ -106,7 +98,6 @@ public class PrettyDisplay extends Application {
         grid2.add(hbBtn, 0, 2);
 
         Scene scene = new Scene(grid2, 1080, 850);
-       
         
  
     	btn.setOnAction(new EventHandler<ActionEvent>() {
@@ -117,8 +108,8 @@ public class PrettyDisplay extends Application {
                     actiontarget.setFill(Color.WHITE);                	
                 	actiontarget.setText(userTextField.getText());
                 	userTextField.clear();
-            		grid.getChildren().clear();
-                    populateGrid(grid);
+            		calendarGrid.getChildren().clear();
+                    populateGrid(calendarGrid);
                 	
                 } else {
                     actiontarget.setFill(Color.FIREBRICK);
@@ -143,6 +134,9 @@ public class PrettyDisplay extends Application {
              }
          });
         
+        
+        
+        
         userTextField.setOnKeyPressed(new EventHandler<KeyEvent>()
         {
             @Override
@@ -153,9 +147,9 @@ public class PrettyDisplay extends Application {
                 	if ((userTextField.getText() != null && !userTextField.getText().isEmpty())) {
                         actiontarget.setFill(Color.WHITE);                	
                     	actiontarget.setText(userTextField.getText());
-                		grid.getChildren().clear();
+                    	calendarGrid.getChildren().clear();
                     	userTextField.clear();
-                        populateGrid(grid);
+                        populateGrid(calendarGrid);
                     	
                     } else {
                         actiontarget.setFill(Color.FIREBRICK);
@@ -188,6 +182,18 @@ public class PrettyDisplay extends Application {
                 		isViewingHelpScreen = false;
                 	}
                 }
+                else if (ke.getCode().equals(KeyCode.LEFT))
+                {
+                    primaryStage.setIconified(true);
+                }
+                else if (ke.getCode().equals(KeyCode.END))
+                {
+                	int height = isShortened ? 850 : 315;
+                    primaryStage.setHeight(height);
+                    isShortened = !isShortened;
+                    String titleName = isShortened? "Type Mode" : "Calendar";
+                    scenetitle.setText(titleName);
+                }
             }
         });
         
@@ -199,13 +205,11 @@ public class PrettyDisplay extends Application {
         scene.getStylesheets().add(HelloWorld.class.getResource("a.css").toExternalForm());
       
         primaryStage.show();
-        
     }
     
     void populateGrid(GridPane grid){
     	int currentYPos = 1;
         //Scene title
-        Text scenetitle = new Text("Calendar");
         scenetitle.setFont(Font.font("Tahoma", FontWeight.BOLD, 66));
         scenetitle.setFill(Color.DIMGRAY);
         grid.add(scenetitle, 1, 0);
@@ -217,10 +221,13 @@ public class PrettyDisplay extends Application {
         //for the actual calendar items
         TextedColorDayBox daydBox = new TextedColorDayBox("Float");
     	grid.add(daydBox, 0, currentYPos++);
+
+    	int currTaskIndex = 1;
     	
     	for (int i=1; i<14; i++){
         	Random ran = new Random();
         	int randomNumTasks = ran.nextInt(5);
+        	
         	if (randomNumTasks!=0){
 	        	TextedColorDayBox dayBox = new TextedColorDayBox("Day\n"+ i);
 	        	grid.add(dayBox, 0, currentYPos);
@@ -234,16 +241,15 @@ public class PrettyDisplay extends Application {
 		        			grid.add(circle, 0, currentYPos);
 		    	        	currentXPos = 1;
 		        		}
-		        		TextedTaskBox taskBox = new TextedTaskBox("Meetin with boss at meeting roomdddddd" , "08:00pm", "09:00pm");
+		        		TextedTaskBox taskBox = new TextedTaskBox("Meetin with boss at meeting roomdddddd" , "08:00pm", "09:00pm", currTaskIndex);
+		        		currTaskIndex++;
 		        		grid.add(taskBox, currentXPos++, currentYPos);
 		            }
 		        	currentYPos++;
 		        	
         	}
-        	System.out.println(i + " " + currentYPos);
         	if (i == 5 && currentYPos < 8){
         		for (int k=currentYPos; k<7; k++){
-        			System.out.println("extra circle added at " + k);
         			TransparentCircle circle = new TransparentCircle();
         			grid.add(circle, 0, k);
         		}

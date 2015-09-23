@@ -4,10 +4,8 @@ import java.util.List;
 import java.util.Collections;
 import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
 public class SingleDateParser {
 	
@@ -31,7 +29,6 @@ public class SingleDateParser {
 	
 	private static ArrayList<String> validDateFormats;
 	
-	
 	public SingleDateParser() {
 		validDateFormats = new ArrayList<String>();
 		validDateFormats.addAll(DATE_FORMAT_SLASH);
@@ -53,7 +50,7 @@ public class SingleDateParser {
 		
 		return null;
 	}
-	@SuppressWarnings("finally")
+	
 	private LocalDate compareDateFormat(String dateString, String pattern) {
 		
 		try {
@@ -90,7 +87,7 @@ public class SingleDateParser {
 				
 				if (dateDetails.length < 3 ) {
 					String appendedYear = DATE_DELIMITERS[i] 
-							+ String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+							+ String.valueOf(LocalDate.now().getYear());
 					fixedDate += appendedYear;
 				}
 
