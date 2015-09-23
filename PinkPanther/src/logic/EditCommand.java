@@ -1,10 +1,8 @@
 package logic;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 import common.Task;
-import common.TaskType;
 
 public class EditCommand implements Command{
 	private TaskHandler handler;
@@ -28,40 +26,17 @@ public class EditCommand implements Command{
 	
 	private Task applyModification(Task unmodfied,Task modified){
 		modified.setName(unmodified.getName());
-		TaskType type=modified.getTaskType();
-		
-		if(type==TaskType.TODO){
-			if(modified.getStartDate()==null){
-				modified.setStartDate(unmodified.getStartDate());
-			}
-			if(modified.getStartTime()==null){
-				modified.setStartTime(unmodified.getStartTime());
-			}
+		if(modified.getStartDate()==null){
+			modified.setStartDate(unmodified.getStartDate());
 		}
-		
-		else if(type==TaskType.DEADLINE){
-			if(modified.getEndDate()==null){
-				modified.setEndDate(unmodified.getEndDate());
-			}
-			if(modified.getEndTime()==null){
-				modified.setEndTime(unmodified.getEndTime());
-			}
-			
+		if(modified.getStartTime()==null){
+			modified.setStartTime(unmodified.getStartTime());
 		}
-		
-		else if(type==TaskType.EVENT){
-			if(modified.getStartDate()==null){
-				modified.setStartDate(unmodified.getStartDate());
-			}
-			if(modified.getStartTime()==null){
-				modified.setStartTime(unmodified.getStartTime());
-			}
-			if(modified.getEndDate()==null){
-				modified.setEndDate(unmodified.getEndDate());
-			}
-			if(modified.getEndTime()==null){
-				modified.setEndTime(unmodified.getEndTime());
-			}
+		if(modified.getEndDate()==null){
+			modified.setEndDate(unmodified.getEndDate());
+		}
+		if(modified.getEndTime()==null){
+			modified.setEndTime(unmodified.getEndTime());
 		}
 		
 		return modified;
