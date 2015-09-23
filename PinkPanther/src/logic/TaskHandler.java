@@ -68,7 +68,7 @@ public class TaskHandler {
 	}
 	
 	
-	public Task searchTaskByIndexAndDate(LocalDate date,int displayIndex){
+	public Task searchTaskByIndex(LocalDate date,int displayIndex){
 		int actualIndex=displayIndex-1;
 		if(date==null){
 			if(actualIndex>=floatingList.size()){

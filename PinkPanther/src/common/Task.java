@@ -16,7 +16,7 @@ public class Task {
 	
 	public Task(String name){
 		this.name=name;
-		this.type=type.FLOATING;
+		this.type=TaskType.FLOATING;
 	}
 	
 	
@@ -40,7 +40,7 @@ public class Task {
 		this.startTime=startTime;
 		this.endDate=endDate;
 		this.endTime=endTime;
-		this.type=type.EVENT;
+		this.type=TaskType.EVENT;
 	}
 	
 	public void setName(String name){

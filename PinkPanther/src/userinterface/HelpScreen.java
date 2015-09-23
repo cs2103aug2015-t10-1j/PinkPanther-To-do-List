@@ -37,28 +37,28 @@ public class HelpScreen extends ScrollPane{
         TextedColorDayBox addBox = new TextedColorDayBox("add");
         grid.add(addBox, 3, 1);
         
-        TextedTaskBox addInfo = new TextedTaskBox("   Instructions for add", "", "");
+        TextedTaskBox addInfo = new TextedTaskBox("   Instructions for add", "", "", 0);
         grid.add(addInfo, 4, 1);
         
         
         TextedColorDayBox delBox = new TextedColorDayBox("delete");
         grid.add(delBox, 3, 2);
         
-        TextedTaskBox delInfo = new TextedTaskBox("   Instructions for del", "", "");
+        TextedTaskBox delInfo = new TextedTaskBox("   Instructions for del", "", "", 0);
         grid.add(delInfo, 4, 2);
         
         
         TextedColorDayBox editBox = new TextedColorDayBox("edit");
         grid.add(editBox, 3, 3);
         
-        TextedTaskBox editInfo = new TextedTaskBox("   Instructions for edit", "", "");
+        TextedTaskBox editInfo = new TextedTaskBox("   Instructions for edit", "", "", 0);
         grid.add(editInfo, 4, 3);
         
         
         TextedColorDayBox undoBox = new TextedColorDayBox("undo");
         grid.add(undoBox, 3, 4);
         
-        TextedTaskBox undoInfo = new TextedTaskBox("   Instructions for undo", "", "");
+        TextedTaskBox undoInfo = new TextedTaskBox("   Instructions for undo", "", "", 0);
         grid.add(undoInfo, 4, 4);
         
         
@@ -66,7 +66,7 @@ public class HelpScreen extends ScrollPane{
         TextedColorDayBox redoBox = new TextedColorDayBox("redo");
         grid.add(redoBox, 3, 5);
         
-        TextedTaskBox redoInfo = new TextedTaskBox("   Instructions for redo", "", "");
+        TextedTaskBox redoInfo = new TextedTaskBox("   Instructions for redo", "", "", 0);
         grid.add(redoInfo, 4, 5);
         
         
@@ -74,7 +74,7 @@ public class HelpScreen extends ScrollPane{
         TextedColorDayBox saveBox = new TextedColorDayBox("save");
         grid.add(saveBox, 3, 6);
 
-        TextedTaskBox saveInfo = new TextedTaskBox("   Instructions for save", "", "");
+        TextedTaskBox saveInfo = new TextedTaskBox("   Instructions for save", "", "", 0);
         grid.add(saveInfo, 4, 6);
         
         

@@ -26,16 +26,26 @@ public class Controller {
 				case "edit":
 					EditCommand edit = new EditCommand(handler,editParser.parse(parameterString));
 					commandStack.addCommand(edit);
+					break;
 				case "done":
 					DoneCommand done = new DoneCommand(handler,queryParser.parse(parameterString));
 					commandStack.addCommand(done);
+					break;
 				case "delete":
-					DoneCommand delete = new DoneCommand(handler,queryParser.parse(parameterString));
+					DeleteCommand delete = new DeleteCommand(handler,queryParser.parse(parameterString));
 					commandStack.addCommand(delete);
+					break;
+				case "undo":
+					commandStack.undoOperation();
+					break;
+				case "redo":
+					commandStack.redoOperation();
+					break;
 				case "exit":
 					gui.closeWindow();
 					System.exit(0);
-					
+				default:
+					//display invalid command message
 					
 			}
 		}
