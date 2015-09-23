@@ -9,18 +9,19 @@ public class EditCommand implements Command{
 	private Task unmodified;
 	private Task modified;
 	
-	public EditCommand(TaskHandler handler,ArrayList<Task>inputTasks){
+	public EditCommand(TaskHandler handler){
 		this.handler=handler;
-		execute(inputTasks);
 	}
 	
-	public void execute(ArrayList<Task>inputTasks){
+	public boolean execute(ArrayList<Task>inputTasks){
 		unmodified=inputTasks.get(0);
+		if(unmodified==null){
+			return false;
+		}
 		modified=inputTasks.get(1);
 		modified=applyModification(unmodified,modified);
 		handler.deleteTask(unmodified);
-		handler.addTask(modified);
-		Display.showFeedBack(unmodified.getName()+" is modified");
+		return handler.addTask(modified);
 		
 	}
 	

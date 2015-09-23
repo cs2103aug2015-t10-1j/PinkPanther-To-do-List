@@ -1,6 +1,7 @@
 package logic;
 
 import common.Task;
+import parser.AddStringParser;
 import userinterface.PrettyDisplay;
 
 public class Controller {
@@ -9,7 +10,7 @@ public class Controller {
 		PrettyDisplay gui=new PrettyDisplay();
 		TaskHandler handler=new TaskHandler();
 		CommandStack commandStack=new CommandStack();
-		AddParser addParser=new AddParser(handler);
+		AddStringParser addParser=new AddStringParser();
 		EditParser editParser=new EditParser(handler);
 		QueryParser queryParser=new QueryParser(handler);
 		
@@ -20,20 +21,36 @@ public class Controller {
 			
 			switch(commandString.toLowerCase()){
 				case "add":
-					AddCommand add = new AddCommand(handler,addParser.parse(parameterString));
-					commandStack.addCommand(add);
+					AddCommand add = new AddCommand(handler);
+					if(add.execute(addParser.parse(parameterString))){
+						commandStack.addCommand(add);
+					}
+					else{
+						//show error message
+					}
 					break;
 				case "edit":
-					EditCommand edit = new EditCommand(handler,editParser.parse(parameterString));
-					commandStack.addCommand(edit);
+					EditCommand edit = new EditCommand(handler);
+					if(edit.execute(editParser.parse(parameterString))){
+						commandStack.addCommand(edit);
+					}
+					else{
+						//show error message
+					}
 					break;
 				case "done":
 					DoneCommand done = new DoneCommand(handler,queryParser.parse(parameterString));
 					commandStack.addCommand(done);
 					break;
 				case "delete":
-					DeleteCommand delete = new DeleteCommand(handler,queryParser.parse(parameterString));
-					commandStack.addCommand(delete);
+					DeleteCommand delete = new DeleteCommand(handler);
+					if(delete.execute(queryParser.parse(parameterString))){
+						commandStack.addCommand(delete);
+					}
+					else{
+						//show error message
+					}
+					
 					break;
 				case "undo":
 					commandStack.undoOperation();

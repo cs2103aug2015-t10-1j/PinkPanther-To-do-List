@@ -8,7 +8,7 @@ public class DoneCommand implements Command{
 	private int previousTaskStatus;
 	
 	public DoneCommand(Task task){
-		execute(task);
+
 	}
 	
 	public void execute(Task task){
