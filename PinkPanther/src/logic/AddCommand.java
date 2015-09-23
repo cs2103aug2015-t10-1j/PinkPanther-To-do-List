@@ -6,23 +6,30 @@ import common.Task;
  */
 public class AddCommand implements Command{
 	private TaskHandler handler;
-	private Task TaskRef;
+	private Task taskRef;
 	
 	public AddCommand(TaskHandler handler){
 		this.handler=handler;
 	}
 	
 	public boolean execute(Task task){	
-		TaskRef=task;
-	    return handler.addTask(task);
+		taskRef=task;
+	    if(handler.addTask(task)){
+	    	Display.setFeedBack(task.getName()+" is added");
+	    	return true;
+	    }
+	    else{
+	    	Display.setFeedBack("you have another event during this period");
+	    	return false;
+	    }
 	}
 	
 	
 	public void undo(){
-		handler.deleteTask(TaskRef);
+		handler.deleteTask(taskRef);
 	}
 	
 	public void redo(){
-		handler.addTask(TaskRef);
+		handler.addTask(taskRef);
 	}
 }

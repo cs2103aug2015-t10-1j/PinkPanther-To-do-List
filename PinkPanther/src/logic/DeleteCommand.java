@@ -15,7 +15,14 @@ public class DeleteCommand implements Command{
 	
 	public boolean execute(Task task){
 		taskRef=task;
-		return handler.deleteTask(taskRef);
+		if(handler.deleteTask(taskRef)){
+			Display.setFeedBack(taskRef.getName()+" is deleted");
+			return true;
+		}
+		else{
+			Display.setFeedBack("task does not exist");
+			return false;
+		}
 	}
 	
 	public void undo(){

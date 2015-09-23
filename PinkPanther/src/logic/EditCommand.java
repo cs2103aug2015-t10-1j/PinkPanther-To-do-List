@@ -16,12 +16,20 @@ public class EditCommand implements Command{
 	public boolean execute(ArrayList<Task>inputTasks){
 		unmodified=inputTasks.get(0);
 		if(unmodified==null){
+			Display.setFeedBack("task does not exist");
 			return false;
 		}
 		modified=inputTasks.get(1);
 		modified=applyModification(unmodified,modified);
 		handler.deleteTask(unmodified);
-		return handler.addTask(modified);
+		if(handler.addTask(modified)){
+			Display.setFeedBack(unmodified.getName()+" is modified");
+			return true;
+		}
+		else{
+			Display.setFeedBack("you have another event during this period");
+			return false;
+		}
 		
 	}
 	
