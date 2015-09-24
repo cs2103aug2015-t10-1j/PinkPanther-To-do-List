@@ -33,10 +33,11 @@ public class TextedTaskBox extends StackPane{
 		grid.add(text, 0, 2);
 		
 		
-		TextedTimeBox indexBox = new TextedTimeBox("Index " + Integer.toString(index));
-		GridPane.setConstraints(indexBox , 0, 3);
-		grid.add(indexBox, 0, 3);
-		
+		if (index != 0){
+			TextedTimeBox indexBox = new TextedTimeBox("Index " + Integer.toString(index));
+			GridPane.setConstraints(indexBox , 0, 3);
+			grid.add(indexBox, 0, 3);
+		}
 		
 		
 		if (!startTime.equals("")){

@@ -28,54 +28,54 @@ public class HelpScreen extends ScrollPane{
         
         
 
-        Text scenetitle = new Text("Cheat Sheet");
+        Text scenetitle = new Text("Cheatsheet");
         scenetitle.setFont(Font.font("Tahoma", FontWeight.BOLD, 66));
         scenetitle.setFill(Color.DIMGRAY);
-        grid.add(scenetitle, 0, 2);
+        grid.add(scenetitle, 2, 2);
         
         
         TextedColorDayBox addBox = new TextedColorDayBox("add");
-        grid.add(addBox, 3, 1);
+        grid.add(addBox, 4, 1);
         
         TextedTaskBox addInfo = new TextedTaskBox("   Instructions for add", "", "", 0);
-        grid.add(addInfo, 4, 1);
+        grid.add(addInfo, 5, 1);
         
         
         TextedColorDayBox delBox = new TextedColorDayBox("delete");
-        grid.add(delBox, 3, 2);
+        grid.add(delBox, 4, 2);
         
         TextedTaskBox delInfo = new TextedTaskBox("   Instructions for del", "", "", 0);
-        grid.add(delInfo, 4, 2);
+        grid.add(delInfo, 5, 2);
         
         
         TextedColorDayBox editBox = new TextedColorDayBox("edit");
-        grid.add(editBox, 3, 3);
+        grid.add(editBox, 4, 3);
         
         TextedTaskBox editInfo = new TextedTaskBox("   Instructions for edit", "", "", 0);
-        grid.add(editInfo, 4, 3);
+        grid.add(editInfo, 5, 3);
         
         
         TextedColorDayBox undoBox = new TextedColorDayBox("undo");
-        grid.add(undoBox, 3, 4);
+        grid.add(undoBox, 4, 4);
         
         TextedTaskBox undoInfo = new TextedTaskBox("   Instructions for undo", "", "", 0);
-        grid.add(undoInfo, 4, 4);
+        grid.add(undoInfo, 5, 4);
         
         
 
         TextedColorDayBox redoBox = new TextedColorDayBox("redo");
-        grid.add(redoBox, 3, 5);
+        grid.add(redoBox, 4, 5);
         
         TextedTaskBox redoInfo = new TextedTaskBox("   Instructions for redo", "", "", 0);
-        grid.add(redoInfo, 4, 5);
+        grid.add(redoInfo, 5, 5);
         
         
         
         TextedColorDayBox saveBox = new TextedColorDayBox("save");
-        grid.add(saveBox, 3, 6);
+        grid.add(saveBox, 4, 6);
 
         TextedTaskBox saveInfo = new TextedTaskBox("   Instructions for save", "", "", 0);
-        grid.add(saveInfo, 4, 6);
+        grid.add(saveInfo, 5, 6);
         
         
 	}
