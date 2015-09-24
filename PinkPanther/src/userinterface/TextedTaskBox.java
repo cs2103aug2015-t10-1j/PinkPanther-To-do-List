@@ -24,17 +24,17 @@ public class TextedTaskBox extends StackPane{
 	    ColumnConstraints column2 = new ColumnConstraints(50, 150, 100);
 	    grid.getColumnConstraints().addAll(column1, column2);
 		
-		Text text = new Text(name);
+		Text text = new Text("     " + name);
 		text.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 		text.setTextAlignment(TextAlignment.LEFT);
-		text.setFill(Color.DIMGRAY);
+		text.setFill(Color.BLACK);
 
 		GridPane.setConstraints(text, 0, 2);
 		grid.add(text, 0, 2);
 		
 		
 		if (index != 0){
-			TextedTimeBox indexBox = new TextedTimeBox("Index " + Integer.toString(index));
+			IndexBox indexBox = new IndexBox(index);
 			GridPane.setConstraints(indexBox , 0, 3);
 			grid.add(indexBox, 0, 3);
 		}
