@@ -2,6 +2,8 @@ package parser;
 
 import common.Task;
 import common.TaskType;
+import logic.Display;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -44,6 +46,7 @@ public class AddStringParser {
 			} catch (Exception e) {
 				//System.out.println(e.getMessage());
 				//e.printStackTrace();
+				Display.setFeedBack(e.getMessage());
 			}
 			return null;
 		
@@ -53,6 +56,7 @@ public class AddStringParser {
 		
 		// invalid task to create; no task created
 		} else {
+			Display.setFeedBack("Invalid add command");
 			return null;
 		}
 	}

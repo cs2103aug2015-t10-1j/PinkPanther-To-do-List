@@ -25,8 +25,8 @@ public class TextedTaskBox extends StackPane{
 	    grid.getColumnConstraints().addAll(column1, column2);
 		
 		Text text = new Text("     " + name);
-		text.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 		text.setTextAlignment(TextAlignment.LEFT);
+		text.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 		text.setFill(Color.BLACK);
 
 		GridPane.setConstraints(text, 0, 2);
@@ -57,7 +57,7 @@ public class TextedTaskBox extends StackPane{
 			Text dash = new Text("-");
 			text.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 			text.setTextAlignment(TextAlignment.LEFT);
-			text.setFill(Color.DIMGRAY);
+			text.setFill(Color.BLACK);
 
 			GridPane.setConstraints(dash, 7, 3);
 			grid.add(dash, 7, 3);

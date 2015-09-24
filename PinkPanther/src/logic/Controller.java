@@ -134,6 +134,7 @@ public class Controller {
 				gui.closeWindow();
 				System.exit(0);
 			default:
+				Display.setFeedBack("Invalid Command");
 				//display invalid command message
 	}
 }}

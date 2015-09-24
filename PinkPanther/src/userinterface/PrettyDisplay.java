@@ -27,6 +27,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.*;
 import logic.Controller;
+import logic.Display;
 import common.*;
  
 public class PrettyDisplay extends Application {
@@ -264,21 +265,24 @@ public class PrettyDisplay extends Application {
     		
     		int currXPos = 1;
 			for(Task task:todoList.get(date)){ //looping through tasks for specified date
+				
+				if (currXPos == 3){
+        			currentYPos++;
+        			TransparentCircle circle = new TransparentCircle();
+        			grid.add(circle, 0, currentYPos);
+        			currXPos = 1;
+        		}
+				
 	    		String taskName = task.getName();
 	    		String startTime = task.getStartTimeString();
     			String endTime = task.getEndTimeString();
 	    		TextedTaskBox taskBox = new TextedTaskBox(taskName , startTime, endTime, currTaskIndex);
 	    		currTaskIndex++;
 	    		grid.add(taskBox, currXPos++, currentYPos);
+
 	    		
-	    		if (currXPos == 3){
-        			currentYPos++;
-        			TransparentCircle circle = new TransparentCircle();
-        			grid.add(circle, 0, currentYPos);
-        			currXPos = 1;
-        		}
 			}
-			
+			currentYPos++;
 		}
 
     	/*
@@ -321,8 +325,10 @@ public class PrettyDisplay extends Application {
     void callControllerToAddCommand(){
     	String command = userTextField.getText();
     	actiontarget.setFill(Color.WHITE);                	
-    	actiontarget.setText(command);
+    	//actiontarget.setText(command);
+
     	mainController.addCommand(command);
+        actiontarget.setText(Display.showFeedBack());
     	calendarGrid.getChildren().clear();
     	userTextField.clear();
         populateGrid(calendarGrid);
@@ -373,7 +379,7 @@ public class PrettyDisplay extends Application {
         {
     		scrollUp(0.05f);
         }
-        else if (ke.getCode().equals(KeyCode.RIGHT) && !isCalendarHidden)
+        else if (ke.getCode().equals(KeyCode.PAGE_UP) && !isCalendarHidden)
         {
         	if (!isViewingHelpScreen){
         		viewHelpScreen();
@@ -382,7 +388,7 @@ public class PrettyDisplay extends Application {
         		hideHelpScreen();
         	}
         }
-        else if (ke.getCode().equals(KeyCode.LEFT))
+        else if (ke.getCode().equals(KeyCode.PAGE_DOWN))
         {
             primaryStage.setIconified(true);
         }
@@ -422,7 +428,8 @@ public class PrettyDisplay extends Application {
         grid2.add(actiontarget, 0, 2);
         grid2.add(hbBtn, 0, 2);
         actiontarget.setFill(Color.WHITE);
-		actiontarget.setText("Input command into the field above");
+        actiontarget.setText(Display.showFeedBack());
+		//actiontarget.setText("Input command into the field above");
 		isViewingHelpScreen = false;
 	}
 	
@@ -431,7 +438,8 @@ public class PrettyDisplay extends Application {
         scenetitle.setText("Calendar");
         s1.setDisable(false);
         actiontarget.setFill(Color.WHITE);
-		actiontarget.setText("Input command into the field above");
+        actiontarget.setText(Display.showFeedBack());
+		//actiontarget.setText("Input command into the field above");
         isCalendarHidden = false;
  		s1.setVvalue(currentScrollYPos);
 	}
