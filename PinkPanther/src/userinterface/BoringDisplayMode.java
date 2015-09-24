@@ -100,7 +100,7 @@ public class BoringDisplayMode extends Application {
         
         Scene scene = new Scene(grid, 1080, 800);
         scene.getStylesheets().clear();
-        scene.getStylesheets().add(HelloWorld.class.getResource("a.css").toExternalForm());
+        scene.getStylesheets().add(this.getClass().getResource("a.css").toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.show();
 

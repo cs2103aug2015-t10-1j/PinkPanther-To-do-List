@@ -37,6 +37,11 @@ public class PrettyDisplay extends Application {
     Stage objPrimaryStage;
     HBox hbBtn;
     
+    public static void main(String[] args){
+    	PrettyDisplay pD = new PrettyDisplay();
+    	pD.runApp();
+    }
+    
     public void runApp() {
         launch();
     }
@@ -238,7 +243,6 @@ public class PrettyDisplay extends Application {
     	userTextField.clear();
         populateGrid(calendarGrid);
 
-    	System.out.println(objPrimaryStage);
     }
     
     public void setActionResult(String text){
