@@ -1,5 +1,6 @@
 package userinterface;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import javafx.application.Application;
@@ -19,6 +20,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.*;
 import logic.Controller;
+import common.*;
  
 public class PrettyDisplay extends Application {
 	
@@ -48,13 +50,35 @@ public class PrettyDisplay extends Application {
      
     @Override
     public void start(Stage primaryStage) {
-    	fillPage ("Input command in the field above", primaryStage);
+ //   	fillPage ("Input command in the field above", primaryStage);
     	objPrimaryStage = primaryStage;
     	mainController = new Controller();
+    	
+    	 primaryStage.setTitle("PinkPanther: The best to-do list");
+         
+         //Holds all calendar items
+         implementCalendarGrid();
+         //Holds content of Grid together with grid1
+         implementScrollPane();
+         //Holds calendar grid and textboxes/buttons below
+         implementMainGrid();
+         //Holds the user input box
+         implementUserTextField();
+         //text that displays after-action (e.g added x event)
+         implementActionTarget("Input command in the field above");
+         //add buttons
+         implementButtons();
+         //Allows keyboard inputs to be read as commands
+         implementKeystrokeEvents(primaryStage);
+         //Implements the scene
+         implementScene();
+         
+         setStage(primaryStage);
+         
     }
     
     void fillPage(String newInput, Stage primaryStage){
-    	
+
         primaryStage.setTitle("PinkPanther: The best to-do list");
         
         //Holds all calendar items
@@ -75,6 +99,7 @@ public class PrettyDisplay extends Application {
         implementScene();
         
         setStage(primaryStage);
+        
     }
 
     void implementCalendarGrid(){    
@@ -184,7 +209,8 @@ public class PrettyDisplay extends Application {
     }
     
     void populateGrid(GridPane grid){
-    	int currentYPos = 1;
+
+        
         //Scene title
         scenetitle.setFont(Font.font("Tahoma", FontWeight.BOLD, 66));
         scenetitle.setFill(Color.DIMGRAY);
@@ -194,13 +220,40 @@ public class PrettyDisplay extends Application {
 		TransparentRect tRect = new TransparentRect();
 		grid.add(tRect, 2, 0);
 
-        //for the actual calendar items
-        TextedColorDayBox daydBox = new TextedColorDayBox("Float");
-    	grid.add(daydBox, 0, currentYPos++);
 
+        //for the actual calendar items
     	int currTaskIndex = 1;
+
+    	int currentYPos = 1;
     	
-    	for (int i=1; i<14; i++){
+    	//for unpacking floatingTasks
+    	ArrayList<Task> floatingTasks = mainController.getFloatingList();
+    	if (floatingTasks.size() != 0){
+            TextedColorDayBox daydBox = new TextedColorDayBox("Float");
+        	grid.add(daydBox, 0, currentYPos);
+	    	int currFloatXPos = 1;
+	    	for (int i=0; i<floatingTasks.size(); i++){
+	    		if (currFloatXPos == 3){
+        			currentYPos++;
+        			TransparentCircle circle = new TransparentCircle();
+        			grid.add(circle, 0, currentYPos);
+        			currFloatXPos = 1;
+        		}
+	    		
+	    		String taskName = floatingTasks.get(i).getName();
+	    		TextedTaskBox taskBox = new TextedTaskBox(taskName , "", "", currTaskIndex);
+	    		currTaskIndex++;
+	    		grid.add(taskBox, currFloatXPos++, currentYPos);
+	    		
+
+	    		
+	    	}
+	    	currentYPos++;
+    	}
+    	
+    	
+    	//for non-floating tasks
+    	for (int i=1; i<1; i++){
         	Random ran = new Random();
         	int randomNumTasks = ran.nextInt(5);
         	

@@ -1,5 +1,9 @@
 package logic;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import common.Task;
 import parser.AddStringParser;
 import userinterface.PrettyDisplay;
@@ -76,6 +80,14 @@ public class Controller {
 	private static String removeFirstWord(String userInput) {
 		String commandContent = userInput.replaceFirst(getFirstWord(userInput), "").trim();
 		return commandContent;
+	}
+	
+	public ArrayList<Task> getFloatingList(){
+		return handler.getFloatingList();
+	}
+	
+	public HashMap<LocalDate,ArrayList<Task>> getTodoList(){
+		return handler.getTodoList();
 	}
 	
 	public void addCommand(String command){
