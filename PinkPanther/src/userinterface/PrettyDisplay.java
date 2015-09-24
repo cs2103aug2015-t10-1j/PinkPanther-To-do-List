@@ -3,6 +3,7 @@ package userinterface;
 import java.util.Random;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -42,13 +43,13 @@ public class PrettyDisplay extends Application {
      
     @Override
     public void start(Stage primaryStage) {
+    	fillPage ("Input command in the field above", primaryStage);
     	objPrimaryStage = primaryStage;
-    	fillPage ("Input command in the field above");
     	mainController = new Controller();
     }
     
-    void fillPage(String newInput){
-    	Stage primaryStage = new Stage();    	
+    void fillPage(String newInput, Stage primaryStage){
+    	
         primaryStage.setTitle("PinkPanther: The best to-do list");
         
         //Holds all calendar items
@@ -236,6 +237,8 @@ public class PrettyDisplay extends Application {
     	calendarGrid.getChildren().clear();
     	userTextField.clear();
         populateGrid(calendarGrid);
+
+    	System.out.println(objPrimaryStage);
     }
     
     public void setActionResult(String text){
@@ -354,8 +357,9 @@ public class PrettyDisplay extends Application {
         isCalendarHidden = true;
 	}
 	
+	//currently not working..
 	public void closeWindow(){
-		objPrimaryStage.close();
+		Platform.exit();
 	}
 
 
