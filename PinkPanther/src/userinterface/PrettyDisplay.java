@@ -308,6 +308,7 @@ public class PrettyDisplay extends Application {
         		unHideCalendar(primaryStage);
         	}
         	else{
+        		currentScrollYPos = (s1.getVvalue());
         		hideCalendar(primaryStage);
         	}
         }
@@ -348,7 +349,7 @@ public class PrettyDisplay extends Application {
         actiontarget.setFill(Color.WHITE);
 		actiontarget.setText("Input command into the field above");
         isCalendarHidden = false;
-// 		s1.setVvalue(currentScrollYPos);		
+ 		s1.setVvalue(currentScrollYPos);
 	}
 	
 	void hideCalendar(Stage stage){
