@@ -1,7 +1,14 @@
 package userinterface;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
+import java.util.Set;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -209,17 +216,15 @@ public class PrettyDisplay extends Application {
     }
     
     void populateGrid(GridPane grid){
-
-        
+     
         //Scene title
         scenetitle.setFont(Font.font("Tahoma", FontWeight.BOLD, 66));
         scenetitle.setFill(Color.DIMGRAY);
         grid.add(scenetitle, 1, 0);
-        
-		
+	
+        //filler for rightGridColumn; to make sure length of display does not change
 		TransparentRect tRect = new TransparentRect();
 		grid.add(tRect, 2, 0);
-
 
         //for the actual calendar items
     	int currTaskIndex = 1;
@@ -244,15 +249,40 @@ public class PrettyDisplay extends Application {
 	    		TextedTaskBox taskBox = new TextedTaskBox(taskName , "", "", currTaskIndex);
 	    		currTaskIndex++;
 	    		grid.add(taskBox, currFloatXPos++, currentYPos);
-	    		
 
-	    		
 	    	}
 	    	currentYPos++;
     	}
     	
-    	
-    	//for non-floating tasks
+    	HashMap<LocalDate,ArrayList<Task>> todoList = mainController.getTodoList();
+
+    	for(LocalDate date:todoList.keySet()){ //looping through dates which have Tasks inside
+    		String month = date.getMonth().toString().substring(0, 3);
+    		String currDayNum = Integer.toString(date.getDayOfMonth());
+            TextedColorDayBox currentDayBox = new TextedColorDayBox(currDayNum + "\n" + month);
+        	grid.add(currentDayBox, 0, currentYPos);
+    		
+    		int currXPos = 1;
+			for(Task task:todoList.get(date)){ //looping through tasks for specified date
+	    		String taskName = task.getName();
+	    		String startTime = task.getStartTimeString();
+    			String endTime = task.getEndTimeString();
+	    		TextedTaskBox taskBox = new TextedTaskBox(taskName , startTime, endTime, currTaskIndex);
+	    		currTaskIndex++;
+	    		grid.add(taskBox, currXPos++, currentYPos);
+	    		
+	    		if (currXPos == 3){
+        			currentYPos++;
+        			TransparentCircle circle = new TransparentCircle();
+        			grid.add(circle, 0, currentYPos);
+        			currXPos = 1;
+        		}
+			}
+			
+		}
+
+    	/*
+    	//for non-floating tasks randomizer
     	for (int i=1; i<1; i++){
         	Random ran = new Random();
         	int randomNumTasks = ran.nextInt(5);
@@ -285,6 +315,7 @@ public class PrettyDisplay extends Application {
         	
         	}
         }
+    	*/
     }
 
     void callControllerToAddCommand(){

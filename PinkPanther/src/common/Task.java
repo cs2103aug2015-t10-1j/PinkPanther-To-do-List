@@ -78,6 +78,12 @@ public class Task {
 	public LocalTime getStartTime(){
 		return startTime;
 	}
+	public String getStartTimeString(){
+		if(startTime == null){
+			return "";
+		}
+		return startTime.toString();
+	}
 	
 	public LocalDate getEndDate(){
 		return endDate;
@@ -85,6 +91,12 @@ public class Task {
 	
 	public LocalTime getEndTime(){
 		return endTime;
+	}
+	public String getEndTimeString(){
+		if(endTime == null){
+			return "";
+		}
+		return endTime.toString();
 	}
 	
 	public LocalDate getDate(){
