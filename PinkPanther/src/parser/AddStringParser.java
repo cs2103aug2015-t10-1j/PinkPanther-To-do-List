@@ -324,7 +324,7 @@ public class AddStringParser {
 					TaskType.DEADLINE );
 			return deadline;
 		} else if (taskTypeStore == TaskType.TODO 
-				|| (startDateStore != null && startTimeStore != null)) {
+				|| (startDateStore != null)) {
 			Task toDoAt = new Task(details[INDEX_TASKNAME], startDateStore, startTimeStore,
 					TaskType.TODO);
 			return toDoAt;
