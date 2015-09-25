@@ -92,7 +92,11 @@ public class TaskHandler {
 		}
 		else{
 			LocalDate date=task.getDate();
-			todoList.get(date).remove(task);
+			ArrayList<Task>taskList=todoList.get(date);
+			taskList.remove(task);
+			if(taskList.isEmpty()){
+				todoList.remove(date);
+			}
 			TaskStorage.writeToFile(todoList);
 		}
 		return canDelete;
