@@ -2,7 +2,7 @@ package logic;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.TreeMap;
 
 import storage.TaskStorage;
 import common.*;
@@ -10,7 +10,7 @@ import common.*;
  * Add class description
  */
 public class TaskHandler {
-	private HashMap<LocalDate,ArrayList<Task>>todoList;
+	private TreeMap<LocalDate,ArrayList<Task>>todoList;
 	private ArrayList<Task>floatingList;
 	
 	public TaskHandler(){
@@ -18,7 +18,7 @@ public class TaskHandler {
 		floatingList=TaskStorage.readFromFloatingFile();
 	}
 	
-	public HashMap<LocalDate,ArrayList<Task>> getTodoList(){
+	public TreeMap<LocalDate,ArrayList<Task>> getTodoList(){
 		return todoList;
 	}
 	

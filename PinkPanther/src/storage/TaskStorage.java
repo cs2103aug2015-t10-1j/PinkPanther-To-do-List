@@ -8,7 +8,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.TreeMap;
 import java.time.LocalDate;
 
 import com.google.gson.Gson;
@@ -36,7 +36,7 @@ public class TaskStorage {
 		
 	}
 	
-	public static void writeToFile(HashMap<LocalDate,ArrayList<Task>>todoList){
+	public static void writeToFile(TreeMap<LocalDate,ArrayList<Task>>todoList){
 		try{
 			BufferedWriter bw=new BufferedWriter(new FileWriter(todo));
 			for(LocalDate date:todoList.keySet()){
@@ -74,8 +74,8 @@ public class TaskStorage {
 		return floatingList;
 	}
 	
-	public static HashMap<LocalDate,ArrayList<Task>> readFromTodoFile(){
-		HashMap<LocalDate,ArrayList<Task>>todoList=new HashMap<LocalDate,ArrayList<Task>>();
+	public static TreeMap<LocalDate,ArrayList<Task>> readFromTodoFile(){
+		TreeMap<LocalDate,ArrayList<Task>>todoList=new TreeMap<LocalDate,ArrayList<Task>>();
 		String line="";
 		try{
 			BufferedReader br=new BufferedReader(new FileReader(todo));

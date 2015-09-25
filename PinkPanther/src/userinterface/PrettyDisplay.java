@@ -3,12 +3,12 @@ package userinterface;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -255,7 +255,7 @@ public class PrettyDisplay extends Application {
 	    	currentYPos++;
     	}
     	
-    	HashMap<LocalDate,ArrayList<Task>> todoList = mainController.getTodoList();
+    	TreeMap<LocalDate,ArrayList<Task>> todoList = mainController.getTodoList();
 
     	for(LocalDate date:todoList.keySet()){ //looping through dates which have Tasks inside
     		String month = date.getMonth().toString().substring(0, 3);

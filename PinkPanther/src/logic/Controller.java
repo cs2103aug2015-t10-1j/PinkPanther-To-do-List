@@ -2,7 +2,7 @@ package logic;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.TreeMap;
 
 import common.Task;
 import parser.AddStringParser;
@@ -86,7 +86,7 @@ public class Controller {
 		return handler.getFloatingList();
 	}
 	
-	public HashMap<LocalDate,ArrayList<Task>> getTodoList(){
+	public TreeMap<LocalDate,ArrayList<Task>> getTodoList(){
 		return handler.getTodoList();
 	}
 	
