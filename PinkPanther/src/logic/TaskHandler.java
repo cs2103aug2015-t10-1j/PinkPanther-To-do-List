@@ -124,8 +124,8 @@ public class TaskHandler {
 		LocalDate date=event.getDate();
 		for(Task task:todoList.get(date)){
 			if(task.getTaskType()==TaskType.EVENT){
-				if((event.getStartTime().isAfter(task.getStartTime()) && event.getStartTime().isBefore(task.getEndTime()))||
-						(event.getEndTime().isAfter(task.getStartTime()) && event.getEndTime().isBefore(task.getEndTime()))){
+				if(event.getEndTime().isAfter(task.getStartTime())&& 
+						event.getStartTime().isBefore(task.getEndTime())){
 					return true;
 				}
 			}
