@@ -285,41 +285,6 @@ public class PrettyDisplay extends Application {
 			currentYPos++;
 		}
 
-    	/*
-    	//for non-floating tasks randomizer
-    	for (int i=1; i<1; i++){
-        	Random ran = new Random();
-        	int randomNumTasks = ran.nextInt(5);
-        	
-        	if (randomNumTasks!=0){
-	        	TextedColorDayBox dayBox = new TextedColorDayBox("Day\n"+ i);
-	        	grid.add(dayBox, 0, currentYPos);
-	
-	
-	    			int currentXPos = 1;
-		        	for (int j=0; j<randomNumTasks; j++){
-		        		if(j==2){
-		        			currentYPos++;
-		        			TransparentCircle circle = new TransparentCircle();
-		        			grid.add(circle, 0, currentYPos);
-		    	        	currentXPos = 1;
-		        		}
-		        		TextedTaskBox taskBox = new TextedTaskBox("Meetin with boss at meeting roomdddddd" , "08:00pm", "09:00pm", currTaskIndex);
-		        		currTaskIndex++;
-		        		grid.add(taskBox, currentXPos++, currentYPos);
-		            }
-		        	currentYPos++;
-		        	
-        	}
-        	if (i == 5 && currentYPos < 8){
-        		for (int k=currentYPos; k<7; k++){
-        			TransparentCircle circle = new TransparentCircle();
-        			grid.add(circle, 0, k);
-        		}
-        	
-        	}
-        }
-    	*/
     }
 
     void callControllerToAddCommand(){
