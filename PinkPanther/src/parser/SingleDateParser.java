@@ -44,6 +44,9 @@ public class SingleDateParser {
 		for (String dateFormat : validDateFormats) {
 			LocalDate parsedDate = compareDateFormat(date, dateFormat);
 			if (parsedDate != null) {
+				if (parsedDate.isBefore(LocalDate.now())) {
+					parsedDate = parsedDate.plusYears(1);
+				}
 				return parsedDate;
 			}
 		}
@@ -92,6 +95,7 @@ public class SingleDateParser {
 				}
 
 				return fixedDate;
+				
 			}
 		}
 		
