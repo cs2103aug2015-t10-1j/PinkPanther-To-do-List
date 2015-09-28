@@ -31,6 +31,9 @@ public class SingleDateParser {
 		    		"d MMM yyyy", "dd MMM yyyy", "d MMMM yyyy", "dd MMMM yyyy"));
 	
 	private static ArrayList<String> validDateFormats;
+	private static final String[] DATE_INDICATORS_ONE = {"TONIGHT", "NOW", "TODAY",
+			"TOMORROW",};
+	private static final String[] DATE_INDICATORS_PRECURSOR = {"THIS", "NEXT"};
 	
 	public SingleDateParser() {
 		validDateFormats = new ArrayList<String>();
@@ -39,12 +42,13 @@ public class SingleDateParser {
 		validDateFormats.addAll(DATE_FORMAT_SPACE);
 	}
 	
+	
 	public LocalDate parse(String date) {
 		
 		// if date contains a certain keyword, refer to list(s) and parse separately
-		// stub
-		if (date.equalsIgnoreCase("now") || date.equalsIgnoreCase("today")) {
-			return LocalDate.now();
+		// check one word indicators:
+		if (isDateIndicator(date)) {
+			return oneWordIndicatorParser(date);
 		}
 		
 		// for dates
@@ -107,6 +111,31 @@ public class SingleDateParser {
 			}
 		}
 		
+		return date;
+	}
+	
+	private boolean isDateIndicator(String date) {
+		
+		for (int i = 0; i < DATE_INDICATORS_ONE.length; i++) {
+			if (date.equalsIgnoreCase(DATE_INDICATORS_ONE[i])) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	private LocalDate oneWordIndicatorParser(String date) {
+		date = date.toUpperCase();
+		switch (date) {
+			case "TODAY":
+			case "TONIGHT":
+			case "NOW":
+				return LocalDate.now();
+			case "TOMORROW":
+				return LocalDate.now().plusDays(1);
+			default:
+		}
 		return null;
 	}
 }
