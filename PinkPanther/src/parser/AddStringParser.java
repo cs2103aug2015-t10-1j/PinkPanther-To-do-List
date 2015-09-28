@@ -112,8 +112,10 @@ public class AddStringParser {
 			}
 			for (int i = 0; i < LIST_START_MARKERS.length; i++) {
 				if (dateIndicator.equalsIgnoreCase(LIST_START_MARKERS[i])) {
+					if (taskTypeStore != TaskType.DEADLINE) {
+						setTaskType(TaskType.TODO);
+					}
 					setStartDate(sdp.parse(removeFirstWord(dateTimeInfo)));
-					setTaskType(TaskType.TODO);
 					return 1;
 				}
 			}
@@ -205,8 +207,10 @@ public class AddStringParser {
 			}
 			for (int i = 0; i < LIST_START_MARKERS.length; i++) {
 				if (timeIndicator.equalsIgnoreCase(LIST_START_MARKERS[i])) {
+					if (taskTypeStore != TaskType.DEADLINE) {
+						setTaskType(TaskType.TODO);
+					}
 					setStartTime(stp.parse(removeFirstWord(dateTimeInfo)));
-					setTaskType(TaskType.TODO);
 					return 1;
 				}
 			}
@@ -325,6 +329,12 @@ public class AddStringParser {
 		// case: 1 T 1 D (add todo or deadline)
 		// case: 0 T 1 D (add dated event on 1D)
 		if (taskTypeStore == TaskType.DEADLINE) {
+			if (endDateStore == null && startDateStore != null) {
+				setEndDate(startDateStore);
+			}
+			if (endTimeStore == null && startTimeStore != null) {
+				setEndTime(startTimeStore);
+			}
 			Task deadline = new Task(details[INDEX_TASKNAME], endDateStore, endTimeStore,
 					TaskType.DEADLINE, commandStringStore );
 			return deadline;
