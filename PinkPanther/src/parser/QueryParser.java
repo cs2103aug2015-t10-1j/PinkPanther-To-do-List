@@ -19,10 +19,10 @@ public class QueryParser {
 		try {
 			index = (Integer)Integer.parseInt(userInfo[INDEX_INDEX]);
 		} catch (Exception e) {
-			
+			//Display some invalid input
 		} 
 		
-		Pair<LocalDate, Integer> dateIndex = new Pair(date, index);
+		Pair<LocalDate, Integer> dateIndex = new Pair<LocalDate, Integer>(date, index);
 		return dateIndex;
 	}
 }
