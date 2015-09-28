@@ -12,10 +12,13 @@ import common.Pair;
 public class CommandParser {
 	
 	public Task createTask(String userInput){
-		return null;
+		AddStringParser asp = new AddStringParser();
+		Task task = asp.parse(userInput);
+		return task;
 	}
 	
 	public Pair<LocalDate,Integer> query(String userInput){
+		
 		return null;
 	}
 
