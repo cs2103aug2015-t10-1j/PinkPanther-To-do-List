@@ -278,11 +278,14 @@ public class AddStringParser {
 		return floating;
 	}
 	
-	private Task addEvent(String[] details) throws Exception {
+	private Task addEvent(String[] details) throws Exception {		
 		
 		// case: 1 T 2 D (append time to contents? and add dated(i.e. no time) event)
 		// case: 0 T 2 D (add dated event)
 		if (startTimeStore == null || endTimeStore == null) {
+			if (startDateStore.equals(endDateStore)) {
+				return addSingleDated(details);
+			}
 			setStartTime(null);
 			setEndTime(null);
 			if (!endDateStore.isAfter(startDateStore)) {
@@ -306,6 +309,9 @@ public class AddStringParser {
 			LocalDateTime earlier = startDateStore.atTime(startTimeStore);
 			LocalDateTime later = endDateStore.atTime(endTimeStore);
 			if (!later.isAfter(earlier)) {
+				if(!later.isBefore(earlier)) {
+					return addSingleDated(details);
+				}
 				throw new Exception("Not chronological!");
 			}
 		}
