@@ -22,8 +22,7 @@ public class QueryParser {
 			
 		} 
 		
-		Pair dateIndex = new Pair(date, index);
+		Pair<LocalDate, Integer> dateIndex = new Pair(date, index);
 		return dateIndex;
 	}
-	
 }
