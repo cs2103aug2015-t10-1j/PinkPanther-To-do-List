@@ -36,7 +36,7 @@ public class AddStringParser {
 		clearStores();
 		commandStringStore = commandContent;
 		String[] userInfo = commandContent.split(",");
-		userInfo = trimStringArray(userInfo);
+		userInfo = Auxiliary.trimStringArray(userInfo);
 		int validDateTimes = findValidDateTime(userInfo);
 		
 		// create a floating task
@@ -101,12 +101,12 @@ public class AddStringParser {
 		}
 		
 		// starts with a date indicator
-		if (isSingleDate(removeFirstWord(dateTimeInfo), sdp)) {
-			String dateIndicator = getFirstWord(dateTimeInfo);
+		if (isSingleDate(Auxiliary.removeFirstWord(dateTimeInfo), sdp)) {
+			String dateIndicator = Auxiliary.getFirstWord(dateTimeInfo);
 			
 			for (int i = 0; i < LIST_DEADLINE_MARKERS.length; i++) {
 				if (dateIndicator.equalsIgnoreCase(LIST_DEADLINE_MARKERS[i])) {
-					setEndDate(sdp.parse(removeFirstWord(dateTimeInfo)));
+					setEndDate(sdp.parse(Auxiliary.removeFirstWord(dateTimeInfo)));
 					setTaskType(TaskType.DEADLINE);
 					return 1;
 				}
@@ -116,7 +116,7 @@ public class AddStringParser {
 					if (taskTypeStore != TaskType.DEADLINE) {
 						setTaskType(TaskType.TODO);
 					}
-					setStartDate(sdp.parse(removeFirstWord(dateTimeInfo)));
+					setStartDate(sdp.parse(Auxiliary.removeFirstWord(dateTimeInfo)));
 					return 1;
 				}
 			}
@@ -144,7 +144,7 @@ public class AddStringParser {
 		int delimOccurrence = dates.length() - dates.replaceAll(delimiter, "").length();
 		if (delimOccurrence == delimiter.length()) {
 			String[] dateTokens = dates.split(delimiter);
-			dateTokens = trimStringArray(dateTokens);
+			dateTokens = Auxiliary.trimStringArray(dateTokens);
 			
 			if (isValidDateRange(dateTokens[0], dateTokens[1])) {
 				return 2;
@@ -159,7 +159,7 @@ public class AddStringParser {
 		
 		// case: need to convert first date to a valid date
 		if (laterDate != null) {
-			if (isNumber(date1)) {
+			if (Auxiliary.isNumber(date1)) {
 				int dayOfDate1 = Integer.parseInt(date1);
 				earlierDate = laterDate.withDayOfMonth(dayOfDate1);
 			}
@@ -193,12 +193,12 @@ public class AddStringParser {
 		}
 		
 		// starts with a time indicator
-		if (isSingleTime(removeFirstWord(dateTimeInfo), stp)) {
-			String timeIndicator = getFirstWord(dateTimeInfo);
+		if (isSingleTime(Auxiliary.removeFirstWord(dateTimeInfo), stp)) {
+			String timeIndicator = Auxiliary.getFirstWord(dateTimeInfo);
 			
 			for (int i = 0; i < LIST_DEADLINE_MARKERS.length; i++) {
 				if (timeIndicator.equalsIgnoreCase(LIST_DEADLINE_MARKERS[i])) {
-					setEndTime(stp.parse(removeFirstWord(dateTimeInfo)));
+					setEndTime(stp.parse(Auxiliary.removeFirstWord(dateTimeInfo)));
 					setTaskType(TaskType.DEADLINE);
 					return 1;
 				}
@@ -208,7 +208,7 @@ public class AddStringParser {
 					if (taskTypeStore != TaskType.DEADLINE) {
 						setTaskType(TaskType.TODO);
 					}
-					setStartTime(stp.parse(removeFirstWord(dateTimeInfo)));
+					setStartTime(stp.parse(Auxiliary.removeFirstWord(dateTimeInfo)));
 					return 1;
 				}
 			}
@@ -236,7 +236,7 @@ public class AddStringParser {
 		int delimOccurrence = times.length() - times.replaceAll(delimiter, "").length();
 		if (delimOccurrence == delimiter.length()) {
 			String[] timeTokens = times.split(delimiter);
-			timeTokens = trimStringArray(timeTokens);
+			timeTokens = Auxiliary.trimStringArray(timeTokens);
 			
 			if (isValidTimeRange(timeTokens[0], timeTokens[1])) {
 				return 2;
@@ -359,27 +359,6 @@ public class AddStringParser {
 		setStartTime(null);
 		setEndTime(null);
 		setTaskType(null);
-	}
-	
-	private static String getFirstWord(String userInput) {
-		String commandTypeString = userInput.trim().split("\\s+")[0];
-		return commandTypeString;
-	}
-	
-	private static String removeFirstWord(String userInput) {
-		String commandContent = userInput.replaceFirst(getFirstWord(userInput), "").trim();
-		return commandContent;
-	}
-	
-	public static String[] trimStringArray(String[] arr) {
-		for (int i = 0; i < arr.length; i++) {
-			arr[i] = arr[i].trim();
-		}
-		return arr;
-	}
-	
-	private static boolean isNumber(String possiblyNumber) {
-		return !possiblyNumber.isEmpty() && possiblyNumber.replaceAll("[0-9]","").isEmpty();
 	}
 	
 	// accessors for testing
