@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class SingleDateParser {
@@ -29,26 +28,33 @@ public class SingleDateParser {
 		    		"d MM yy", "dd MM yy", "d MMM yy", "dd MMM yy", "d MMMM yy", 
 		    		"dd MMMM yy", "d M yyyy", "d MM yyyy", "d MM yyyy", "dd MM yyyy", 
 		    		"d MMM yyyy", "dd MMM yyyy", "d MMMM yyyy", "dd MMMM yyyy"));
+	private static final List<String> DAY_FORMAT = 
+			Collections.unmodifiableList(Arrays.asList("EEE", "EEEE"));
 	
-	private static ArrayList<String> validDateFormats;
 	private static final String[] DATE_INDICATORS_ONE = {"TONIGHT", "NOW", "TODAY",
 			"TOMORROW",};
-	private static final String[] DATE_INDICATORS_PRECURSOR = {"THIS", "NEXT"};
+	
+	private static ArrayList<String> validDateFormats;
+	private static ArrayList<String> validDayFormats;
 	
 	public SingleDateParser() {
 		validDateFormats = new ArrayList<String>();
+		validDayFormats = new ArrayList<String>();
 		validDateFormats.addAll(DATE_FORMAT_SLASH);
 		validDateFormats.addAll(DATE_FORMAT_DASH);
 		validDateFormats.addAll(DATE_FORMAT_SPACE);
+		validDayFormats.addAll(DAY_FORMAT);
 	}
-	
 	
 	public LocalDate parse(String date) {
 		
 		// if date contains a certain keyword, refer to list(s) and parse separately
-		// check one word indicators:
 		if (isDateIndicator(date)) {
 			return oneWordIndicatorParser(date);
+		}
+
+		if (hasDateIndicator(date)) {
+			return twoWordIndicatorParser(date);
 		}
 		
 		// for dates
@@ -86,7 +92,7 @@ public class SingleDateParser {
 		for (int i = 0; i < DATE_DELIMITERS.length; i++){	
 			String[] dateDetails = date.split(DATE_DELIMITERS[i]);
 			if (dateDetails.length > 1) {
-				dateDetails = AddStringParser.trimStringArray(dateDetails);
+				dateDetails = Auxiliary.trimStringArray(dateDetails);
 				fixedDate = dateDetails[INDEX_DAY];
 				
 				// fix month
@@ -136,6 +142,34 @@ public class SingleDateParser {
 				return LocalDate.now().plusDays(1);
 			default:
 		}
+		return null;
+	}
+	
+	private boolean hasDateIndicator(String date) {
+		return date.toUpperCase().contains("THIS") || date.toUpperCase().contains("NEXT");
+	}
+
+	private LocalDate twoWordIndicatorParser (String date) {
+		String precursor = Auxiliary.getFirstWord(date).toUpperCase();
+		String content = Auxiliary.removeFirstWord(date).toUpperCase().trim();
+		
+		if (precursor.equals("THIS")) {
+			return parseDayOfWeek(date);
+		} else if (precursor.equals("NEXT")) {
+			if (content.equals("WEEK")) {
+				return LocalDate.now().plusWeeks(1);
+			} else if (content.equals("MONTH")) {
+				return LocalDate.now().plusMonths(1);
+			} else if (content.equals("YEAR")) {
+				return LocalDate.now().plusYears(1);
+			} else {
+				return parseDayOfWeek(date);
+			}
+		}
+		return null;
+	}
+	
+	private LocalDate parseDayOfWeek(String dayOfWeek) {
 		return null;
 	}
 }
