@@ -4,17 +4,16 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+import common.Pair;
 import common.Task;
-import parser.AddStringParser;
+import parser.CommandParser;
 import userinterface.PrettyDisplay;
 
 public class Controller {
 	PrettyDisplay gui=new PrettyDisplay();
 	TaskHandler handler=new TaskHandler();
 	CommandStack commandStack=new CommandStack();
-	AddStringParser addParser=new AddStringParser();
-//	EditParser editParser=new EditParser(handler);
-//	QueryParser queryParser=new QueryParser(handler);
+	CommandParser parser=new CommandParser();
 	
 	private static String getFirstWord(String userInput) {
 		String commandTypeString = userInput.trim().split("\\s+")[0];
@@ -42,32 +41,27 @@ public class Controller {
 		switch(commandString.toLowerCase()){
 			case "add":
 				AddCommand add = new AddCommand(handler);
-				if(add.execute(addParser.parse(parameterString))){
+				if(add.execute(parser.createTask(parameterString))){
 					commandStack.addCommand(add);
 				}
 				break;
-/*
+
 			case "edit":
-				EditCommand edit = new EditCommand(handler);
-				if(edit.execute(editParser.parse(parameterString))){
-					commandStack.addCommand(edit);
-				}
+				//
 				
-				break;
+
 			case "done":
-				DoneCommand done = new DoneCommand();
-				if(done.execute(queryParser.parse(parameterString))){
+				DoneCommand done = new DoneCommand(handler);
+				if(done.execute(parser.query(parameterString))){
 					commandStack.addCommand(done);
 				}
 				break;
 			case "delete":
 				DeleteCommand delete = new DeleteCommand(handler);
-				if(delete.execute(queryParser.parse(parameterString))){
+				if(delete.execute(parser.query(parameterString))){
 					commandStack.addCommand(delete);
 				}
-				break;
-*/
-				
+				break;			
 			case "undo":
 				commandStack.undoOperation();
 				break;

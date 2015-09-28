@@ -56,7 +56,6 @@ public class TaskHandler {
 	
 	
 	public boolean addTask(Task task){
-		boolean canAdd=true;
 		if(task.getTaskType()==TaskType.FLOATING){
 			floatingList.add(task);
 			sortFloatingList();
@@ -69,7 +68,7 @@ public class TaskHandler {
 			}
 			
 			if(task.getTaskType()==TaskType.EVENT && checkForTimeConflict(task)){
-				canAdd=false;
+				return false;
 			}
 			else{
 				todoList.get(date).add(task);
@@ -78,7 +77,7 @@ public class TaskHandler {
 			sortTodoList(date);
 			TaskStorage.writeToFile(todoList);
 		}
-		return canAdd;
+		return true;
 	}
 	
 	public void deleteTask(Task task){

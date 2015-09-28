@@ -1,6 +1,5 @@
 package logic;
 
-import java.util.ArrayList;
 
 import common.Task;
 
@@ -13,43 +12,21 @@ public class EditCommand implements Command{
 		this.handler=handler;
 	}
 	
-	public boolean execute(ArrayList<Task>inputTasks){
-		unmodified=inputTasks.get(0);
-		if(unmodified==null){
-			Display.setFeedBack("task does not exist");
-			return false;
-		}
-		modified=inputTasks.get(1);
-		modified=applyModification(unmodified,modified);
+	public boolean execute(Task t1,Task t2){
+		unmodified=t1;
+		modified=t2;
 		handler.deleteTask(unmodified);
 		if(handler.addTask(modified)){
-			Display.setFeedBack(unmodified.getName()+" is modified");
+			Display.setFeedBack("the task has been modified");
 			return true;
 		}
 		else{
 			Display.setFeedBack("you have another event during this period");
+			handler.addTask(unmodified);
 			return false;
 		}
-		
 	}
 	
-	private Task applyModification(Task unmodfied,Task modified){
-		modified.setName(unmodified.getName());
-		if(modified.getStartDate()==null){
-			modified.setStartDate(unmodified.getStartDate());
-		}
-		if(modified.getStartTime()==null){
-			modified.setStartTime(unmodified.getStartTime());
-		}
-		if(modified.getEndDate()==null){
-			modified.setEndDate(unmodified.getEndDate());
-		}
-		if(modified.getEndTime()==null){
-			modified.setEndTime(unmodified.getEndTime());
-		}
-		
-		return modified;
-	}
 	
 	public void undo(){
 		handler.deleteTask(modified);

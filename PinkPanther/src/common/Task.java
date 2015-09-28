@@ -70,10 +70,6 @@ public class Task {
 		this.status=status;
 	}
 	
-	public void setCommandString(String userInput){
-		this.commandString=userInput;
-	}
-	
 	public String getName(){
 		return name;
 	}

@@ -3,7 +3,7 @@ package logic;
 
 import java.time.LocalDate;
 
-import common.DateIndex;
+import common.Pair;
 import common.Task;
 /*
  * Add class description
@@ -16,9 +16,9 @@ public class DeleteCommand implements Command{
 		this.handler=handler;
 	}
 	
-	public boolean execute(DateIndex input){
-		LocalDate date=input.getDate();
-		int index=input.getIndex();
+	public boolean execute(Pair<LocalDate,Integer> pair){
+		LocalDate date=pair.getFirst();
+		int index=pair.getSecond();
 		if(date==null){
 			Display.setFeedBack("you have entered an invalid date");
 			return false;
