@@ -13,6 +13,7 @@ public class Task {
 	private LocalTime startTime;
 	private LocalTime endTime;
 	private int status;
+	private String commandString;
 	
 	public Task(String name){
 		this.name=name;
@@ -20,7 +21,7 @@ public class Task {
 	}
 	
 	
-	public Task(String name,LocalDate date,LocalTime time, TaskType type){
+	public Task(String name,LocalDate date,LocalTime time, TaskType type,String userInput){
 		this.name=name;
 		if(type==TaskType.TODO){
 			this.startDate=date;
@@ -31,16 +32,18 @@ public class Task {
 			this.endTime=time;
 		}
 		this.type=type;
+		this.commandString=userInput;
 	}
 	
 	public Task(String name,LocalDate startDate,LocalTime startTime,
-			LocalDate endDate,LocalTime endTime){
+			LocalDate endDate,LocalTime endTime,String userInput){
 		this.name=name;
 		this.startDate=startDate;
 		this.startTime=startTime;
 		this.endDate=endDate;
 		this.endTime=endTime;
 		this.type=TaskType.EVENT;
+		this.commandString=userInput;
 	}
 	
 	public void setName(String name){
@@ -65,6 +68,10 @@ public class Task {
 	
 	public void setStatus(int status){
 		this.status=status;
+	}
+	
+	public void setCommandString(String userInput){
+		this.commandString=userInput;
 	}
 	
 	public String getName(){
@@ -127,6 +134,10 @@ public class Task {
 	
 	public int getStatus(){
 		return status;
+	}
+	
+	public String getCommandString(){
+		return commandString;
 	}
 	
 	

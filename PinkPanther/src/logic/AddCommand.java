@@ -14,6 +14,10 @@ public class AddCommand implements Command{
 	
 	public boolean execute(Task task){	
 		taskRef=task;
+		if(taskRef==null){
+			Display.setFeedBack("you have entered an invalid date or time");
+		}
+		
 	    if(handler.addTask(task)){
 	    	Display.setFeedBack(task.getName()+" is added");
 	    	return true;

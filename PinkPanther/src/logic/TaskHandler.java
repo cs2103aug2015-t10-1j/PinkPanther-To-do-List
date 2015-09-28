@@ -81,12 +81,8 @@ public class TaskHandler {
 		return canAdd;
 	}
 	
-	public boolean deleteTask(Task task){
-		boolean canDelete=true;
-		if(task==null){
-			canDelete=false;
-		}
-		else if(task.getTaskType()==TaskType.FLOATING){
+	public void deleteTask(Task task){
+		if(task.getTaskType()==TaskType.FLOATING){
 			floatingList.remove(task);
 			TaskStorage.writeToFile(floatingList);
 		}
@@ -99,7 +95,6 @@ public class TaskHandler {
 			}
 			TaskStorage.writeToFile(todoList);
 		}
-		return canDelete;
 	}
 	
 	

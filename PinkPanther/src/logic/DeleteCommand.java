@@ -1,6 +1,9 @@
 package logic;
 
 
+import java.time.LocalDate;
+
+import common.DateIndex;
 import common.Task;
 /*
  * Add class description
@@ -13,9 +16,16 @@ public class DeleteCommand implements Command{
 		this.handler=handler;
 	}
 	
-	public boolean execute(Task task){
-		taskRef=task;
-		if(handler.deleteTask(taskRef)){
+	public boolean execute(DateIndex input){
+		LocalDate date=input.getDate();
+		int index=input.getIndex();
+		if(date==null){
+			Display.setFeedBack("you have entered an invalid date");
+			return false;
+		}
+		
+		taskRef=handler.searchTaskByIndex(date,index);
+		if(taskRef!=null){
 			Display.setFeedBack(taskRef.getName()+" is deleted");
 			return true;
 		}
