@@ -14,17 +14,20 @@ public class SingleDateParser {
 	
 	private static final String[] DATE_DELIMITERS = {"/", "-", " "};
 	private static final List<String> DATE_FORMAT_SLASH = 
-			Collections.unmodifiableList(Arrays.asList("dd/MM/yy", "d/MM/yy",
-		    		"dd/M/yy", "d/M/yy", "dd/MMM/yy", "d/MMM/yy", "dd/MM/yyyy", 
-		    		"d/MM/yyyy", "dd/M/yyyy", "d/M/yyyy", "dd/MMM/yyyy", "d/MMM/yyyy"));
+			Collections.unmodifiableList(Arrays.asList("d/M/yy", "dd/M/yy",
+		    		"d/MM/yy", "dd/MM/yy", "d/MMM/yy", "dd/MMM/yy",  "d/MMMM/yy",
+		    		"dd/MMMM/yy", "d/M/yyyy", "dd/M/yyyy", "d/MM/yyyy", "dd/MM/yyyy",
+		    		"d/MMM/yyyy", "dd/MMM/yyyy", "d/MMMM/yyyy", "dd/MMMM/yyyy"));
 	private static final List<String> DATE_FORMAT_DASH = 
-			Collections.unmodifiableList(Arrays.asList("dd-MM-yy", "d-MM-yy",
-		    		"dd-M-yy", "d-M-yy", "dd-MMM-yy", "d-MMM-yy", "dd-MM-yyyy", 
-		    		"d-MM-yyyy", "dd-M-yyyy", "d-M-yyyy", "dd-MMM-yyyy", "d-MMM-yyyy"));
+			Collections.unmodifiableList(Arrays.asList("d-M-yy", "dd-M-yy",
+		    		"d-MM-yy", "dd-MM-yy", "d-MMM-yy", "dd-MMM-yy", "d-MMMM-yy",
+		    		"dd-MMMM-yy", "d-M-yyyy", "dd-M-yyyy", "d-MM-yyyy", "dd-MM-yyyy",
+		    		"d-MMM-yyyy", "dd-MMM-yyyy", "d-MMMM-yyyy", "dd-MMMM-yyyy"));
 	private static final List<String> DATE_FORMAT_SPACE = 
-			Collections.unmodifiableList(Arrays.asList("dd MM yy", "d MM yy",
-		    		"dd M yy", "d M yy", "dd MMM yy", "d MMM yy", "dd MM yyyy", 
-		    		"d MM yyyy", "dd M yyyy", "d M yyyy", "dd MMM yyyy", "d MMM yyyy"));
+			Collections.unmodifiableList(Arrays.asList("d M yy", "dd M yy",
+		    		"d MM yy", "dd MM yy", "d MMM yy", "dd MMM yy", "d MMMM yy", 
+		    		"dd MMMM yy", "d M yyyy", "d MM yyyy", "d MM yyyy", "dd MM yyyy", 
+		    		"d MMM yyyy", "dd MMM yyyy", "d MMMM yyyy", "dd MMMM yyyy"));
 	
 	private static ArrayList<String> validDateFormats;
 	
