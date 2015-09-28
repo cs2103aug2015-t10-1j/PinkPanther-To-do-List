@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class SingleDateParser {
@@ -41,6 +42,10 @@ public class SingleDateParser {
 	public LocalDate parse(String date) {
 		
 		// if date contains a certain keyword, refer to list(s) and parse separately
+		// stub
+		if (date.equalsIgnoreCase("now") || date.equalsIgnoreCase("today")) {
+			return LocalDate.now();
+		}
 		
 		// for dates
 		date = fixDate(date);
