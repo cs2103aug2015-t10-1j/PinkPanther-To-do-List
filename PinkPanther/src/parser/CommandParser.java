@@ -1,10 +1,11 @@
 package parser;
 
 import common.Task;
+import common.Pair;
 
 import java.time.LocalDate;
 
-import common.Pair;
+
 
 //cs please create all your parser objects here. I am only going to use this object
 //in controller class
@@ -18,8 +19,8 @@ public class CommandParser {
 	}
 	
 	public Pair<LocalDate,Integer> query(String userInput){
-		
-		return null;
+		return QueryParser.parse(userInput);
+		//return null;
 	}
 
 }
