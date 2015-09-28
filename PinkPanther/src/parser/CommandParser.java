@@ -12,8 +12,9 @@ import java.time.LocalDate;
 
 public class CommandParser {
 	
+	private static AddStringParser asp = new AddStringParser();
+	
 	public Task createTask(String userInput){
-		AddStringParser asp = new AddStringParser();
 		Task task = asp.parse(userInput);
 		return task;
 	}
