@@ -25,6 +25,9 @@ public class AddStringParser {
 	private static final String[] LIST_TWO_DATE_MARKERS = {" to ", "-"};
 	private static final String[] LIST_DEADLINE_MARKERS = {"by", "due", "before"}; 
 	private static final String[] LIST_START_MARKERS = {"at", "after"};
+	
+	private static SingleDateParser sdp = new SingleDateParser();
+	private static SingleTimeParser stp = new SingleTimeParser();
 
 	
 	// main functionality
@@ -85,8 +88,6 @@ public class AddStringParser {
 	
 	// counts number of dates
 	private int countValidDates(String dateTimeInfo) {
-		
-		SingleDateParser sdp = new SingleDateParser();
 		
 		// itself is a date
 		if (isSingleDate(dateTimeInfo, sdp)) {
@@ -153,9 +154,8 @@ public class AddStringParser {
 	}
 	
 	private boolean isValidDateRange(String date1, String date2) {
-		SingleDateParser sdp2 = new SingleDateParser();
-		LocalDate earlierDate = sdp2.parse(date1);
-		LocalDate laterDate = sdp2.parse(date2);
+		LocalDate earlierDate = sdp.parse(date1);
+		LocalDate laterDate = sdp.parse(date2);
 		
 		// case: need to convert first date to a valid date
 		if (laterDate != null) {
@@ -180,8 +180,6 @@ public class AddStringParser {
 
 	
 	private int countValidTimes (String dateTimeInfo) {
-		
-		SingleTimeParser stp = new SingleTimeParser();
 		
 		// itself is a time
 		if (isSingleTime(dateTimeInfo, stp)) {
@@ -248,9 +246,8 @@ public class AddStringParser {
 	}
 	
 	private boolean isValidTimeRange(String time1, String time2) {
-		SingleTimeParser stp2 = new SingleTimeParser();
-		LocalTime earlierTime = stp2.parse(time1);
-		LocalTime laterTime = stp2.parse(time2);
+		LocalTime earlierTime = stp.parse(time1);
+		LocalTime laterTime = stp.parse(time2);
 		
 		// case: need to append "am/pm" to first time
 		if (laterTime != null) {
@@ -259,7 +256,7 @@ public class AddStringParser {
 			} else if (time2.contains("am")) {
 				time1 += "am";
 			}
-			earlierTime = stp2.parse(time1);
+			earlierTime = stp.parse(time1);
 		}
 		
 		// case: both times are valid times
