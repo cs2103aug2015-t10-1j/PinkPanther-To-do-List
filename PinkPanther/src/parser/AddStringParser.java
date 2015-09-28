@@ -15,6 +15,7 @@ public class AddStringParser {
 	private LocalTime startTimeStore;
 	private LocalTime endTimeStore;
 	private TaskType taskTypeStore;
+	private String commandStringStore;
 	
 	// indexes of various arrays
 	private static final int INDEX_TASKNAME = 0;
@@ -30,9 +31,11 @@ public class AddStringParser {
 	public Task parse(String commandContent){
 		
 		clearStores();
+		commandStringStore = commandContent;
 		String[] userInfo = commandContent.split(",");
 		userInfo = trimStringArray(userInfo);
 		int validDateTimes = findValidDateTime(userInfo);
+		
 		// create a floating task
 		if (userInfo.length == 1 || validDateTimes == 0) {
 			return addFloating(commandContent);
@@ -44,8 +47,6 @@ public class AddStringParser {
 			try {
 				return addEvent(userInfo);
 			} catch (Exception e) {
-				//System.out.println(e.getMessage());
-				//e.printStackTrace();
 				Display.setFeedBack(e.getMessage());
 			}
 			return null;
@@ -309,7 +310,7 @@ public class AddStringParser {
 		}
 		
 		Task event = new Task(details[INDEX_TASKNAME], startDateStore, 
-				 startTimeStore, endDateStore, endTimeStore);			
+				 startTimeStore, endDateStore, endTimeStore, commandStringStore);			
 		return event;
 	}
 	
@@ -325,12 +326,12 @@ public class AddStringParser {
 		// case: 0 T 1 D (add dated event on 1D)
 		if (taskTypeStore == TaskType.DEADLINE) {
 			Task deadline = new Task(details[INDEX_TASKNAME], endDateStore, endTimeStore,
-					TaskType.DEADLINE );
+					TaskType.DEADLINE, commandStringStore );
 			return deadline;
 		} else if (taskTypeStore == TaskType.TODO 
 				|| (startDateStore != null)) {
 			Task toDoAt = new Task(details[INDEX_TASKNAME], startDateStore, startTimeStore,
-					TaskType.TODO);
+					TaskType.TODO, commandStringStore);
 			return toDoAt;
 		} else {
 			return null;
