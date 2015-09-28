@@ -15,7 +15,12 @@ public class QueryParser {
 		SingleDateParser sdp = new SingleDateParser();
 		LocalDate date = sdp.parse(userInfo[DATE_INDEX]);
 		
-		Integer index = (Integer)Integer.parseInt(userInfo[INDEX_INDEX]);
+		Integer index = null;
+		try {
+			index = (Integer)Integer.parseInt(userInfo[INDEX_INDEX]);
+		} catch (Exception e) {
+			
+		} 
 		
 		Pair dateIndex = new Pair(date, index);
 		return dateIndex;
