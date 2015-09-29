@@ -156,7 +156,7 @@ public class SingleDateParser {
 		String precursor = Auxiliary.getFirstWord(date).toUpperCase();
 		String content = Auxiliary.removeFirstWord(date).toUpperCase().trim();
 		if (precursor.equals("THIS")) {
-			return parseDayOfWeek(content);
+			return parseDayOfWeek(content, precursor);
 		} else if (precursor.equals("NEXT")) {
 			if (content.equals("WEEK")) {
 				return LocalDate.now().plusWeeks(1);
@@ -165,13 +165,13 @@ public class SingleDateParser {
 			} else if (content.equals("YEAR")) {
 				return LocalDate.now().plusYears(1);
 			} else {
-				return parseDayOfWeek(content).plusWeeks(1);
+				return parseDayOfWeek(content, precursor);
 			}
 		}
 		return null;
 	}
 	
-	private LocalDate parseDayOfWeek(String dayOfWeek) {
+	private LocalDate parseDayOfWeek(String dayOfWeek, String precursor) {
 		LocalDate date = null;
 		int dayIndicator = 0;
 		for (String dayFormat : DAY_FORMAT) {
@@ -185,12 +185,9 @@ public class SingleDateParser {
 		
 		int dayToday = LocalDate.now().getDayOfWeek().getValue();
 		int differenceInDays = dayIndicator - dayToday;
-		if (differenceInDays == 0) {
-			return LocalDate.now();
-		}
-		else if (differenceInDays > 0) {
+		if (differenceInDays >= 0 && precursor.equals("THIS")) {
 			return LocalDate.now().plusDays(differenceInDays);
-		} else if (dayIndicator < dayToday) {
+		} else if (differenceInDays >= 0 && precursor.equals("NEXT") || dayIndicator < dayToday) {
 			differenceInDays += 7;
 			return LocalDate.now().plusDays(differenceInDays);
 		}
@@ -211,4 +208,3 @@ public class SingleDateParser {
 		return null;
 	}
 }
-
