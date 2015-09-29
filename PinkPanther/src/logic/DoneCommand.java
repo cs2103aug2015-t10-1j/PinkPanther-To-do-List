@@ -14,23 +14,17 @@ public class DoneCommand implements Command{
 		this.handler=handler;
 	}
 	
-	public boolean execute(Pair<LocalDate,Integer>pair){
-		LocalDate date=pair.getFirst();
-		if(date==null){
-			Display.setFeedBack("Invalid date input");
-			return false;
-		}
+	public boolean execute(Pair<LocalDate,Integer>dateIndex){
 		
-		int index=pair.getSecond();
-		taskRef=handler.searchTaskByIndex(date, index);
-		if(taskRef==null){
-			Display.setFeedBack("task does not exist");
-			return false;
+		taskRef=TaskFinder.find(handler, dateIndex);
+		if(taskRef!=null){
+			previousTaskStatus=taskRef.getStatus();
+			taskRef.setStatus(1);
+			Display.setFeedBack(taskRef.getName()+" is done");
+			return true;
 		}
-		previousTaskStatus=taskRef.getStatus();
-		taskRef.setStatus(1);
-		Display.setFeedBack(taskRef.getName()+" is done");
-		return true;
+		return false;
+		
 	}
 	
 	public void undo(){

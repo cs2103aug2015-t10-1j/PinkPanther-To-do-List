@@ -1,6 +1,7 @@
 package logic;
 
 
+import common.Pair;
 import common.Task;
 
 public class EditCommand implements Command{
@@ -12,9 +13,9 @@ public class EditCommand implements Command{
 		this.handler=handler;
 	}
 	
-	public boolean execute(Task t1,Task t2){
-		unmodified=t1;
-		modified=t2;
+	public boolean execute(Pair<Task,Task>pair){
+		unmodified=pair.getFirst();
+		modified=pair.getSecond();
 		handler.deleteTask(unmodified);
 		if(handler.addTask(modified)){
 			Display.setFeedBack("the task has been modified");

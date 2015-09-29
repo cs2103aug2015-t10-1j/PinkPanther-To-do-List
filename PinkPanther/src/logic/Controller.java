@@ -47,15 +47,19 @@ public class Controller {
 				break;
 
 			case "edit":
-				//
-				
-
+				EditCommand edit=new EditCommand(handler);
+				Pair<Task,Task>taskPair=editTask(parameterString);
+				if(taskPair!=null && edit.execute(taskPair)){
+					commandStack.addCommand(edit);
+				}
+				break;
 			case "done":
 				DoneCommand done = new DoneCommand(handler);
 				if(done.execute(parser.query(parameterString))){
 					commandStack.addCommand(done);
 				}
 				break;
+			case "del":
 			case "delete":
 				DeleteCommand delete = new DeleteCommand(handler);
 				if(delete.execute(parser.query(parameterString))){
@@ -73,6 +77,20 @@ public class Controller {
 				System.exit(0);
 			default:
 				Display.setFeedBack("Invalid Command");
-				//display invalid command message
+		}
 	}
-}}
+	
+	public Pair<Task,Task> editTask(String userInput){
+
+		Task unmodified=TaskFinder.find(handler, parser.query(userInput));
+		if(unmodified!=null){
+			//pass the commandstring to ui and get back a modified string
+			Display.setFeedBack(unmodified.getCommandString());
+			String modifiedString=""; //string from ui
+			Task modified=parser.createTask(modifiedString);
+			return new Pair<Task,Task>(unmodified,modified);
+		}
+		return null;
+		
+	}
+}

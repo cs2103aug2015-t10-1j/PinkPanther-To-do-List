@@ -16,23 +16,15 @@ public class DeleteCommand implements Command{
 		this.handler=handler;
 	}
 	
-	public boolean execute(Pair<LocalDate,Integer> pair){
-		LocalDate date=pair.getFirst();
-		int index=pair.getSecond();
-		if(date==null){
-			Display.setFeedBack("you have entered an invalid date");
-			return false;
-		}
+	public boolean execute(Pair<LocalDate,Integer> dateIndex){
 		
-		taskRef=handler.searchTaskByIndex(date,index);
+		
+		taskRef=TaskFinder.find(handler, dateIndex);
 		if(taskRef!=null){
 			Display.setFeedBack(taskRef.getName()+" is deleted");
 			return true;
 		}
-		else{
-			Display.setFeedBack("task does not exist");
-			return false;
-		}
+		return false;
 	}
 	
 	public void undo(){
