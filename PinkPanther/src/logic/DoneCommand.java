@@ -1,6 +1,5 @@
 package logic;
 
-import java.time.LocalDate;
 
 import common.Pair;
 import common.Task;
@@ -14,9 +13,9 @@ public class DoneCommand implements Command{
 		this.handler=handler;
 	}
 	
-	public boolean execute(Pair<LocalDate,Integer>dateIndex){
+	public boolean execute(Pair<?,Integer>pair){
 		
-		taskRef=TaskFinder.find(handler, dateIndex);
+		taskRef=TaskFinder.find(handler, pair);
 		if(taskRef!=null){
 			previousTaskStatus=taskRef.getStatus();
 			taskRef.setStatus(1);

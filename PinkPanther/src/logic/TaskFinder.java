@@ -7,8 +7,8 @@ import common.Task;
 //
 public class TaskFinder {
 	
-	public static Task find(TaskHandler handler,Pair<?,?> pair){
-		Integer index=(Integer) pair.getSecond();
+	public static Task find(TaskHandler handler,Pair<?,Integer> pair){
+		Integer index=pair.getSecond();
 		Task task;
 		
 		if(pair.getFirst() instanceof String){
