@@ -6,6 +6,9 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.time.ZoneId;
 
 public class SingleDateParser {
 	
@@ -152,9 +155,8 @@ public class SingleDateParser {
 	private LocalDate twoWordIndicatorParser (String date) {
 		String precursor = Auxiliary.getFirstWord(date).toUpperCase();
 		String content = Auxiliary.removeFirstWord(date).toUpperCase().trim();
-		
 		if (precursor.equals("THIS")) {
-			return parseDayOfWeek(date);
+			return parseDayOfWeek(content);
 		} else if (precursor.equals("NEXT")) {
 			if (content.equals("WEEK")) {
 				return LocalDate.now().plusWeeks(1);
@@ -163,13 +165,49 @@ public class SingleDateParser {
 			} else if (content.equals("YEAR")) {
 				return LocalDate.now().plusYears(1);
 			} else {
-				return parseDayOfWeek(date);
+				return parseDayOfWeek(content).plusWeeks(1);
 			}
 		}
 		return null;
 	}
 	
 	private LocalDate parseDayOfWeek(String dayOfWeek) {
+		LocalDate date = null;
+		int dayIndicator = 0;
+		for (String dayFormat : DAY_FORMAT) {
+			date = compareDayFormat(dayOfWeek, dayFormat);
+			if (date != null) {
+				dayIndicator = date.getDayOfWeek().getValue();
+			} else {
+				return null;
+			}
+		}
+		
+		int dayToday = LocalDate.now().getDayOfWeek().getValue();
+		int differenceInDays = dayIndicator - dayToday;
+		if (differenceInDays == 0) {
+			return LocalDate.now();
+		}
+		else if (differenceInDays > 0) {
+			return LocalDate.now().plusDays(differenceInDays);
+		} else if (dayIndicator < dayToday) {
+			differenceInDays += 7;
+			return LocalDate.now().plusDays(differenceInDays);
+		}
+		return null;
+	}
+	
+	private LocalDate compareDayFormat(String dateString, String pattern) {
+		
+		SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+		
+		try {
+			Date date = sdf.parse(dateString);
+			return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		} catch (Exception e) {
+			// nothing
+		}
+
 		return null;
 	}
 }
