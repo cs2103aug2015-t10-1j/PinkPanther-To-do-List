@@ -7,18 +7,41 @@ import common.Task;
 
 public class TaskFinder {
 	
-	public static Task find(TaskHandler handler,Pair<LocalDate,Integer>dateIndex){
-		LocalDate date=dateIndex.getFirst();
-		if(date==null){
-			Display.setFeedBack("Invalid date input");
-			return null;
+	public static Task find(TaskHandler handler,Pair<?,?> pair){
+		Integer index=(Integer) pair.getSecond();
+		Task task;
+		
+		if(pair.getFirst() instanceof String){
+			if(index!=null){
+				task=handler.searchTaskByIndex(null, index);
+			}
+			else{
+				Display.setFeedBack("invalid index");
+				return null;
+			}
 		}
 		
-		int index=dateIndex.getSecond();
-		Task task=handler.searchTaskByIndex(date, index);
+		else{
+			LocalDate date=(LocalDate) pair.getFirst();
+			if(date!=null && index!=null){
+				task=handler.searchTaskByIndex(date, index);
+			}
+			else if(date==null && index==null){
+				Display.setFeedBack("Invalid date and index");
+				return null;
+			}
+			else if(date==null){
+				Display.setFeedBack("invalid date");
+				return null;
+			}
+			else{
+				Display.setFeedBack("invalid index");
+				return null;
+			}			
+		}
+		
 		if(task==null){
 			Display.setFeedBack("task does not exist");
-			return null;
 		}
 		return task;
 		
