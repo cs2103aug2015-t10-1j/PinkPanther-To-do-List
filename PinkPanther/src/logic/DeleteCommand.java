@@ -18,8 +18,8 @@ public class DeleteCommand implements Command{
 		
 		taskRef=TaskFinder.find(handler, pair);
 		if(taskRef!=null){
-			Display.setFeedBack(taskRef.getName()+" is deleted");
 			handler.deleteTask(taskRef);
+			Display.setFeedBack(taskRef.getName()+" is deleted");
 			return true;
 		}
 		return false;

@@ -80,6 +80,12 @@ public class TaskHandler {
 		return true;
 	}
 	
+	public void addMultipleTasks(ArrayList<Task>taskList){
+		for(Task task:taskList){
+			addTask(task);
+		}
+	}
+	
 	public void deleteTask(Task task){
 		if(task.getTaskType()==TaskType.FLOATING){
 			floatingList.remove(task);
@@ -96,6 +102,12 @@ public class TaskHandler {
 		}
 	}
 	
+	public void deleteMultipleTasks(ArrayList<Task>taskList){
+		for(Task task:taskList){
+			deleteTask(task);
+		}
+	}
+	
 	
 	public Task searchTaskByIndex(LocalDate date,int displayIndex){
 		int actualIndex=displayIndex-1;
@@ -106,12 +118,26 @@ public class TaskHandler {
 			return floatingList.get(actualIndex);
 		}
 		else{
-			if(actualIndex>=todoList.get(date).size()){
+			if(!todoList.containsKey(date)||actualIndex>=todoList.get(date).size()){
 				return null;
 			}
-			return todoList.get(date).get(actualIndex-1);
+			return todoList.get(date).get(actualIndex);
 		}
 				
+	}
+	
+	public ArrayList<Task>searchMultipleTasksByIndex(LocalDate date,ArrayList<Integer>indexList){
+		ArrayList<Task>taskList=new ArrayList<Task>();
+		for(int index:indexList){
+			Task task=searchTaskByIndex(date,index);
+			if(task!=null){
+				taskList.add(task);
+			}
+		}
+		if(taskList.size()==0){
+			return null;
+		}
+		return taskList;
 	}
 	
 	public boolean checkForTimeConflict(Task event){
