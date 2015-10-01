@@ -1,6 +1,6 @@
 package logic;
 /*
- * add description/
+ * add description
  */
 import java.util.LinkedList;
 
