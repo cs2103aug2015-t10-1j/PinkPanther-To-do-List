@@ -35,7 +35,6 @@ public class PrettyDisplay extends Application {
     Text scenetitle = new Text("Calendar");
 	boolean isViewingHelpScreen = false;
     boolean isCalendarHidden = false;
-    boolean isShortened = false;
     double currentScrollYPos = 0;
     Controller mainController;
     GridPane calendarGrid;
@@ -264,6 +263,8 @@ public class PrettyDisplay extends Application {
         	grid.add(currentDayBox, 0, currentYPos);
     		
     		int currXPos = 1;
+    		currTaskIndex = 1;
+    		
 			for(Task task:todoList.get(date)){ //looping through tasks for specified date
 				
 				if (currXPos == 3){
@@ -310,7 +311,11 @@ public class PrettyDisplay extends Application {
     		actiontarget.setFill(Color.WHITE);    		
     	}
     }
-
+    
+    public void setUserTextField(String text){
+    	userTextField.setText(text);
+    }
+    
 	public String getUserInput() {
 		// TODO Auto-generated method stub
 		return null;
