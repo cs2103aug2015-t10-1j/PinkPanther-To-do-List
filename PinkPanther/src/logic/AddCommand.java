@@ -36,4 +36,5 @@ public class AddCommand implements Command{
 	public void redo(){
 		handler.addTask(taskRef);
 	}
+	
 }
