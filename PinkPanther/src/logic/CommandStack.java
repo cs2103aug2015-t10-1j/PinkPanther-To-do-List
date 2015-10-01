@@ -18,11 +18,14 @@ public class CommandStack {
 	}
 	
 	public void addCommand(Command command){
-		if(undoStackSize>=maxStackSize){
-			undoStack.poll();
+		if(undoStackSize<maxStackSize){
+			undoStackSize++;
+		}
+		else{
+			undoStack.pollLast();
 		}
 		undoStack.push(command);
-		undoStackSize++;
+		
 		//if user enter a new command after undo, he is unable to revert back to the state before undo
 		if(!redoStack.isEmpty()){
 			redoStack.clear();
@@ -48,7 +51,6 @@ public class CommandStack {
 		undoStackSize++;
 		return true;
 	}
-	
 	
 	
 }
