@@ -138,19 +138,19 @@ public class Task {
 		}
 		else if(type==TaskType.DEADLINE){
 			if(endTime!=null){
-				return name+",by"+endTime.format(timeformatter)+","+endDate.format(dateformatter);
+				return name+",by "+endTime.format(timeformatter)+","+endDate.format(dateformatter);
 			}
-			return name+",by"+endDate.format(dateformatter);
+			return name+",by "+endDate.format(dateformatter);
 		}
 		else if(type==TaskType.TODO){
 			if(startTime!=null){
-				return name+",at"+startTime.format(timeformatter)+","+startDate.format(dateformatter);
+				return name+",at "+startTime.format(timeformatter)+","+startDate.format(dateformatter);
 			}
 			return name+",at"+startDate.format(dateformatter);
 			
 		}
 		else{
-			return name+","+startTime.format(timeformatter)+" to"+endTime.format(timeformatter)+","+startDate.format(dateformatter);
+			return name+","+startTime.format(timeformatter)+" to "+endTime.format(timeformatter)+","+startDate.format(dateformatter);
 		}
 		
 		
