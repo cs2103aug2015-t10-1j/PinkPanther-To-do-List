@@ -46,10 +46,6 @@ public class PrettyDisplay extends Application {
     Stage objPrimaryStage;
     HBox hbBtn;
     
-    public static void main(String[] args){
-    	PrettyDisplay pD = new PrettyDisplay();
-    	pD.runApp();
-    }
     
     public void runApp() {
         launch();
@@ -60,6 +56,7 @@ public class PrettyDisplay extends Application {
  //   	fillPage ("Input command in the field above", primaryStage);
     	objPrimaryStage = primaryStage;
     	mainController = new Controller();
+    	mainController.setGui(this);
     	
     	 primaryStage.setTitle("PinkPanther: The best to-do list");
          
@@ -296,9 +293,16 @@ public class PrettyDisplay extends Application {
     	mainController.addCommand(command);
         actiontarget.setText(Display.showFeedBack());
     	calendarGrid.getChildren().clear();
-    	userTextField.clear();
         populateGrid(calendarGrid);
 
+    }
+    
+    public void setUserTextField(String text){
+    	userTextField.setText(text);
+    }
+    
+    public void clearTextField(){
+    	userTextField.clear();
     }
     
     public void setActionResult(String text){
@@ -312,9 +316,7 @@ public class PrettyDisplay extends Application {
     	}
     }
     
-    public void setUserTextField(String text){
-    	userTextField.setText(text);
-    }
+
     
 	public String getUserInput() {
 		// TODO Auto-generated method stub

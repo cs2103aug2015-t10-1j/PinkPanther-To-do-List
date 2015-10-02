@@ -1,6 +1,7 @@
 package common;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 /*
  * Add class description
  */
@@ -13,7 +14,6 @@ public class Task {
 	private LocalTime startTime;
 	private LocalTime endTime;
 	private int status;
-	private String commandString;
 	
 	public Task(String name){
 		this.name=name;
@@ -21,7 +21,7 @@ public class Task {
 	}
 	
 	
-	public Task(String name,LocalDate date,LocalTime time, TaskType type,String userInput){
+	public Task(String name,LocalDate date,LocalTime time, TaskType type){
 		this.name=name;
 		if(type==TaskType.TODO){
 			this.startDate=date;
@@ -32,18 +32,16 @@ public class Task {
 			this.endTime=time;
 		}
 		this.type=type;
-		this.commandString=userInput;
 	}
 	
 	public Task(String name,LocalDate startDate,LocalTime startTime,
-			LocalDate endDate,LocalTime endTime,String userInput){
+			LocalDate endDate,LocalTime endTime){
 		this.name=name;
 		this.startDate=startDate;
 		this.startTime=startTime;
 		this.endDate=endDate;
 		this.endTime=endTime;
 		this.type=TaskType.EVENT;
-		this.commandString=userInput;
 	}
 	
 	public void setName(String name){
@@ -132,8 +130,31 @@ public class Task {
 		return status;
 	}
 	
-	public String getCommandString(){
-		return commandString;
+	public String toString(){
+		DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern("d/M/yy");
+		DateTimeFormatter timeformatter = DateTimeFormatter.ofPattern("h.mma");
+		if(type==TaskType.FLOATING){
+			return name;
+		}
+		else if(type==TaskType.DEADLINE){
+			if(endTime!=null){
+				return name+",by"+endTime.format(timeformatter)+","+endDate.format(dateformatter);
+			}
+			return name+",by"+endDate.format(dateformatter);
+		}
+		else if(type==TaskType.TODO){
+			if(startTime!=null){
+				return name+",at"+startTime.format(timeformatter)+","+startDate.format(dateformatter);
+			}
+			return name+",at"+startDate.format(dateformatter);
+			
+		}
+		else{
+			return name+","+startTime.format(timeformatter)+" to"+endTime.format(timeformatter)+","+startDate.format(dateformatter);
+		}
+		
+		
+		
 	}
 	
 	
