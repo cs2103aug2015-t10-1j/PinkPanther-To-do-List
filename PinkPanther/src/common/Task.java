@@ -146,7 +146,7 @@ public class Task {
 			if(startTime!=null){
 				return name+",at "+startTime.format(timeformatter)+","+startDate.format(dateformatter);
 			}
-			return name+",at"+startDate.format(dateformatter);
+			return name+",at "+startDate.format(dateformatter);
 			
 		}
 		else{
