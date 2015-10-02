@@ -10,10 +10,15 @@ import parser.CommandParser;
 import userinterface.PrettyDisplay;
 
 public class Controller {
-	PrettyDisplay gui=new PrettyDisplay();
+	PrettyDisplay gui;
 	TaskHandler handler=new TaskHandler();
 	CommandStack commandStack=new CommandStack();
 	CommandParser parser=new CommandParser();
+	Pair<Task,Task>taskPair=new Pair<Task,Task>(null,null);
+	
+	public void setGui(PrettyDisplay gui){
+		this.gui=gui;
+	}
 	
 	private static String getFirstWord(String userInput) {
 		String commandTypeString = userInput.trim().split("\\s+")[0];
@@ -37,6 +42,7 @@ public class Controller {
     	System.out.println("Called mainController to add command: " + command);
 		String commandString=getFirstWord(command);
 		String parameterString=removeFirstWord(command);
+		boolean canClear=true;
 		
 		switch(commandString.toLowerCase()){
 			case "add":
@@ -47,11 +53,10 @@ public class Controller {
 				break;
 
 			case "edit":
-				EditCommand edit=new EditCommand(handler);
-				Pair<Task,Task>taskPair=editTask(parameterString);
-				if(taskPair!=null && edit.execute(taskPair)){
-					commandStack.addCommand(edit);
-				}
+				Task unmodified=TaskFinder.find(handler, parser.query(parameterString));
+				taskPair.setFirst(unmodified);
+				canClear=false;
+				gui.setUserTextField(unmodified.toString());
 				break;
 			case "done":
 				DoneCommand done = new DoneCommand(handler);
@@ -75,22 +80,25 @@ public class Controller {
 			case "exit":
 				gui.closeWindow();
 				System.exit(0);
+			case "clear":
+				handler.clearAllTasks();
 			default:
-				Display.setFeedBack("Invalid Command");
+				if(taskPair.getFirst()!=null){
+					taskPair.setSecond(parser.createTask(command));
+					EditCommand edit=new EditCommand(handler);
+					if(edit.execute(taskPair)){
+						commandStack.addCommand(edit);
+					}
+					taskPair.setFirst(null);
+					taskPair.setSecond(null);
+				}
+				else{
+					Display.setFeedBack("Invalid Command");
+				}		
+		}
+		if(canClear){
+			gui.clearTextField();
 		}
 	}
 	
-	public Pair<Task,Task> editTask(String userInput){
-
-		Task unmodified=TaskFinder.find(handler, parser.query(userInput));
-		if(unmodified!=null){
-			//pass the commandstring to ui and get back a modified string
-			Display.setFeedBack(unmodified.getCommandString());
-			String modifiedString=""; //string from ui
-			Task modified=parser.createTask(modifiedString);
-			return new Pair<Task,Task>(unmodified,modified);
-		}
-		return null;
-		
-	}
 }

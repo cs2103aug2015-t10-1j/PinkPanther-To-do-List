@@ -10,6 +10,14 @@ public class Pair<A,B> {
 		this.second=input2;
 	}
 	
+	public void setFirst(A input){
+		this.first=input;
+	}
+	
+	public void setSecond(B input){
+		this.second=input;
+	}
+	
 	public A getFirst(){
 		return first;
 	}
