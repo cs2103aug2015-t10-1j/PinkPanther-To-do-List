@@ -39,7 +39,6 @@ public class AddStringParser implements Parser {
 		
 		// does not accept empty input
 		if (Auxiliary.isEmptyArray(userInfo)) {
-			Display.setFeedBack("Empty input");
 			return null;
 		}
 		

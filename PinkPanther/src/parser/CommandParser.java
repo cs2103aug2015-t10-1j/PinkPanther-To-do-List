@@ -12,7 +12,8 @@ import java.time.LocalDate;
 
 public class CommandParser {
 	
-	private static AddStringParser asp = new AddStringParser();
+	private AddStringParser asp = new AddStringParser();
+	private QueryParser qp = new QueryParser();
 	
 	public Task createTask(String userInput){
 		Task task = asp.parse(userInput);
@@ -20,7 +21,7 @@ public class CommandParser {
 	}
 	
 	public Pair<LocalDate,Integer> query(String userInput){
-		return QueryParser.parse(userInput);
+		return qp.parse(userInput);
 		//return null;
 	}
 
