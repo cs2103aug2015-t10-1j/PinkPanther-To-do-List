@@ -201,7 +201,7 @@ public class PrettyDisplay extends Application {
         
     }
     void implementScene(){
-        scene = new Scene(grid2, 1080, 850);
+        scene = new Scene(grid2, 1080, 650);
         scene.getStylesheets().clear();
         scene.getStylesheets().add(this.getClass().getResource("a.css").toExternalForm());
 

@@ -17,11 +17,11 @@ public class TaskHandler {
 	private TaskStorage floatingList_File;
 	
 	public TaskHandler(){
-		todoList = todoList_File.readFromTodoFile();
-		floatingList = floatingList_File.readFromFloatingFile();
-		
 		todoList_File = new TaskStorage("todo");
 		floatingList_File = new TaskStorage("floating");
+		
+		todoList = todoList_File.readFromTodoFile();
+		floatingList = floatingList_File.readFromFloatingFile();
 	}
 	
 	public TreeMap<LocalDate,ArrayList<Task>> getTodoList(){

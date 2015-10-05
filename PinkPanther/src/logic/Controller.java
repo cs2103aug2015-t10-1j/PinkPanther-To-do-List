@@ -51,7 +51,6 @@ public class Controller {
 					commandStack.addCommand(add);
 				}
 				break;
-
 			case "edit":
 				Task unmodified=TaskFinder.find(handler, parser.query(parameterString));
 				taskPair.setFirst(unmodified);
@@ -82,6 +81,7 @@ public class Controller {
 				System.exit(0);
 			case "clear":
 				handler.clearAllTasks();
+				break;
 			default:
 				if(taskPair.getFirst()!=null){
 					taskPair.setSecond(parser.createTask(command));
@@ -93,8 +93,9 @@ public class Controller {
 					taskPair.setSecond(null);
 				}
 				else{
-					Display.setFeedBack("Invalid Command");
-				}		
+					Display.setFeedBack("invalid command");
+  				    
+			   }		
 		}
 		if(canClear){
 			gui.clearTextField();
