@@ -13,10 +13,15 @@ import common.*;
 public class TaskHandler {
 	private TreeMap<LocalDate,ArrayList<Task>>todoList;
 	private ArrayList<Task>floatingList;
+	private TaskStorage todoList_File;
+	private TaskStorage floatingList_File;
 	
 	public TaskHandler(){
-		todoList=TaskStorage.readFromTodoFile();
-		floatingList=TaskStorage.readFromFloatingFile();
+		todoList = todoList_File.readFromTodoFile();
+		floatingList = floatingList_File.readFromFloatingFile();
+		
+		todoList_File = new TaskStorage("todo");
+		floatingList_File = new TaskStorage("floating");
 	}
 	
 	public TreeMap<LocalDate,ArrayList<Task>> getTodoList(){
@@ -59,7 +64,7 @@ public class TaskHandler {
 		if(task.getTaskType()==TaskType.FLOATING){
 			floatingList.add(task);
 			sortFloatingList();
-			TaskStorage.writeToFile(floatingList);
+			floatingList_File.writeToFile(floatingList);
 		}
 		else{
 			LocalDate date=task.getDate();
@@ -75,7 +80,7 @@ public class TaskHandler {
 			}
 			
 			sortTodoList(date);
-			TaskStorage.writeToFile(todoList);
+			todoList_File.writeToFile(todoList);
 		}
 		return true;
 	}
@@ -89,7 +94,7 @@ public class TaskHandler {
 	public void deleteTask(Task task){
 		if(task.getTaskType()==TaskType.FLOATING){
 			floatingList.remove(task);
-			TaskStorage.writeToFile(floatingList);
+			floatingList_File.writeToFile(floatingList);
 		}
 		else{
 			LocalDate date=task.getDate();
@@ -98,7 +103,7 @@ public class TaskHandler {
 			if(taskList.isEmpty()){
 				todoList.remove(date);
 			}
-			TaskStorage.writeToFile(todoList);
+			todoList_File.writeToFile(todoList);
 		}
 	}
 	
