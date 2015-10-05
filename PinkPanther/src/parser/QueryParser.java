@@ -17,7 +17,7 @@ public class QueryParser implements Parser {
 		Integer index = null;
 		try {
 			index = (Integer)Integer.parseInt(userInfo[INDEX_INDEX]);
-		} catch (NullPointerException e) {
+		} catch (Exception e) {
 			Display.setFeedBack("invalid int");
 			//Display some invalid input
 			return null;
