@@ -26,7 +26,7 @@ public class QueryParser implements Parser {
 		}
 		
 		if (userInfo[INDEX_DATE].equalsIgnoreCase("float")) {
-			Pair<String, Integer> floatIndex = new Pair<String, Integer>(userInfo[INDEX_DATE],index);
+			Pair<LocalDate, Integer> floatIndex = new Pair<LocalDate, Integer>(null,index);
 			return floatIndex;
 		}
 		
