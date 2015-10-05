@@ -1,6 +1,7 @@
 package logic;
 
 import java.time.LocalDate;
+import common.Auxiliary;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
@@ -20,16 +21,6 @@ public class Controller {
 		this.gui=gui;
 	}
 	
-	private static String getFirstWord(String userInput) {
-		String commandTypeString = userInput.trim().split("\\s+")[0];
-		return commandTypeString;
-	}
-	
-	private static String removeFirstWord(String userInput) {
-		String commandContent = userInput.replaceFirst(getFirstWord(userInput), "").trim();
-		return commandContent;
-	}
-	
 	public ArrayList<Task> getFloatingList(){
 		return handler.getFloatingList();
 	}
@@ -40,8 +31,8 @@ public class Controller {
 	
 	public void addCommand(String command){
     	System.out.println("Called mainController to add command: " + command);
-		String commandString=getFirstWord(command);
-		String parameterString=removeFirstWord(command);
+		String commandString=Auxiliary.getFirstWord(command);
+		String parameterString=Auxiliary.removeFirstWord(command);
 		boolean canClear=true;
 		
 		switch(commandString.toLowerCase()){
@@ -53,9 +44,12 @@ public class Controller {
 				break;
 			case "edit":
 				Task unmodified=TaskFinder.find(handler, parser.query(parameterString));
-				taskPair.setFirst(unmodified);
-				canClear=false;
-				gui.setUserTextField(unmodified.toString());
+				if(unmodified!=null){
+					taskPair.setFirst(unmodified);
+					canClear=false;
+					gui.setUserTextField(unmodified.toString());	
+				}
+				
 				break;
 			case "done":
 				DoneCommand done = new DoneCommand(handler);
@@ -94,7 +88,6 @@ public class Controller {
 				}
 				else{
 					Display.setFeedBack("invalid command");
-  				    
 			   }		
 		}
 		if(canClear){

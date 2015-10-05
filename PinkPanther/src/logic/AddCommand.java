@@ -13,13 +13,13 @@ public class AddCommand implements Command{
 	}
 	
 	public boolean execute(Task task){	
-		taskRef=task;
-		if(taskRef==null){
+		if(task==null){
 			Display.setFeedBack("retard,enter a name lah");
 			return false;
 		}
 		
 	    if(handler.addTask(task)){
+	    	taskRef=task;
 	    	Display.setFeedBack(task.getName()+" is added");
 	    	return true;
 	    }
