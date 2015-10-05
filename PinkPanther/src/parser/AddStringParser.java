@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-public class AddStringParser {
+public class AddStringParser implements Parser {
 	
 	private LocalDate startDateStore;
 	private LocalDate endDateStore;

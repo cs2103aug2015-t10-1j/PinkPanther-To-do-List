@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class SingleTimeParser {
+public class SingleTimeParser implements Parser{
 	
 	private static final List<String> TIME_FORMATS= 
 			Collections.unmodifiableList(Arrays.asList("h:mma", "hh:mma", 

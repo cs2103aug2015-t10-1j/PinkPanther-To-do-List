@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.time.ZoneId;
 
-public class SingleDateParser {
+public class SingleDateParser implements Parser {
 	
 	private static final int INDEX_DAY = 0;
 	private static final int INDEX_MONTH = 1;
