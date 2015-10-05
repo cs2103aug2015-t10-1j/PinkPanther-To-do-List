@@ -37,6 +37,12 @@ public class AddStringParser {
 		userInfo = Auxiliary.trimStringArray(userInfo);
 		int validDateTimes = findValidDateTime(userInfo);
 		
+		// does not accept empty input
+		if (Auxiliary.isEmptyArray(userInfo)) {
+			Display.setFeedBack("Empty input");
+			return null;
+		}
+		
 		// create a floating task
 		if (userInfo.length == 1 || validDateTimes == 0) {
 			return addFloating(commandContent);

@@ -19,6 +19,15 @@ public class Auxiliary {
 		return arr;
 	}
 	
+	public static boolean isEmptyArray(String[] arr) {
+		for (int i = 0; i < arr.length; i++) {
+			if (!(arr[i].trim().isEmpty())){
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	public static boolean isNumber(String possiblyNumber) {
 		return !possiblyNumber.isEmpty() && possiblyNumber.replaceAll("[0-9]","").isEmpty();
 	}
