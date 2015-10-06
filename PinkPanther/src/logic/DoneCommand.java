@@ -9,7 +9,6 @@ import common.Task;
 public class DoneCommand implements Command{
 	private TaskHandler handler;
 	private Task taskRef;
-	private int previousTaskStatus;
 	
 	public DoneCommand(TaskHandler handler){
 		this.handler=handler;
@@ -19,8 +18,7 @@ public class DoneCommand implements Command{
 		
 		taskRef=TaskFinder.find(handler, pair);
 		if(taskRef!=null){
-			previousTaskStatus=taskRef.getStatus();
-			taskRef.setStatus(1);
+			taskRef.setDoneStatus(true);
 			Display.setFeedBack(taskRef.getName()+" is done");
 			return true;
 		}
@@ -29,10 +27,10 @@ public class DoneCommand implements Command{
 	}
 	
 	public void undo(){
-		taskRef.setStatus(previousTaskStatus);
+		taskRef.setDoneStatus(false);
 	}
 	
 	public void redo(){
-		taskRef.setStatus(1);
+		taskRef.setDoneStatus(true);
 	}
 }

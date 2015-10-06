@@ -161,6 +161,41 @@ public class TaskHandler {
 	public void clearAllTasks(){
 		todoList.clear();
 		floatingList.clear();
+		
+	}
+	
+	public boolean findNameMatch(String keyword){
+		int matchCount=0;
+		for(Task task:floatingList){
+			if(task.getName().contains(keyword)){
+				task.setMatch(true);
+				matchCount++;
+			}
+		}
+		for(LocalDate date:todoList.keySet()){
+			for(Task task:todoList.get(date)){
+				if(task.getName().contains(keyword)){
+					task.setMatch(true);
+					matchCount++;
+				}
+			}
+		}
+		if(matchCount==0){
+			return false;
+		}
+		return true;
+	}
+	
+	public void resetMatchStatus(){
+		for(Task task:floatingList){
+			task.setMatch(false);
+		}
+		
+		for(LocalDate date:todoList.keySet()){
+			for(Task task:todoList.get(date)){
+				task.setMatch(false);
+			}
+		}
 	}
 	
 	//for debugging purpose

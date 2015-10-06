@@ -31,6 +31,7 @@ public class Controller {
 	
 	public void addCommand(String command){
     	System.out.println("Called mainController to add command: " + command);
+    	handler.resetMatchStatus();
 		String commandString=Auxiliary.getFirstWord(command);
 		String parameterString=Auxiliary.removeFirstWord(command);
 		boolean canClear=true;
@@ -63,7 +64,18 @@ public class Controller {
 				if(delete.execute(parser.query(parameterString))){
 					commandStack.addCommand(delete);
 				}
-				break;			
+				break;	
+			case "search":
+				if(handler.findNameMatch(parameterString)){
+					Display.setFeedBack("match found");
+				}
+				else{
+					Display.setFeedBack("no match found");
+				}
+				break;
+			case "saveas":
+				
+			
 			case "undo":
 				commandStack.undoOperation();
 				break;
