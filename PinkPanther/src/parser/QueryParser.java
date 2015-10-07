@@ -66,27 +66,4 @@ public class QueryParser implements Parser {
 		
 	}
 }
-	
-	/*Integer index = null;
-	try {
-		index = (Integer)Integer.parseInt(userInfo[INDEX_INDEX]);
-	} catch (Exception e) {
-		Display.setFeedBack("invalid int");
-		//Display some invalid input
-		return null;
-	} finally {
-		
-	}
-	
-	if (userInfo[INDEX_DATE].equalsIgnoreCase("float")) {
-		Pair<LocalDate, Integer> floatIndex = new Pair<LocalDate, Integer>(null,index);
-		return floatIndex;
-	}
-	
-	LocalDate date = sdp.parse(userInfo[INDEX_DATE]);
-	if (date == null) {
-		Display.setFeedBack("invalid date or float indicator");
-		return null;
-	}
-	Pair<LocalDate, Integer> dateIndex = new Pair<LocalDate, Integer>(date, index);
-	return dateIndex;*/
+
