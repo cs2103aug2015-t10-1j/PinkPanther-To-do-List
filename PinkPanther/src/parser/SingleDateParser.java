@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.time.ZoneId;
+import common.Pair;
 
 public class SingleDateParser implements Parser {
 	
@@ -61,11 +62,12 @@ public class SingleDateParser implements Parser {
 		}
 		
 		// for dates
-		date = fixDate(date);
+		Pair<String, Boolean>fixDateDetails = fixDate(date);
+		String fixedDate = fixDateDetails.getFirst();
 		for (String dateFormat : validDateFormats) {
-			LocalDate parsedDate = compareDateFormat(date, dateFormat);
+			LocalDate parsedDate = compareDateFormat(fixedDate, dateFormat);
 			if (parsedDate != null) {
-				if (parsedDate.isBefore(LocalDate.now())) {
+				if (parsedDate.isBefore(LocalDate.now()) && fixDateDetails.getSecond() ) {
 					parsedDate = parsedDate.plusYears(1);
 				}
 				return parsedDate;
@@ -89,8 +91,9 @@ public class SingleDateParser implements Parser {
 		
 	}
 	
-	private String fixDate(String date) {
+	private Pair<String, Boolean> fixDate(String date) {
 		String fixedDate;
+		boolean hasAppendedYear = false;
 		
 		for (int i = 0; i < DATE_DELIMITERS.length; i++){	
 			String[] dateDetails = date.split(DATE_DELIMITERS[i]);
@@ -113,14 +116,15 @@ public class SingleDateParser implements Parser {
 					String appendedYear = DATE_DELIMITERS[i] 
 							+ String.valueOf(LocalDate.now().getYear());
 					fixedDate += appendedYear;
+					hasAppendedYear = true;
 				}
 
-				return fixedDate;
+				return new Pair<String, Boolean>(fixedDate, hasAppendedYear);
 				
 			}
 		}
 		
-		return date;
+		return new Pair<String, Boolean>(date, hasAppendedYear);
 	}
 	
 	private boolean isDateIndicator(String date) {
