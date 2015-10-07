@@ -1,15 +1,17 @@
 package parser;
 
+import common.Pair;
+import common.Auxiliary;
+
+import java.time.ZoneId;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Collections;
 import java.util.Arrays;
 import java.util.ArrayList;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.time.ZoneId;
-import common.Pair;
 
 public class SingleDateParser implements Parser {
 	

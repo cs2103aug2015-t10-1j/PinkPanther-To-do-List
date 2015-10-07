@@ -2,6 +2,7 @@ package parser;
 
 import common.Task;
 import common.TaskType;
+import common.Auxiliary;
 import logic.Display;
 
 import java.time.LocalDate;

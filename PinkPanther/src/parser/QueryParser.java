@@ -1,22 +1,16 @@
 package parser;
 
+import common.Pair;
+import common.Auxiliary;
+import logic.Display;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
-import common.Pair;
-import logic.Display;
 
 public class QueryParser implements Parser {
 	
 	private static final int INDEX_KEYWORD = 0;
 	private static final int INDEX_INDEX = 1;
-	
-	public static void main(String[] args) {
-		QueryParser qp = new QueryParser();
-		Pair hello = qp.parse("3 jul, , 3, 4, 5");
-		System.out.println(hello.getFirst());
-		System.out.println(hello.getSecond().toString());
-		
-	}
 	
 	public Pair parse(String commandContent) {
 		String[] userInfo = commandContent.split(",");
