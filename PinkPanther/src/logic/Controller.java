@@ -36,7 +36,18 @@ public class Controller {
 		String parameterString=Auxiliary.removeFirstWord(command);
 		boolean canClear=true;
 		
-		switch(commandString.toLowerCase()){
+		if(taskPair.getFirst()!=null){
+			taskPair.setSecond(parser.createTask(command));
+			EditCommand edit=new EditCommand(handler);
+			if(edit.execute(taskPair)){
+				commandStack.addCommand(edit);
+			}
+			taskPair.setFirst(null);
+			taskPair.setSecond(null);
+		}
+		
+		else{
+			switch(commandString.toLowerCase()){
 			case "add":
 				AddCommand add = new AddCommand(handler);
 				if(add.execute(parser.createTask(parameterString))){
@@ -89,19 +100,10 @@ public class Controller {
 				handler.clearAllTasks();
 				break;
 			default:
-				if(taskPair.getFirst()!=null){
-					taskPair.setSecond(parser.createTask(command));
-					EditCommand edit=new EditCommand(handler);
-					if(edit.execute(taskPair)){
-						commandStack.addCommand(edit);
-					}
-					taskPair.setFirst(null);
-					taskPair.setSecond(null);
-				}
-				else{
-					Display.setFeedBack("invalid command");
-			   }		
+				Display.setFeedBack("invalid command");		
 		}
+		}
+			
 		if(canClear){
 			gui.clearTextField();
 		}
