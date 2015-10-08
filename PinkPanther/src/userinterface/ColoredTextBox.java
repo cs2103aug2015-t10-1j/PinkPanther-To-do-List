@@ -4,8 +4,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class ColoredTextBox extends Rectangle{
-	private static Color[] col = {(Color.BISQUE), (Color.ALICEBLUE), 
-			(Color.LAVENDER), (Color.LINEN), (Color.POWDERBLUE)};
+	private static Color[] col = {(Color.BISQUE), (Color.KHAKI), 
+			(Color.POWDERBLUE), (Color.LIGHTGREEN), (Color.POWDERBLUE)};
 	private static int currCol = 0;
 	
 	public ColoredTextBox() {
@@ -24,4 +24,9 @@ public class ColoredTextBox extends Rectangle{
         	currCol = 0;
         }
      }  
+	
+	public void setColor(int i){
+		this.setFill(col[i].deriveColor(0, 1.2, 1, 0.6));
+	
+	}
 }

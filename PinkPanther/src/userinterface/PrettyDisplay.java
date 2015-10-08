@@ -243,7 +243,8 @@ public class PrettyDisplay extends Application {
         		}
 	    		
 	    		String taskName = floatingTasks.get(i).getName();
-	    		TextedTaskBox taskBox = new TextedTaskBox(taskName , "", "", currTaskIndex);
+	    		//TextedTaskBox taskBox = new TextedTaskBox(taskName , "", "", currTaskIndex);
+	    		TextedTaskBox taskBox = new TextedTaskBox(i, floatingTasks.get(i));
 	    		currTaskIndex++;
 	    		grid.add(taskBox, currFloatXPos++, currentYPos);
 
@@ -274,8 +275,9 @@ public class PrettyDisplay extends Application {
 	    		String taskName = task.getName();
 	    		String startTime = task.getStartTimeString();
     			String endTime = task.getEndTimeString();
-	    		TextedTaskBox taskBox = new TextedTaskBox(taskName , startTime, endTime, currTaskIndex);
-	    		currTaskIndex++;
+	    		//TextedTaskBox taskBox = new TextedTaskBox(taskName , startTime, endTime, currTaskIndex);
+    			TextedTaskBox taskBox = new TextedTaskBox(currTaskIndex, task);
+    			currTaskIndex++;
 	    		grid.add(taskBox, currXPos++, currentYPos);
 
 	    		
