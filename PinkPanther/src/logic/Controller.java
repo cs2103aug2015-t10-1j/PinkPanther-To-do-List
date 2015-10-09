@@ -1,39 +1,50 @@
 package logic;
 
-import java.time.LocalDate;
-import common.Auxiliary;
-import java.util.ArrayList;
-import java.util.TreeMap;
+//import java.time.LocalDate;
+
+//import java.util.ArrayList;
+//import java.util.TreeMap;
 
 import common.Pair;
+import common.ProgramState;
 import common.Task;
 import parser.CommandParser;
-import userinterface.PrettyDisplay;
+import storage.TaskStorage;
+import common.Auxiliary;
+import common.Display;
 
 public class Controller {
-	PrettyDisplay gui;
-	TaskHandler handler=new TaskHandler();
-	CommandStack commandStack=new CommandStack();
-	CommandParser parser=new CommandParser();
-	Pair<Task,Task>taskPair=new Pair<Task,Task>(null,null);
+	private static Pair<Task,Task>taskPair=new Pair<Task,Task>(null,null);
 	
-	public void setGui(PrettyDisplay gui){
-		this.gui=gui;
+	private TaskHandler handler;
+	private CommandStack commandStack;
+	private CommandParser parser;
+	private TaskStorage storage;
+	private ProgramState state;
+	
+	public Controller(){
+		storage=new TaskStorage();
+		handler=new TaskHandler(storage);
+		commandStack=new CommandStack();
+		parser=new CommandParser();
+		state=new ProgramState();
+		initializeProgramState();
 	}
 	
-	public ArrayList<Task> getFloatingList(){
-		return handler.getFloatingList();
+	public void initializeProgramState(){
+		state.setFLoatingList(handler.getFloating());
+		state.setTodoList(handler.getTodo());
 	}
 	
-	public TreeMap<LocalDate,ArrayList<Task>> getTodoList(){
-		return handler.getTodoList();
+	public ProgramState getProgramState(){
+		return state;
 	}
+	
 	
 	public void addCommand(String command){
     	System.out.println("Called mainController to add command: " + command);
 		String commandString=Auxiliary.getFirstWord(command);
 		String parameterString=Auxiliary.removeFirstWord(command);
-		boolean canClear=true;
 		
 		if(taskPair.getFirst()!=null){
 			taskPair.setSecond(parser.createTask(command));
@@ -47,59 +58,64 @@ public class Controller {
 		
 		else{
 			switch(commandString.toLowerCase()){
-			case "add":
-				AddCommand add = new AddCommand(handler);
-				if(add.execute(parser.createTask(parameterString))){
-					commandStack.addCommand(add);
-				}
-				break;
-			case "edit":
-				Task unmodified=handler.searchTasks(parser.query(parameterString)).get(0);
-				if(unmodified!=null){
-					taskPair.setFirst(unmodified);
-					canClear=false;
-					gui.setUserTextField(unmodified.toString());	
-				}
-				
-				break;
-			case "done":
-				DoneCommand done = new DoneCommand(handler);
-				if(done.execute(parser.query(parameterString))){
-					commandStack.addCommand(done);
-				}
-				break;
-			case "del":
-			case "delete":
-				DeleteCommand delete = new DeleteCommand(handler);
-				if(delete.execute(parser.query(parameterString))){
-					commandStack.addCommand(delete);
-				}
-				break;	
-			case "search":
-				//to be done
-			case "saveas":
-				//to be done
+				case "add":
+					AddCommand add = new AddCommand(handler);
+					if(add.execute(parser.createTask(parameterString))){
+						commandStack.addCommand(add);
+					}
+					break;
+				case "edit":
+					Task unmodified=handler.searchTasks(parser.query(parameterString)).get(0);
+					if(unmodified!=null){
+						taskPair.setFirst(unmodified);
+						state.setInputBoxText(unmodified.toString());
+					}
+					break;
+				case "done":
+					DoneCommand done = new DoneCommand(handler);
+					if(done.execute(parser.query(parameterString))){
+						commandStack.addCommand(done);
+					}
+					break;
+				case "del":
+				case "delete":
+					DeleteCommand delete = new DeleteCommand(handler);
+					if(delete.execute(parser.query(parameterString))){
+						commandStack.addCommand(delete);
+					}
+					break;	
+				case "search":
+					state.setFLoatingList(handler.getMatchedFloating(parameterString));
+					state.setTodoList(handler.getMatchedTodo(parameterString));
+				case "display":
+					if(parameterString.equals("completed")){
+						state.setFLoatingList(handler.getDoneFloating());
+						state.setTodoList(handler.getDoneTodo());
+					}
+					else if(parameterString.equals("normal")){
+						state.setFLoatingList(handler.getFloating());
+						state.setTodoList(handler.getTodo());
+					}					
+				case "save":
+					storage.setSavePath(parameterString);
+				case "undo":
+					commandStack.undoOperation();
+					break;
+				case "redo":
+					commandStack.redoOperation();
+					break;
+				case "exit":
+					state.setExitState(true);
+				case "clear":
+					handler.clearAllTasks();
+					break;
+				default:
+					Display.setFeedBack("invalid command");		
+			}
+		}
 			
-			case "undo":
-				commandStack.undoOperation();
-				break;
-			case "redo":
-				commandStack.redoOperation();
-				break;
-			case "exit":
-				gui.closeWindow();
-				System.exit(0);
-			case "clear":
-				handler.clearAllTasks();
-				break;
-			default:
-				Display.setFeedBack("invalid command");		
-		}
-		}
-			
-		if(canClear){
-			gui.clearTextField();
-		}
+		storage.updateTodoList(handler.getTodo());
+		storage.updateFloating(handler.getFloating());
 	}
 	
 }

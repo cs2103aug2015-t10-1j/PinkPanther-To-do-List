@@ -13,23 +13,71 @@ import common.*;
 public class TaskHandler {
 	private TreeMap<LocalDate,ArrayList<Task>>todoList;
 	private ArrayList<Task>floatingList;
-	private TaskStorage todoList_File;
-	private TaskStorage floatingList_File;
-	
-	public TaskHandler(){
-		todoList_File = new TaskStorage("todo");
-		floatingList_File = new TaskStorage("floating");
-		
-		todoList = todoList_File.readFromTodoFile();
-		floatingList = floatingList_File.readFromFloatingFile();
+
+	public TaskHandler(TaskStorage storage){
+		todoList=storage.readFromTodoFile();
+		floatingList=storage.readFromFloatingFile();
 	}
 	
-	public TreeMap<LocalDate,ArrayList<Task>> getTodoList(){
+	public TreeMap<LocalDate,ArrayList<Task>> getTodo(){
 		return todoList;
 	}
 	
-	public ArrayList<Task> getFloatingList(){
+	private static TreeMap<LocalDate,ArrayList<Task>> addTaskToMap(TreeMap<LocalDate,ArrayList<Task>>map,Task task){
+		LocalDate date=task.getDate();
+		if(!map.containsKey(date)){
+			map.put(date, new ArrayList<Task>());
+		}
+		map.get(date).add(task);
+		return map;
+	}
+	
+	public TreeMap<LocalDate,ArrayList<Task>> getDoneTodo(){
+		TreeMap<LocalDate,ArrayList<Task>>doneTodo=new TreeMap<LocalDate,ArrayList<Task>>();
+		for(LocalDate date:todoList.keySet()){
+			for(Task task:todoList.get(date)){
+				if(task.getDoneStatus()){
+					addTaskToMap(doneTodo,task);
+				}
+			}
+		}
+		return doneTodo;
+	}
+	
+	public TreeMap<LocalDate,ArrayList<Task>>getMatchedTodo(String keyword){
+		TreeMap<LocalDate,ArrayList<Task>>matchedTodo=new TreeMap<LocalDate,ArrayList<Task>>();
+		for(LocalDate date:todoList.keySet()){
+			for(Task task:todoList.get(date)){
+				if(task.getName().contains(keyword)){
+					addTaskToMap(matchedTodo,task);
+				}
+			}
+		}
+		return matchedTodo;
+	}
+	
+	public ArrayList<Task> getFloating(){
 		return floatingList;
+	}
+	
+	public ArrayList<Task> getDoneFloating(){
+		ArrayList<Task>doneFloating=new ArrayList<Task>();
+		for(Task task:floatingList){
+			if(task.getDoneStatus()){
+				doneFloating.add(task);
+			}
+		}
+		return doneFloating;
+	}
+	
+	public ArrayList<Task>getMatchedFloating(String keyword){
+		ArrayList<Task>matchedFloating=new ArrayList<Task>();
+		for(Task task:floatingList){
+			if(task.getName().contains(keyword)){
+				matchedFloating.add(task);
+			}
+		}
+		return matchedFloating;
 	}
 	
 	
@@ -64,23 +112,16 @@ public class TaskHandler {
 		if(task.getTaskType()==TaskType.FLOATING){
 			floatingList.add(task);
 			sortFloatingList();
-			floatingList_File.writeToFile(floatingList);
 		}
 		else{
 			LocalDate date=task.getDate();
-			if(!todoList.containsKey(date)){
-				todoList.put(date, new ArrayList<Task>());
-			}
 			
 			if(task.getTaskType()==TaskType.EVENT && checkForTimeConflict(task)){
 				return false;
 			}
-			else{
-				todoList.get(date).add(task);
-			}
-			
+
+			addTaskToMap(todoList,task);
 			sortTodoList(date);
-			todoList_File.writeToFile(todoList);
 		}
 		return true;
 	}
@@ -94,7 +135,6 @@ public class TaskHandler {
 	public void deleteTask(Task task){
 		if(task.getTaskType()==TaskType.FLOATING){
 			floatingList.remove(task);
-			floatingList_File.writeToFile(floatingList);
 		}
 		else{
 			LocalDate date=task.getDate();
@@ -103,7 +143,6 @@ public class TaskHandler {
 			if(taskList.isEmpty()){
 				todoList.remove(date);
 			}
-			todoList_File.writeToFile(todoList);
 		}
 	}
 	

@@ -1,4 +1,4 @@
-package logic;
+package common;
 
 public class Display {
 	private static String message;
