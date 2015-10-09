@@ -9,7 +9,7 @@ import common.Pair;
 import common.ProgramState;
 import common.Task;
 import parser.CommandParser;
-import storage.TaskStorage;
+import storage.StorageControl;
 import common.Auxiliary;
 import common.Display;
 
@@ -19,11 +19,11 @@ public class Controller {
 	private TaskHandler handler;
 	private CommandStack commandStack;
 	private CommandParser parser;
-	private TaskStorage storage;
+	private StorageControl storage;
 	private ProgramState state;
 	
 	public Controller(){
-		storage=new TaskStorage();
+		storage=StorageControl.createStorageControl();
 		handler=new TaskHandler(storage);
 		commandStack=new CommandStack();
 		parser=new CommandParser();
@@ -103,7 +103,7 @@ public class Controller {
 					canSave=false;
 					break;
 				case "save":
-					storage.setSavePath(parameterString);
+					storage.changeDirectory(parameterString);
 					canSave=false;
 					break;
 				case "undo":
@@ -123,8 +123,8 @@ public class Controller {
 		}
 		
 		if(canSave){
-			storage.updateTodoList(handler.getTodo());
-			storage.updateFloating(handler.getFloating());
+			storage.save(handler.getTodo());
+			storage.save(handler.getFloating());
 		}
 		
 	}

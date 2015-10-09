@@ -1,5 +1,6 @@
 package logic;
 
+import common.Display;
 import common.Task;
 /*
  * Add class description

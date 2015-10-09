@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.TreeMap;
 
-import storage.TaskStorage;
+import storage.StorageControl;
 import common.*;
 /*
  * Add class description
@@ -14,9 +14,9 @@ public class TaskHandler {
 	private TreeMap<LocalDate,ArrayList<Task>>todoList;
 	private ArrayList<Task>floatingList;
 
-	public TaskHandler(TaskStorage storage){
-		todoList=storage.readFromTodoFile();
-		floatingList=storage.readFromFloatingFile();
+	public TaskHandler(StorageControl storage){
+		todoList=storage.loadToDo();
+		floatingList=storage.loadFloating();
 	}
 	
 	public TreeMap<LocalDate,ArrayList<Task>> getTodo(){
