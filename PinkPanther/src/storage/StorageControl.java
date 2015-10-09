@@ -80,7 +80,7 @@ public class StorageControl {
 		this.saveLatestDirectory();
 
 		floating_File = new FloatingStorage(directory);
-		//toDo_File = new ToDoStorage(directory);
+		toDo_File = new ToDoStorage(directory);
 	}
 
 	public boolean createDirectory() {
