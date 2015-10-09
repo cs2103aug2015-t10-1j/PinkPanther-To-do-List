@@ -69,7 +69,7 @@ public class StorageControl {
 		floating_File = new FloatingStorage(directory);
 		toDo_File = new ToDoStorage(directory);
 
-		this.saveLatestDirectory();
+		this.setLatestDirectory();
 	}
 
 	private StorageControl(String input_FilePath) {
@@ -77,7 +77,7 @@ public class StorageControl {
 
 		directory = new File(input_FilePath);
 		this.createDirectory();
-		this.saveLatestDirectory();
+		this.setLatestDirectory();
 
 		floating_File = new FloatingStorage(directory);
 		toDo_File = new ToDoStorage(directory);
@@ -105,11 +105,18 @@ public class StorageControl {
 
 	public boolean changeDirectory(String input_NewDirectory) {
 		File newDirectory = new File(input_NewDirectory);
+		File newFloating = new File(input_NewDirectory);
+		File newToDo = new File(input_NewDirectory);
 		try {
 			if (directory.isDirectory()) {
 				Display.setFeedBack(String.format(SUCCESSFUL_CHANGE_DIRECTORY_MESSAGE, directory.getPath()));
 				Display.showFeedBack();
-				return directory.renameTo(newDirectory);
+				if (directory.renameTo(newDirectory)) {
+					return floating_File.getFloatingFile().renameTo(newFloating) && toDo_File.getToDoFile().renameTo(newToDo);
+				}
+				else {
+					return false;
+				}
 			}
 			else {
 				Display.setFeedBack(String.format(IS_NOT_DIRECTORY_MESSAGE, input_NewDirectory));
@@ -179,7 +186,7 @@ public class StorageControl {
 		return null;
 	}
 
-	private void saveLatestDirectory() {
+	private void setLatestDirectory() {
 		try {
 			if (Files.isHidden(latestDirectoryTextFile.toPath())) {
 				Files.setAttribute(latestDirectoryTextFile.toPath(), "dos:hidden", false);

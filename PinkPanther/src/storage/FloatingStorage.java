@@ -65,4 +65,8 @@ public class FloatingStorage {
 		
 		return json; //Primarily for testing purposes.
 	}
+	
+	protected File getFloatingFile() {
+		return floatingFile;
+	}
 }

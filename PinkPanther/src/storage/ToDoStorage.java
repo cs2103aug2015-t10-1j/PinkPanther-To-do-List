@@ -75,4 +75,8 @@ public class ToDoStorage {
 		}
 		return new_TaskList;
 	}
+	
+	protected File getToDoFile() {
+		return toDoFile;
+	}
 }
