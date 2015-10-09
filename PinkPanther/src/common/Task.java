@@ -14,7 +14,6 @@ public class Task {
 	private LocalTime startTime;
 	private LocalTime endTime;
 	private boolean isDone;
-	private boolean isMatch;
 	
 	public Task(String name){
 		this.name=name;
@@ -67,10 +66,6 @@ public class Task {
 	
 	public void setDoneStatus(boolean isDone){
 		this.isDone=isDone;
-	}
-	
-	public void setMatch(boolean isMatch){
-		this.isMatch=isMatch;
 	}
 	
 	public String getName(){
@@ -157,10 +152,6 @@ public class Task {
 		else{
 			return name+","+startTime.format(timeformatter)+" to "+endTime.format(timeformatter)+","+startDate.format(dateformatter);
 		}
-	}
-	
-	public boolean getMatch(){
-		return isMatch;
 	}
 	
 	

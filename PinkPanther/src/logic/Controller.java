@@ -31,7 +31,6 @@ public class Controller {
 	
 	public void addCommand(String command){
     	System.out.println("Called mainController to add command: " + command);
-    	handler.resetMatchStatus();
 		String commandString=Auxiliary.getFirstWord(command);
 		String parameterString=Auxiliary.removeFirstWord(command);
 		boolean canClear=true;
@@ -55,7 +54,7 @@ public class Controller {
 				}
 				break;
 			case "edit":
-				Task unmodified=TaskFinder.find(handler, parser.query(parameterString));
+				Task unmodified=handler.searchTasks(parser.query(parameterString)).get(0);
 				if(unmodified!=null){
 					taskPair.setFirst(unmodified);
 					canClear=false;
@@ -77,15 +76,9 @@ public class Controller {
 				}
 				break;	
 			case "search":
-				if(handler.findNameMatch(parameterString)){
-					Display.setFeedBack("match found");
-				}
-				else{
-					Display.setFeedBack("no match found");
-				}
-				break;
+				//to be done
 			case "saveas":
-				
+				//to be done
 			
 			case "undo":
 				commandStack.undoOperation();

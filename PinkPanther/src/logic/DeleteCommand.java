@@ -2,6 +2,7 @@ package logic;
 
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import common.Pair;
 import common.Task;
@@ -11,27 +12,49 @@ import common.Task;
 public class DeleteCommand implements Command{
 	private TaskHandler handler;
 	private Task taskRef;
+	private ArrayList<Task> taskListRef;
 	
 	public DeleteCommand(TaskHandler handler){
 		this.handler=handler;
 	}
 	
-	public boolean execute(Pair<LocalDate,Integer> pair){
+	public boolean execute(Pair<LocalDate,ArrayList<Integer>>pair){
 		
-		taskRef=TaskFinder.find(handler, pair);
-		if(taskRef!=null){
+		ArrayList<Task>taskList=handler.searchTasks(pair);
+		if(taskList==null){
+			return false;
+		}
+		if(taskList.size()==1){
+			taskRef=taskList.get(0);
+			Display.setFeedBack("the task has been deleted");
 			handler.deleteTask(taskRef);
-			Display.setFeedBack(taskRef.getName()+" is deleted");
 			return true;
 		}
-		return false;
+		else{
+			taskListRef=taskList;
+			Display.setFeedBack("the tasks have been deleted");
+			handler.deleteMultipleTasks(taskListRef);
+			return true;
+		}
+		
 	}
 	
 	public void undo(){
-		handler.addTask(taskRef);
+		if(taskRef!=null){
+			handler.addTask(taskRef);
+		}
+		else{
+			handler.addMultipleTasks(taskListRef);
+		}
+		
 	}
 	
 	public void redo(){
-		handler.deleteTask(taskRef);
+		if(taskRef!=null){
+			handler.deleteTask(taskRef);
+		}
+		else{
+			handler.deleteMultipleTasks(taskListRef);
+		}
 	}
 }

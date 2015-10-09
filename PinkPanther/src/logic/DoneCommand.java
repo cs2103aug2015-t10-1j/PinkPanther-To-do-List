@@ -2,6 +2,7 @@ package logic;
 
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import common.Pair;
 import common.Task;
@@ -14,9 +15,9 @@ public class DoneCommand implements Command{
 		this.handler=handler;
 	}
 	
-	public boolean execute(Pair<LocalDate,Integer>pair){
+	public boolean execute(Pair<LocalDate,ArrayList<Integer>>pair){
 		
-		taskRef=TaskFinder.find(handler, pair);
+		taskRef=handler.searchTasks(pair).get(0);
 		if(taskRef!=null){
 			taskRef.setDoneStatus(true);
 			Display.setFeedBack(taskRef.getName()+" is done");

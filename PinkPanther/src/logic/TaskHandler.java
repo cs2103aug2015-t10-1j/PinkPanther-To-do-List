@@ -113,8 +113,33 @@ public class TaskHandler {
 		}
 	}
 	
+	public ArrayList<Task> searchTasks(Pair<LocalDate,ArrayList<Integer>>pair){
+		if(pair==null){
+			return null;
+		}
+		
+		ArrayList<Task>output;
+		LocalDate date=pair.getFirst();
+		ArrayList<Integer>indexList=pair.getSecond();
+		if(indexList!=null){
+			output=searchMultipleTasks(date,indexList);
+			if(output==null){
+				Display.setFeedBack("task or tasks do not exist");
+			}
+		}
+		else{
+			if(date==null){
+				output=floatingList;
+			}
+			else{
+				output=todoList.get(date);
+			}
+		}
+		return output;
+	}
 	
-	public Task searchTaskByIndex(LocalDate date,int displayIndex){
+	
+	public Task searchSingleTask(LocalDate date,int displayIndex){
 		int actualIndex=displayIndex-1;
 		if(date==null){
 			if(actualIndex>=floatingList.size()){
@@ -131,10 +156,10 @@ public class TaskHandler {
 				
 	}
 	
-	public ArrayList<Task>searchMultipleTasksByIndex(LocalDate date,ArrayList<Integer>indexList){
+	public ArrayList<Task>searchMultipleTasks(LocalDate date,ArrayList<Integer>indexList){
 		ArrayList<Task>taskList=new ArrayList<Task>();
 		for(int index:indexList){
-			Task task=searchTaskByIndex(date,index);
+			Task task=searchSingleTask(date,index);
 			if(task!=null){
 				taskList.add(task);
 			}
@@ -164,39 +189,6 @@ public class TaskHandler {
 		
 	}
 	
-	public boolean findNameMatch(String keyword){
-		int matchCount=0;
-		for(Task task:floatingList){
-			if(task.getName().contains(keyword)){
-				task.setMatch(true);
-				matchCount++;
-			}
-		}
-		for(LocalDate date:todoList.keySet()){
-			for(Task task:todoList.get(date)){
-				if(task.getName().contains(keyword)){
-					task.setMatch(true);
-					matchCount++;
-				}
-			}
-		}
-		if(matchCount==0){
-			return false;
-		}
-		return true;
-	}
-	
-	public void resetMatchStatus(){
-		for(Task task:floatingList){
-			task.setMatch(false);
-		}
-		
-		for(LocalDate date:todoList.keySet()){
-			for(Task task:todoList.get(date)){
-				task.setMatch(false);
-			}
-		}
-	}
 	
 	//for debugging purpose
 	public void printTodoAtDate(LocalDate date){
