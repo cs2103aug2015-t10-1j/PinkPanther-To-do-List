@@ -27,7 +27,6 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.*;
 import logic.Controller;
-import logic.Display;
 import common.*;
  
 public class PrettyDisplay extends Application {
@@ -45,6 +44,8 @@ public class PrettyDisplay extends Application {
     Scene scene;
     Stage objPrimaryStage;
     HBox hbBtn;
+    Color defaultActionTargetColor = Color.BLACK;
+    ProgramState programState;
     
     
     public void runApp() {
@@ -56,7 +57,7 @@ public class PrettyDisplay extends Application {
  //   	fillPage ("Input command in the field above", primaryStage);
     	objPrimaryStage = primaryStage;
     	mainController = new Controller();
-    	mainController.setGui(this);
+//    	mainController.setGui(this);
     	
     	 primaryStage.setTitle("PinkPanther: The best to-do list");
          
@@ -71,7 +72,7 @@ public class PrettyDisplay extends Application {
          //text that displays after-action (e.g added x event)
          implementActionTarget("Input command in the field above");
          //add buttons
-         implementButtons();
+     //    implementButtons();
          //Allows keyboard inputs to be read as commands
          implementKeystrokeEvents(primaryStage);
          //Implements the scene
@@ -135,7 +136,7 @@ public class PrettyDisplay extends Application {
         + "-fx-font-size: 30px;"
         + "-fx-font-weight: bold;"
         + "-fx-font-family: Tahoma;"
-        + "-fx-text-fill: DIMGRAY;"
+        + "-fx-text-fill: BLACK;"
         + "-fx-border-width: 6px;"
         + "-fx-border-color: DIMGRAY;"
         + "-fx-background-color: PINK");
@@ -145,7 +146,7 @@ public class PrettyDisplay extends Application {
         actiontarget = new Text(newInput);
         grid2.add(actiontarget, 0, 2);
         actiontarget.setFont(Font.font("Tahoma", FontWeight.BOLD, 25));
-        actiontarget.setFill(Color.WHITE);     
+        actiontarget.setFill(defaultActionTargetColor);     
     }
     void implementButtons(){
     	Button btn = new Button("Enter");
@@ -218,7 +219,9 @@ public class PrettyDisplay extends Application {
         scenetitle.setFont(Font.font("Tahoma", FontWeight.BOLD, 66));
         scenetitle.setFill(Color.DIMGRAY);
         grid.add(scenetitle, 1, 0);
-	
+
+    	programState = mainController.getProgramState();
+        
         //filler for rightGridColumn; to make sure length of display does not change
 		TransparentRect tRect = new TransparentRect();
 		grid.add(tRect, 2, 0);
@@ -228,9 +231,11 @@ public class PrettyDisplay extends Application {
 
     	int currentYPos = 1;
     	
+    	System.out.println(programState.getFloatingList());
     	//for unpacking floatingTasks
-    	ArrayList<Task> floatingTasks = mainController.getFloatingList();
-    	if (floatingTasks.size() != 0){
+    	if (programState != null){
+        	ArrayList<Task> floatingTasks = programState.getFloatingList();
+    	if (floatingTasks != null && floatingTasks.size() != 0){
             TextedColorDayBox daydBox = new TextedColorDayBox("Float");
         	grid.add(daydBox, 0, currentYPos);
 	    	int currFloatXPos = 1;
@@ -242,9 +247,9 @@ public class PrettyDisplay extends Application {
         			currFloatXPos = 1;
         		}
 	    		
-	    		String taskName = floatingTasks.get(i).getName();
+//	    		String taskName = floatingTasks.get(i).getName();
 	    		//TextedTaskBox taskBox = new TextedTaskBox(taskName , "", "", currTaskIndex);
-	    		TextedTaskBox taskBox = new TextedTaskBox(i, floatingTasks.get(i));
+	    		TextedTaskBox taskBox = new TextedTaskBox(i+1, floatingTasks.get(i));
 	    		currTaskIndex++;
 	    		grid.add(taskBox, currFloatXPos++, currentYPos);
 
@@ -252,8 +257,8 @@ public class PrettyDisplay extends Application {
 	    	currentYPos++;
     	}
     	
-    	TreeMap<LocalDate,ArrayList<Task>> todoList = mainController.getTodoList();
-
+    	TreeMap<LocalDate,ArrayList<Task>> todoList = programState.getTodoList();
+    	if (todoList != null){
     	for(LocalDate date:todoList.keySet()){ //looping through dates which have Tasks inside
     		String month = date.getMonth().toString().substring(0, 3);
     		String currDayNum = Integer.toString(date.getDayOfMonth());
@@ -284,15 +289,18 @@ public class PrettyDisplay extends Application {
 			}
 			currentYPos++;
 		}
-
+    	}
+    	}
     }
 
     void callControllerToAddCommand(){
     	String command = userTextField.getText();
-    	actiontarget.setFill(Color.WHITE);                	
+    	actiontarget.setFill(defaultActionTargetColor);                	
     	//actiontarget.setText(command);
-
+    	
     	mainController.addCommand(command);
+    	
+    	//actiontarget.setText(showFeedBack(programState.getExitState());
         actiontarget.setText(Display.showFeedBack());
     	calendarGrid.getChildren().clear();
         populateGrid(calendarGrid);
@@ -314,7 +322,7 @@ public class PrettyDisplay extends Application {
     		actiontarget.setFill(Color.FIREBRICK);
     	}
     	else{
-    		actiontarget.setFill(Color.WHITE);    		
+    		actiontarget.setFill(defaultActionTargetColor);    		
     	}
     }
     
@@ -389,8 +397,9 @@ public class PrettyDisplay extends Application {
 	void viewHelpScreen(){
     	HelpScreen helpScreen = new HelpScreen();
     	grid2.getChildren().remove(s1);
-    	grid2.add(helpScreen, 0, 0);
-        actiontarget.setFill(Color.WHITE);
+    //	grid2.add(helpScreen, 0, 0);
+    	grid2.add(new FirstOpenScreen(), 0, 0);
+        actiontarget.setFill(defaultActionTargetColor);
 		actiontarget.setText("Viewing cheatsheet: Press RIGHT key to resume");
     	isViewingHelpScreen = true;
 	}
@@ -400,8 +409,8 @@ public class PrettyDisplay extends Application {
 		grid2.add(s1,0,0);
         grid2.add(userTextField, 0, 1);
         grid2.add(actiontarget, 0, 2);
-        grid2.add(hbBtn, 0, 2);
-        actiontarget.setFill(Color.WHITE);
+    //    grid2.add(hbBtn, 0, 2);
+        actiontarget.setFill(defaultActionTargetColor);
         actiontarget.setText(Display.showFeedBack());
 		//actiontarget.setText("Input command into the field above");
 		isViewingHelpScreen = false;
@@ -411,7 +420,7 @@ public class PrettyDisplay extends Application {
         stage.setHeight(890);
         scenetitle.setText("Calendar");
         s1.setDisable(false);
-        actiontarget.setFill(Color.WHITE);
+        actiontarget.setFill(defaultActionTargetColor);
         actiontarget.setText(Display.showFeedBack());
 		//actiontarget.setText("Input command into the field above");
         isCalendarHidden = false;
@@ -423,7 +432,7 @@ public class PrettyDisplay extends Application {
         scenetitle.setText("Calendar\n Hidden");
         s1.setDisable(true);
         s1.setVvalue(0);
-        actiontarget.setFill(Color.WHITE);
+        actiontarget.setFill(defaultActionTargetColor);
 		actiontarget.setText("Hidden calendar mode: Press END to restore calendar");
         isCalendarHidden = true;
 	}
