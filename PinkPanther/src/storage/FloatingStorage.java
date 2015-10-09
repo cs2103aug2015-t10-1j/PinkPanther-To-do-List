@@ -50,11 +50,11 @@ public class FloatingStorage {
 			br.close();
 		}
 		catch (FileNotFoundException e) {
-			return null;
+			//return null;
 		}
 		catch (IOException e) {
 			e.printStackTrace();
-			return null;
+			//return null;
 		}
 		return new_TaskList;
 	}

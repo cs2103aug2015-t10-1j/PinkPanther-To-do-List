@@ -8,7 +8,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import java.nio.file.Files;
+//import java.nio.file.Files;
 
 import java.util.TreeMap;
 import java.util.ArrayList;
@@ -168,35 +168,34 @@ public class StorageControl {
 	
 	private File getLatestDirectory() {
 		String newLine;
-
+		File latestDirectory = null;
 		try{
-			File latestDirectory;
 			BufferedReader br = new BufferedReader(new FileReader(latestDirectoryTextFile));
 			newLine = br.readLine();
 			latestDirectory = gson.fromJson(newLine, File.class);
 			br.close();
-			return latestDirectory;
 		}
 		catch (FileNotFoundException e) {
 			//Do nothing since file does not exist
 		}
 		catch (IOException e) {
 			e.printStackTrace();
+			//return null;
 		}
-		return null;
+		return latestDirectory;
 	}
 
 	private void setLatestDirectory() {
 		try {
-			if (Files.isHidden(latestDirectoryTextFile.toPath())) {
-				Files.setAttribute(latestDirectoryTextFile.toPath(), "dos:hidden", false);
-			}
+			/*if (Files.isHidden(latestDirectoryTextFile.toPath())) {
+			Files.setAttribute(latestDirectoryTextFile.toPath(), "dos:hidden", false);
+			*/
 			BufferedWriter bw = new BufferedWriter(new FileWriter(latestDirectoryTextFile));
 			String json = gson.toJson(directory);
 			bw.write(json);
 			bw.close();
 
-			Files.setAttribute(latestDirectoryTextFile.toPath(), "dos:hidden", true);
+			//Files.setAttribute(latestDirectoryTextFile.toPath(), "dos:hidden", true);
 		}
 		catch (IOException e) {
 			e.printStackTrace();
