@@ -123,19 +123,24 @@ public class TaskHandler {
 		ArrayList<Integer>indexList=pair.getSecond();
 		if(indexList!=null){
 			output=searchMultipleTasks(date,indexList);
-			if(output==null){
-				Display.setFeedBack("task or tasks do not exist");
-			}
 		}
 		else{
-			if(date==null){
-				output=floatingList;
-			}
-			else{
-				output=todoList.get(date);
-			}
+			output=searchTasksAtDate(date);
 		}
 		return output;
+	}
+	
+	public ArrayList<Task>searchTasksAtDate(LocalDate date){
+		if(date==null){
+			return new ArrayList<Task>(floatingList);
+		}
+		else if(!todoList.containsKey(date)){
+			Display.setFeedBack("you do not have task on this date");
+			return null;
+		}
+		else{
+			return new ArrayList<Task>(todoList.get(date));
+		}
 	}
 	
 	
@@ -165,12 +170,13 @@ public class TaskHandler {
 			}
 		}
 		if(taskList.size()==0){
+			Display.setFeedBack("task or tasks do not exist");
 			return null;
 		}
 		return taskList;
 	}
 	
-	public boolean checkForTimeConflict(Task event){
+	private boolean checkForTimeConflict(Task event){
 		LocalDate date=event.getDate();
 		for(Task task:todoList.get(date)){
 			if(task.getTaskType()==TaskType.EVENT){
@@ -191,9 +197,8 @@ public class TaskHandler {
 	
 	
 	//for debugging purpose
-	public void printTodoAtDate(LocalDate date){
-		ArrayList<Task>tasks=todoList.get(date);
-		for(Task task:tasks){
+	public void printTasks(ArrayList<Task>taskList){
+		for(Task task:taskList){
 			System.out.println(task.getName());
 		}
 	}

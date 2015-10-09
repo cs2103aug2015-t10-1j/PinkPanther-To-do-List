@@ -20,6 +20,10 @@ public class QueryParser implements Parser {
 		
 		// retrieving multiple floating tasks
 		if (userInfo[INDEX_KEYWORD].equalsIgnoreCase("float")) {
+			if (userInfo.length == 2 && userInfo[INDEX_INDEX].equalsIgnoreCase("all")) {
+				return new Pair<LocalDate, ArrayList<Integer>>(null, null);
+			}
+			
 			for (int i = INDEX_INDEX; i < userInfo.length; i++) {
 				if (userInfo[i].isEmpty()) {
 					continue;

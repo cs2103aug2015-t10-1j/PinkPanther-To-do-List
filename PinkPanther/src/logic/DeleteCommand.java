@@ -24,6 +24,7 @@ public class DeleteCommand implements Command{
 		if(taskList==null){
 			return false;
 		}
+		
 		if(taskList.size()==1){
 			taskRef=taskList.get(0);
 			Display.setFeedBack("the task has been deleted");
