@@ -4,7 +4,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class ColoredTextBox extends Rectangle{
-	private static Color[] col = {(Color.BISQUE), (Color.KHAKI), 
+	private static Color[] col = {(Color.ORANGE), (Color.KHAKI), 
 			(Color.POWDERBLUE), (Color.LIGHTGREEN), (Color.POWDERBLUE)};
 	private static int currCol = 0;
 	

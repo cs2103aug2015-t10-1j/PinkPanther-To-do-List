@@ -1,6 +1,6 @@
-.root {
-     -fx-background-image: url("background.jpg");
-}
+//.root {
+   //  -fx-background-image: url("background.jpg");
+//}
 
 .scroll-pane {
     -fx-background-insets: 0;
