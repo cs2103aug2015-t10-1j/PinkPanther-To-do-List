@@ -45,6 +45,8 @@ public class Controller {
     	System.out.println("Called mainController to add command: " + command);
 		String commandString=Auxiliary.getFirstWord(command);
 		String parameterString=Auxiliary.removeFirstWord(command);
+		boolean canSave=true;
+		state.setInputBoxText("");
 		
 		if(taskPair.getFirst()!=null){
 			taskPair.setSecond(parser.createTask(command));
@@ -87,6 +89,8 @@ public class Controller {
 				case "search":
 					state.setFLoatingList(handler.getMatchedFloating(parameterString));
 					state.setTodoList(handler.getMatchedTodo(parameterString));
+					canSave=false;
+					break;
 				case "display":
 					if(parameterString.equals("completed")){
 						state.setFLoatingList(handler.getDoneFloating());
@@ -96,8 +100,12 @@ public class Controller {
 						state.setFLoatingList(handler.getFloating());
 						state.setTodoList(handler.getTodo());
 					}					
+					canSave=false;
+					break;
 				case "save":
 					storage.setSavePath(parameterString);
+					canSave=false;
+					break;
 				case "undo":
 					commandStack.undoOperation();
 					break;
@@ -113,9 +121,12 @@ public class Controller {
 					Display.setFeedBack("invalid command");		
 			}
 		}
-			
-		storage.updateTodoList(handler.getTodo());
-		storage.updateFloating(handler.getFloating());
+		
+		if(canSave){
+			storage.updateTodoList(handler.getTodo());
+			storage.updateFloating(handler.getFloating());
+		}
+		
 	}
 	
 }

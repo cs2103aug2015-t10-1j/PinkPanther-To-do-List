@@ -23,14 +23,6 @@ public class TaskHandler {
 		return todoList;
 	}
 	
-	private static TreeMap<LocalDate,ArrayList<Task>> addTaskToMap(TreeMap<LocalDate,ArrayList<Task>>map,Task task){
-		LocalDate date=task.getDate();
-		if(!map.containsKey(date)){
-			map.put(date, new ArrayList<Task>());
-		}
-		map.get(date).add(task);
-		return map;
-	}
 	
 	public TreeMap<LocalDate,ArrayList<Task>> getDoneTodo(){
 		TreeMap<LocalDate,ArrayList<Task>>doneTodo=new TreeMap<LocalDate,ArrayList<Task>>();
@@ -54,6 +46,15 @@ public class TaskHandler {
 			}
 		}
 		return matchedTodo;
+	}
+	
+	private static TreeMap<LocalDate,ArrayList<Task>> addTaskToMap(TreeMap<LocalDate,ArrayList<Task>>map,Task task){
+		LocalDate date=task.getDate();
+		if(!map.containsKey(date)){
+			map.put(date, new ArrayList<Task>());
+		}
+		map.get(date).add(task);
+		return map;
 	}
 	
 	public ArrayList<Task> getFloating(){
