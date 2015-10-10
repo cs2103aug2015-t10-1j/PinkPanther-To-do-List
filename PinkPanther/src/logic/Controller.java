@@ -116,6 +116,7 @@ public class Controller {
 				case "exit":
 					state.setExitState(true);
 					canSave=false;
+					break;
 				case "clear":
 					handler.clearAllTasks();
 					break;
