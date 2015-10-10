@@ -105,18 +105,25 @@ public class StorageControl {
 
 	public boolean changeDirectory(String input_NewDirectory) {
 		File newDirectory = new File(input_NewDirectory);
-		File newFloating = new File(input_NewDirectory);
-		File newToDo = new File(input_NewDirectory);
+		File newFloating = new File(input_NewDirectory + "\\Floating.txt");
+		File newToDo = new File(input_NewDirectory + "\\ToDo.txt");
 		try {
 			if (directory.isDirectory()) {
+				newDirectory.mkdir();
+
+				floating_File.getFloatingFile().renameTo(newFloating);
+				floating_File.setFloatingFile(newFloating);
+				toDo_File.getToDoFile().renameTo(newToDo);
+				toDo_File.setToDoFile(newToDo);
+
+				directory.delete();
+				directory = newDirectory;
+				this.setLatestDirectory();
+				
 				Display.setFeedBack(String.format(SUCCESSFUL_CHANGE_DIRECTORY_MESSAGE, directory.getPath()));
 				Display.showFeedBack();
-				if (directory.renameTo(newDirectory)) {
-					return floating_File.getFloatingFile().renameTo(newFloating) && toDo_File.getToDoFile().renameTo(newToDo);
-				}
-				else {
-					return false;
-				}
+
+				return true;
 			}
 			else {
 				Display.setFeedBack(String.format(IS_NOT_DIRECTORY_MESSAGE, input_NewDirectory));

@@ -80,4 +80,8 @@ public class ToDoStorage {
 	protected File getToDoFile() {
 		return toDoFile;
 	}
+	
+	protected void setToDoFile(File newToDo) {
+		toDoFile = newToDo;
+	}
 }

@@ -35,6 +35,7 @@ public class FloatingStorage {
 			return true;
 		}
 		catch (IOException e) {
+			e.printStackTrace();
 			return false;
 		}
 	}
@@ -68,5 +69,9 @@ public class FloatingStorage {
 	
 	protected File getFloatingFile() {
 		return floatingFile;
+	}
+	
+	protected void setFloatingFile(File newFloating) {
+		floatingFile = newFloating;
 	}
 }
