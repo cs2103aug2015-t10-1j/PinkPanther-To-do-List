@@ -61,6 +61,7 @@ public class PrettyDisplay extends Application {
     	
     	 primaryStage.setTitle("PinkPanther: The best to-do list");
          
+
          //Holds all calendar items
          implementCalendarGrid();
          //Holds content of Grid together with grid1
@@ -222,6 +223,9 @@ public class PrettyDisplay extends Application {
 
     	programState = mainController.getProgramState();
         
+    	setUserTextField(programState.getInputBoxText());
+    	
+    	
         //filler for rightGridColumn; to make sure length of display does not change
 		TransparentRect tRect = new TransparentRect();
 		grid.add(tRect, 2, 0);
@@ -235,61 +239,61 @@ public class PrettyDisplay extends Application {
     	//for unpacking floatingTasks
     	if (programState != null){
         	ArrayList<Task> floatingTasks = programState.getFloatingList();
-    	if (floatingTasks != null && floatingTasks.size() != 0){
-            TextedColorDayBox daydBox = new TextedColorDayBox("Float");
-        	grid.add(daydBox, 0, currentYPos);
-	    	int currFloatXPos = 1;
-	    	for (int i=0; i<floatingTasks.size(); i++){
-	    		if (currFloatXPos == 3){
-        			currentYPos++;
-        			TransparentCircle circle = new TransparentCircle();
-        			grid.add(circle, 0, currentYPos);
-        			currFloatXPos = 1;
-        		}
-	    		
-//	    		String taskName = floatingTasks.get(i).getName();
-	    		//TextedTaskBox taskBox = new TextedTaskBox(taskName , "", "", currTaskIndex);
-	    		TextedTaskBox taskBox = new TextedTaskBox(i+1, floatingTasks.get(i));
-	    		currTaskIndex++;
-	    		grid.add(taskBox, currFloatXPos++, currentYPos);
-
+	    	if (floatingTasks != null && floatingTasks.size() != 0){
+	            TextedColorDayBox daydBox = new TextedColorDayBox("Float");
+	        	grid.add(daydBox, 0, currentYPos);
+		    	int currFloatXPos = 1;
+		    	for (int i=0; i<floatingTasks.size(); i++){
+		    		if (currFloatXPos == 3){
+	        			currentYPos++;
+	        			TransparentCircle circle = new TransparentCircle();
+	        			grid.add(circle, 0, currentYPos);
+	        			currFloatXPos = 1;
+	        		}
+		    		
+	//	    		String taskName = floatingTasks.get(i).getName();
+		    		//TextedTaskBox taskBox = new TextedTaskBox(taskName , "", "", currTaskIndex);
+		    		TextedTaskBox taskBox = new TextedTaskBox(i+1, floatingTasks.get(i));
+		    		currTaskIndex++;
+		    		grid.add(taskBox, currFloatXPos++, currentYPos);
+	
+		    	}
+		    	currentYPos++;
 	    	}
-	    	currentYPos++;
-    	}
-    	
-    	TreeMap<LocalDate,ArrayList<Task>> todoList = programState.getTodoList();
-    	if (todoList != null){
-    	for(LocalDate date:todoList.keySet()){ //looping through dates which have Tasks inside
-    		String month = date.getMonth().toString().substring(0, 3);
-    		String currDayNum = Integer.toString(date.getDayOfMonth());
-            TextedColorDayBox currentDayBox = new TextedColorDayBox(currDayNum + "\n" + month);
-        	grid.add(currentDayBox, 0, currentYPos);
-    		
-    		int currXPos = 1;
-    		currTaskIndex = 1;
-    		
-			for(Task task:todoList.get(date)){ //looping through tasks for specified date
-				
-				if (currXPos == 3){
-        			currentYPos++;
-        			TransparentCircle circle = new TransparentCircle();
-        			grid.add(circle, 0, currentYPos);
-        			currXPos = 1;
-        		}
-				
-	    		String taskName = task.getName();
-	    		String startTime = task.getStartTimeString();
-    			String endTime = task.getEndTimeString();
-	    		//TextedTaskBox taskBox = new TextedTaskBox(taskName , startTime, endTime, currTaskIndex);
-    			TextedTaskBox taskBox = new TextedTaskBox(currTaskIndex, task);
-    			currTaskIndex++;
-	    		grid.add(taskBox, currXPos++, currentYPos);
-
-	    		
-			}
-			currentYPos++;
-		}
-    	}
+	    	
+	    	TreeMap<LocalDate,ArrayList<Task>> todoList = programState.getTodoList();
+	    	if (todoList != null){
+		    	for(LocalDate date:todoList.keySet()){ //looping through dates which have Tasks inside
+		    		String month = date.getMonth().toString().substring(0, 3);
+		    		String currDayNum = Integer.toString(date.getDayOfMonth());
+		            TextedColorDayBox currentDayBox = new TextedColorDayBox(currDayNum + "\n" + month);
+		        	grid.add(currentDayBox, 0, currentYPos);
+		    		
+		    		int currXPos = 1;
+		    		currTaskIndex = 1;
+		    		
+					for(Task task:todoList.get(date)){ //looping through tasks for specified date
+						
+						if (currXPos == 3){
+		        			currentYPos++;
+		        			TransparentCircle circle = new TransparentCircle();
+		        			grid.add(circle, 0, currentYPos);
+		        			currXPos = 1;
+		        		}
+						
+		//	    		String taskName = task.getName();
+		//	    		String startTime = task.getStartTimeString();
+		 //   			String endTime = task.getEndTimeString();
+			    		//TextedTaskBox taskBox = new TextedTaskBox(taskName , startTime, endTime, currTaskIndex);
+		    			TextedTaskBox taskBox = new TextedTaskBox(currTaskIndex, task);
+		    			currTaskIndex++;
+			    		grid.add(taskBox, currXPos++, currentYPos);
+		
+			    		
+					}
+					currentYPos++;
+				}
+		    }
     	}
     }
 
@@ -308,7 +312,9 @@ public class PrettyDisplay extends Application {
     }
     
     public void setUserTextField(String text){
-    	userTextField.setText(text);
+    	if(userTextField!=null){
+    		userTextField.setText(text);
+    	}
     }
     
     public void clearTextField(){
@@ -400,7 +406,7 @@ public class PrettyDisplay extends Application {
     //	grid2.add(helpScreen, 0, 0);
     	grid2.add(new FirstOpenScreen(), 0, 0);
         actiontarget.setFill(defaultActionTargetColor);
-		actiontarget.setText("Viewing cheatsheet: Press RIGHT key to resume");
+		actiontarget.setText("Viewing cheatsheet: Press PAGEUP key to resume");
     	isViewingHelpScreen = true;
 	}
 	

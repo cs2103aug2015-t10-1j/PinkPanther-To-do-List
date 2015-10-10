@@ -2,7 +2,7 @@ package parser;
 
 import common.Pair;
 import common.Auxiliary;
-import logic.Display;
+import common.Display;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

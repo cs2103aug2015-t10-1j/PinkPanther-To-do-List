@@ -10,6 +10,13 @@ public class ProgramState {
 	private String inputBoxText;
 	private boolean isExit;
 	
+	public ProgramState(){
+		this.floatingList = new ArrayList<Task>();
+		this.todoList = new TreeMap<LocalDate,ArrayList<Task>>();
+		this.inputBoxText = "";
+		this.isExit = false;
+	}
+	
 	public void setFLoatingList(ArrayList<Task>floatingList){
 		this.floatingList=floatingList;
 	}

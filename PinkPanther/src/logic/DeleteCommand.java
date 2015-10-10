@@ -28,13 +28,13 @@ public class DeleteCommand implements Command{
 		
 		if(taskList.size()==1){
 			taskRef=taskList.get(0);
-			Display.setFeedBack("the task has been deleted");
+			Display.setFeedBack(taskRef + " has been deleted");
 			handler.deleteTask(taskRef);
 			return true;
 		}
 		else{
 			taskListRef=taskList;
-			Display.setFeedBack("the tasks have been deleted");
+			Display.setFeedBack(taskListRef + " have been deleted");
 			handler.deleteMultipleTasks(taskListRef);
 			return true;
 		}

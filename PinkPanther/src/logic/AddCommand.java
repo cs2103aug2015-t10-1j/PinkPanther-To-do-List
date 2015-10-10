@@ -1,5 +1,7 @@
 package logic;
 
+import java.time.LocalDate;
+
 import common.Display;
 import common.Task;
 /*
@@ -15,17 +17,19 @@ public class AddCommand implements Command{
 	
 	public boolean execute(Task task){	
 		if(task==null){
-			Display.setFeedBack("retard,enter a name lah");
+			Display.setFeedBack("You did not enter a valid task name!");
 			return false;
 		}
 		
 	    if(handler.addTask(task)){
 	    	taskRef=task;
-	    	Display.setFeedBack(task.getName()+" is added");
+	    	LocalDate date = taskRef.getDate();
+	    	String dateString = (date == null) ? "floating tasks" : date.toString();
+	    	Display.setFeedBack("\"" + task.getName()+ "\"" + " has been added to " + dateString + ".");
 	    	return true;
 	    }
 	    else{
-	    	Display.setFeedBack("you have another event during this period");
+	    	Display.setFeedBack("You have another event during this period, which might cause clashes.");
 	    	return false;
 	    }
 	}

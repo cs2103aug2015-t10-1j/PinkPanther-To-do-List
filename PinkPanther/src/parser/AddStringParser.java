@@ -3,7 +3,7 @@ package parser;
 import common.Task;
 import common.TaskType;
 import common.Auxiliary;
-import logic.Display;
+import common.Display;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
