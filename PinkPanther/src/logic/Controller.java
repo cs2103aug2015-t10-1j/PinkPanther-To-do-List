@@ -92,8 +92,8 @@ public class Controller {
 					state.setTodoList(handler.getMatchedTodo(parameterString));
 					canSave=false;
 					break;
-				case "display":
-					if(parameterString.equals("completed")){
+				case "view":
+					if(parameterString.equals("done")){
 						state.setFLoatingList(handler.getDoneFloating());
 						state.setTodoList(handler.getDoneTodo());
 					}

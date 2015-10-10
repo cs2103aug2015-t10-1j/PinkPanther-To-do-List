@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.SortedMap;
 
 import storage.StorageControl;
 import common.*;
@@ -121,14 +120,12 @@ public class TaskHandler {
 			sortFloatingList();
 		}
 		else{
-			LocalDate date=task.getDate();
-			
 			if(task.getTaskType()==TaskType.EVENT && checkForTimeConflict(task)){
 				return false;
 			}
 
 			addTaskToMap(todoList,task);
-			sortTodoList(date);
+			sortTodoList(task.getDate());
 		}
 		return true;
 	}
@@ -224,6 +221,10 @@ public class TaskHandler {
 	
 	private boolean checkForTimeConflict(Task event){
 		LocalDate date=event.getDate();
+		if(!todoList.containsKey(date)){
+			return false;
+		}
+		
 		for(Task task:todoList.get(date)){
 			if(task.getTaskType()==TaskType.EVENT){
 				if(event.getEndTime().isAfter(task.getStartTime())&& 
