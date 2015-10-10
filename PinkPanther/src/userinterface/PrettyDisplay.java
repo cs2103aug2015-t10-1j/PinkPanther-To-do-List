@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 import javafx.application.Application;
@@ -261,7 +262,7 @@ public class PrettyDisplay extends Application {
 		    	currentYPos++;
 	    	}
 	    	
-	    	TreeMap<LocalDate,ArrayList<Task>> todoList = programState.getTodoList();
+	    	SortedMap<LocalDate,ArrayList<Task>> todoList = programState.getTodoList();
 	    	if (todoList != null){
 		    	for(LocalDate date:todoList.keySet()){ //looping through dates which have Tasks inside
 		    		String month = date.getMonth().toString().substring(0, 3);
@@ -308,6 +309,9 @@ public class PrettyDisplay extends Application {
         actiontarget.setText(Display.showFeedBack());
     	calendarGrid.getChildren().clear();
         populateGrid(calendarGrid);
+        if(mainController.getProgramState().getExitState()){
+        	closeWindow();
+        }
 
     }
     

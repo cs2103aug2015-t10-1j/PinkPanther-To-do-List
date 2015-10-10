@@ -10,8 +10,8 @@ import java.io.IOException;
 
 //import java.nio.file.Files;
 
-import java.util.TreeMap;
 import java.util.ArrayList;
+import java.util.SortedMap;
 
 import com.google.gson.Gson;
 
@@ -147,7 +147,7 @@ public class StorageControl {
 		}
 	}
 
-	public boolean save(TreeMap<LocalDate, ArrayList<Task>> taskList) {
+	public boolean save(SortedMap<LocalDate, ArrayList<Task>> taskList) {
 		if (toDo_File.writeToFile(taskList)) {
 			return true;
 		}
@@ -162,7 +162,7 @@ public class StorageControl {
 		return floating_File.readFromFile();
 	}
 	
-	public TreeMap<LocalDate, ArrayList<Task>> loadToDo() {
+	public SortedMap<LocalDate, ArrayList<Task>> loadToDo() {
 		return toDo_File.readFromFile();
 	}
 	

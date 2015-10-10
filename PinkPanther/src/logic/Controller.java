@@ -33,7 +33,7 @@ public class Controller {
 	
 	public void initializeProgramState(){
 		state.setFLoatingList(handler.getFloating());
-		state.setTodoList(handler.getTodo());
+		state.setTodoList(handler.getTwoWeekTodo());
 	}
 	
 	public ProgramState getProgramState(){

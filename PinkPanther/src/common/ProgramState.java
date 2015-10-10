@@ -2,11 +2,12 @@ package common;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 public class ProgramState {
 	private ArrayList<Task>floatingList;
-	private TreeMap<LocalDate,ArrayList<Task>>todoList;
+	private SortedMap<LocalDate,ArrayList<Task>>todoList;
 	private String inputBoxText;
 	private boolean isExit;
 	
@@ -21,7 +22,7 @@ public class ProgramState {
 		this.floatingList=floatingList;
 	}
 	
-	public void setTodoList(TreeMap<LocalDate,ArrayList<Task>>todoList){
+	public void setTodoList(SortedMap<LocalDate,ArrayList<Task>>todoList){
 		this.todoList=todoList;
 	}
 	
@@ -37,7 +38,7 @@ public class ProgramState {
 		return floatingList;
 	}
 	
-	public TreeMap<LocalDate,ArrayList<Task>>getTodoList(){
+	public SortedMap<LocalDate,ArrayList<Task>>getTodoList(){
 		return todoList;
 	}
 	

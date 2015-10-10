@@ -10,6 +10,7 @@ import java.io.IOException;
 
 import java.util.TreeMap;
 import java.util.ArrayList;
+import java.util.SortedMap;
 
 import com.google.gson.Gson;
 
@@ -27,7 +28,7 @@ public class ToDoStorage {
 		gson = new Gson();
 	}
 	
-	protected boolean writeToFile(TreeMap<LocalDate, ArrayList<Task>> input_ToDoList) {
+	protected boolean writeToFile(SortedMap<LocalDate, ArrayList<Task>> input_ToDoList) {
 		try{
 			BufferedWriter bw = new BufferedWriter(new FileWriter(toDoFile));
 			
@@ -51,8 +52,8 @@ public class ToDoStorage {
 		return json; //Primarily for testing purposes.
 	}
 	
-	protected TreeMap<LocalDate,ArrayList<Task>> readFromFile(){
-		TreeMap<LocalDate, ArrayList<Task>> new_TaskList = new TreeMap<LocalDate, ArrayList<Task>>();
+	protected SortedMap<LocalDate,ArrayList<Task>> readFromFile(){
+		SortedMap<LocalDate, ArrayList<Task>> new_TaskList = new TreeMap<LocalDate, ArrayList<Task>>();
 		String newLine="";
 		try{
 			BufferedReader br = new BufferedReader(new FileReader(toDoFile));

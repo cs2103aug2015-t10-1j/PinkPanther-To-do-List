@@ -3,7 +3,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.SortedMap;
 
 import storage.StorageControl;
 import common.*;
@@ -11,33 +13,37 @@ import common.*;
  * Add class description
  */
 public class TaskHandler {
-	private TreeMap<LocalDate,ArrayList<Task>>todoList;
+	private SortedMap<LocalDate,ArrayList<Task>>todoList;
 	private ArrayList<Task>floatingList;
 
 	public TaskHandler(StorageControl storage){
 		todoList=storage.loadToDo();
 		floatingList=storage.loadFloating();
 	}
-	
-	public TreeMap<LocalDate,ArrayList<Task>> getTodo(){
+		
+	public SortedMap<LocalDate,ArrayList<Task>>getTodo(){
 		return todoList;
 	}
 	
+	public SortedMap<LocalDate, ArrayList<Task>> getTwoWeekTodo(){
+		return todoList.subMap(LocalDate.now(), LocalDate.now().plusWeeks(2));
+	}
+			
 	
-	public TreeMap<LocalDate,ArrayList<Task>> getDoneTodo(){
-		TreeMap<LocalDate,ArrayList<Task>>doneTodo=new TreeMap<LocalDate,ArrayList<Task>>();
+	public SortedMap<LocalDate,ArrayList<Task>> getDoneTodo(){
+		SortedMap<LocalDate,ArrayList<Task>>todo=new TreeMap<LocalDate,ArrayList<Task>>();
 		for(LocalDate date:todoList.keySet()){
 			for(Task task:todoList.get(date)){
 				if(task.getDoneStatus()){
-					addTaskToMap(doneTodo,task);
+					addTaskToMap(todo,task);
 				}
 			}
 		}
-		return doneTodo;
+		return todo;
 	}
 	
-	public TreeMap<LocalDate,ArrayList<Task>>getMatchedTodo(String keyword){
-		TreeMap<LocalDate,ArrayList<Task>>matchedTodo=new TreeMap<LocalDate,ArrayList<Task>>();
+	public SortedMap<LocalDate,ArrayList<Task>>getMatchedTodo(String keyword){
+		SortedMap<LocalDate,ArrayList<Task>>matchedTodo=new TreeMap<LocalDate,ArrayList<Task>>();
 		for(LocalDate date:todoList.keySet()){
 			for(Task task:todoList.get(date)){
 				if(task.getName().contains(keyword)){
@@ -48,7 +54,7 @@ public class TaskHandler {
 		return matchedTodo;
 	}
 	
-	private static TreeMap<LocalDate,ArrayList<Task>> addTaskToMap(TreeMap<LocalDate,ArrayList<Task>>map,Task task){
+	private static SortedMap<LocalDate,ArrayList<Task>> addTaskToMap(SortedMap<LocalDate,ArrayList<Task>>map,Task task){
 		LocalDate date=task.getDate();
 		if(!map.containsKey(date)){
 			map.put(date, new ArrayList<Task>());
@@ -62,13 +68,13 @@ public class TaskHandler {
 	}
 	
 	public ArrayList<Task> getDoneFloating(){
-		ArrayList<Task>doneFloating=new ArrayList<Task>();
+		ArrayList<Task>floating=new ArrayList<Task>();
 		for(Task task:floatingList){
 			if(task.getDoneStatus()){
-				doneFloating.add(task);
+				floating.add(task);
 			}
 		}
-		return doneFloating;
+		return floating;
 	}
 	
 	public ArrayList<Task>getMatchedFloating(String keyword){
