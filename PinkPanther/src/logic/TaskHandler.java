@@ -27,6 +27,10 @@ public class TaskHandler {
 	public SortedMap<LocalDate, ArrayList<Task>> getTwoWeekTodo(){
 		return todoList.subMap(LocalDate.now(), LocalDate.now().plusWeeks(2));
 	}
+	
+	public SortedMap<LocalDate,ArrayList<Task>> getDateRangeTodo(LocalDate date1,LocalDate date2){
+		return todoList.subMap(date1, date2);
+	}
 			
 	
 	public SortedMap<LocalDate,ArrayList<Task>> getDoneTodo(){

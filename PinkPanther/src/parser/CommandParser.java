@@ -23,5 +23,9 @@ public class CommandParser {
 		return qp.parse(userInput);
 		//return null;
 	}
+	
+	public Pair<LocalDate,LocalDate>parseDate(String userInput){
+		return null;
+	}
 
 }

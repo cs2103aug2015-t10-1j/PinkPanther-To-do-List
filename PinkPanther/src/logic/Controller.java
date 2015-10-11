@@ -10,6 +10,9 @@ import common.ProgramState;
 import common.Task;
 import parser.CommandParser;
 import storage.StorageControl;
+
+import java.time.LocalDate;
+
 import common.Auxiliary;
 import common.Display;
 
@@ -93,14 +96,7 @@ public class Controller {
 					canSave=false;
 					break;
 				case "view":
-					if(parameterString.equals("done")){
-						state.setFLoatingList(handler.getDoneFloating());
-						state.setTodoList(handler.getDoneTodo());
-					}
-					else if(parameterString.equals("normal")){
-						state.setFLoatingList(handler.getFloating());
-						state.setTodoList(handler.getTodo());
-					}					
+					changeDisplayMode(parameterString);
 					canSave=false;
 					break;
 				case "save":
@@ -130,6 +126,22 @@ public class Controller {
 			storage.save(handler.getFloating());
 		}
 		
+	}
+	
+	private void changeDisplayMode(String mode){
+		Pair<LocalDate,LocalDate>datePair=parser.parseDate(mode);
+		if(datePair!=null){
+			state.setFLoatingList(null);
+			state.setTodoList(handler.getDateRangeTodo(datePair.getFirst(), datePair.getSecond()));
+		}
+		else if(mode.equals("done")){
+			state.setFLoatingList(handler.getDoneFloating());
+			state.setTodoList(handler.getDoneTodo());
+		}
+		else if(mode.equals("normal")){
+			state.setFLoatingList(handler.getFloating());
+			state.setTodoList(handler.getTodo());
+		}					
 	}
 	
 }
