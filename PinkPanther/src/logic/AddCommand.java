@@ -21,7 +21,7 @@ public class AddCommand implements Command{
 			return false;
 		}
 		
-	    if(handler.addTask(task)){
+	    if(handler.addTask(task,false)){
 	    	taskRef=task;
 	    	LocalDate date = taskRef.getDate();
 	    	String dateString = (date == null) ? "floating tasks" : date.toString();
@@ -36,11 +36,11 @@ public class AddCommand implements Command{
 	
 	
 	public void undo(){
-		handler.deleteTask(taskRef);
+		handler.deleteTask(taskRef,false);
 	}
 	
 	public void redo(){
-		handler.addTask(taskRef);
+		handler.addTask(taskRef,false);
 	}
 	
 }

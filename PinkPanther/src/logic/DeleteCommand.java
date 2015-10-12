@@ -29,13 +29,13 @@ public class DeleteCommand implements Command{
 		if(taskList.size()==1){
 			taskRef=taskList.get(0);
 			Display.setFeedBack(taskRef + " has been deleted");
-			handler.deleteTask(taskRef);
+			handler.deleteTask(taskRef,false);
 			return true;
 		}
 		else{
 			taskListRef=taskList;
 			Display.setFeedBack(taskListRef + " have been deleted");
-			handler.deleteMultipleTasks(taskListRef);
+			handler.deleteMultipleTasks(taskListRef,false);
 			return true;
 		}
 		
@@ -43,20 +43,20 @@ public class DeleteCommand implements Command{
 	
 	public void undo(){
 		if(taskRef!=null){
-			handler.addTask(taskRef);
+			handler.addTask(taskRef,false);
 		}
 		else{
-			handler.addMultipleTasks(taskListRef);
+			handler.addMultipleTasks(taskListRef,false);
 		}
 		
 	}
 	
 	public void redo(){
 		if(taskRef!=null){
-			handler.deleteTask(taskRef);
+			handler.deleteTask(taskRef,false);
 		}
 		else{
-			handler.deleteMultipleTasks(taskListRef);
+			handler.deleteMultipleTasks(taskListRef,false);
 		}
 	}
 }

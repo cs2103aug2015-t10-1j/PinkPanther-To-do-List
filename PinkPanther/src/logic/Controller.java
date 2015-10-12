@@ -35,7 +35,7 @@ public class Controller {
 	}
 	
 	public void initializeProgramState(){
-		state.setFLoatingList(handler.getFloating());
+		state.setFLoatingList(handler.getFloating(false));
 		state.setTodoList(handler.getTwoWeekTodo());
 	}
 	
@@ -122,10 +122,16 @@ public class Controller {
 		}
 		
 		if(canSave){
-			storage.save(handler.getTodo());
-			storage.save(handler.getFloating());
+			saveToStorage();
 		}
 		
+	}
+	
+	private void saveToStorage(){
+		storage.save(handler.getFloating(true));
+		storage.save(handler.getFloating(false));
+		storage.save(handler.getTodo(true));
+		storage.save(handler.getTodo(false));
 	}
 	
 	private void changeDisplayMode(String mode){
@@ -135,12 +141,12 @@ public class Controller {
 			state.setTodoList(handler.getDateRangeTodo(datePair.getFirst(), datePair.getSecond()));
 		}
 		else if(mode.equals("done")){
-			state.setFLoatingList(handler.getDoneFloating());
-			state.setTodoList(handler.getDoneTodo());
+			state.setFLoatingList(handler.getFloating(true));
+			state.setTodoList(handler.getTodo(true));
 		}
 		else if(mode.equals("normal")){
-			state.setFLoatingList(handler.getFloating());
-			state.setTodoList(handler.getTodo());
+			state.setFLoatingList(handler.getFloating(false));
+			state.setTodoList(handler.getTodo(false));
 		}					
 	}
 	

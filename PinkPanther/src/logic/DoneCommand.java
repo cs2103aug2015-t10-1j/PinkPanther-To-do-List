@@ -21,6 +21,8 @@ public class DoneCommand implements Command{
 		taskRef=handler.searchTasks(pair).get(0);
 		if(taskRef!=null){
 			taskRef.setDoneStatus(true);
+			handler.deleteTask(taskRef, false);
+			handler.addTask(taskRef, true);
 			Display.setFeedBack(taskRef.getName()+" is done");
 			return true;
 		}
@@ -30,9 +32,13 @@ public class DoneCommand implements Command{
 	
 	public void undo(){
 		taskRef.setDoneStatus(false);
+		handler.deleteTask(taskRef, true);
+		handler.addTask(taskRef, true);
 	}
 	
 	public void redo(){
 		taskRef.setDoneStatus(true);
+		handler.deleteTask(taskRef, false);
+		handler.addTask(taskRef, true);
 	}
 }

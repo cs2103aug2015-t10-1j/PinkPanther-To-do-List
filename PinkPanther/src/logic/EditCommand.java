@@ -17,26 +17,26 @@ public class EditCommand implements Command{
 	public boolean execute(Pair<Task,Task>pair){
 		unmodified=pair.getFirst();
 		modified=pair.getSecond();
-		handler.deleteTask(unmodified);
-		if(handler.addTask(modified)){
+		handler.deleteTask(unmodified,false);
+		if(handler.addTask(modified,false)){
 			Display.setFeedBack("the task has been modified");
 			return true;
 		}
 		else{
 			Display.setFeedBack("you have another event during this period");
-			handler.addTask(unmodified);
+			handler.addTask(unmodified,false);
 			return false;
 		}
 	}
 	
 	
 	public void undo(){
-		handler.deleteTask(modified);
-		handler.addTask(unmodified);
+		handler.deleteTask(modified,false);
+		handler.addTask(unmodified,false);
 	}
 	
 	public void redo(){
-		handler.deleteTask(unmodified);
-		handler.addTask(modified);
+		handler.deleteTask(unmodified,false);
+		handler.addTask(modified,false);
 	}
 }
