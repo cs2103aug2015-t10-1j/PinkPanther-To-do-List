@@ -23,7 +23,7 @@ public class ToDoStorage {
 	private File toDoFile;
 	private Gson gson;
 	
-	ToDoStorage(File directory) {
+	protected ToDoStorage(File directory) {
 		toDoFile = new File(directory, "ToDo.txt");
 		gson = new Gson();
 	}

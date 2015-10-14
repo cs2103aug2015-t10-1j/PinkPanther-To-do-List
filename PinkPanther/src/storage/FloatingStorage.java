@@ -19,7 +19,7 @@ public class FloatingStorage {
 	private File floatingFile;
 	private Gson gson;
 	
-	FloatingStorage(File directory) {
+	protected FloatingStorage(File directory) {
 		floatingFile = new File(directory, "Floating.txt");
 		gson = new Gson();
 	}

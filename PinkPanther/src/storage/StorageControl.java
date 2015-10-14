@@ -12,6 +12,7 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.SortedMap;
+import java.util.logging.*;
 
 import com.google.gson.Gson;
 
@@ -29,6 +30,7 @@ public class StorageControl {
 	private Gson gson;
 
 	private static boolean hasStorageControl = false;
+	private static Logger logger = Logger.getLogger("StorageControl");
 
 	// Error Messages
 	private static final String SUCCESSFUL_CREATE_DIRECTORY_MESSAGE = "Directory created at: \"%1$s\"";
@@ -43,6 +45,7 @@ public class StorageControl {
 	public static StorageControl createStorageControl() {
 		if (!hasStorageControl) {
 			hasStorageControl = true;
+			logger.log(Level.INFO, "StorageControl instance created.");
 			return new StorageControl();
 		}
 		return null;
@@ -52,6 +55,7 @@ public class StorageControl {
 	public static StorageControl createStorageControl(String input_FilePath) {
 		if (!hasStorageControl) {
 			hasStorageControl = true;
+			logger.log(Level.INFO, "StorageControl instance created.");
 			return new StorageControl(input_FilePath);
 		}
 		return null;
@@ -60,16 +64,19 @@ public class StorageControl {
 	private StorageControl() {
 		gson = new Gson();
 		latestDirectoryTextFile = new File("latestDirectory.txt");
+		
 		directory = this.getLatestDirectory();
 
 		if (directory == null || !directory.isDirectory()) {
 			directory = new File("C:\\PPCalendar");
 			this.createDirectory();
+			logger.log(Level.INFO, "Default directory created.");
 		}
 		floating_File = new FloatingStorage(directory);
 		toDo_File = new ToDoStorage(directory);
 
 		this.setLatestDirectory();
+		logger.log(Level.INFO, "Environment for storage has been set.");
 	}
 
 	private StorageControl(String input_FilePath) {
@@ -77,7 +84,9 @@ public class StorageControl {
 
 		directory = new File(input_FilePath);
 		this.createDirectory();
+		assert directory.isDirectory() == true;
 		this.setLatestDirectory();
+		assert directory.equals(this.getLatestDirectory());
 
 		floating_File = new FloatingStorage(directory);
 		toDo_File = new ToDoStorage(directory);
@@ -88,17 +97,20 @@ public class StorageControl {
 			if (!directory.exists()) {
 				Display.setFeedBack(String.format(SUCCESSFUL_CREATE_DIRECTORY_MESSAGE, directory.getAbsolutePath()));
 				Display.showFeedBack();
+				logger.log(Level.INFO, "Directory created.");
 				return directory.mkdir();
 			}
 			else {
 				Display.setFeedBack(String.format(DIRECTORY_ALREADY_EXISTS_MESSAGE, directory.getAbsolutePath()));
 				Display.showFeedBack();
+				logger.log(Level.INFO, "Directory already exists. Not creating new directory.");
 				return false;
 			}
 		}
 		catch (SecurityException e) {
 			Display.setFeedBack(String.format(SECURITY_EXCEPTION_MESSAGE, directory.getAbsolutePath()));
 			Display.showFeedBack();
+			logger.log(Level.INFO, "Security exception encountered. Not creating new directory.");
 			return false;
 		}
 	}
@@ -110,7 +122,8 @@ public class StorageControl {
 		try {
 			if (directory.isDirectory()) {
 				newDirectory.mkdir();
-
+				assert newDirectory.mkdir() == true;
+				
 				floating_File.getFloatingFile().renameTo(newFloating);
 				floating_File.setFloatingFile(newFloating);
 				toDo_File.getToDoFile().renameTo(newToDo);
@@ -119,6 +132,7 @@ public class StorageControl {
 				directory.delete();
 				directory = newDirectory;
 				this.setLatestDirectory();
+				assert directory.equals(this.getLatestDirectory()) == true;
 				
 				Display.setFeedBack(String.format(SUCCESSFUL_CHANGE_DIRECTORY_MESSAGE, directory.getPath()));
 				Display.showFeedBack();
