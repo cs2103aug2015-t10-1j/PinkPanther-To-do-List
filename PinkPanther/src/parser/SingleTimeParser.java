@@ -15,7 +15,7 @@ public class SingleTimeParser implements Parser{
 					"h.mma", "hh.mma", "hmma", "hhmma", "H:mm", "HH:mm", 
 					"H.mm", "HH.mm", "Hmm", "HHmm", "ha", "hha"));
 	private static final String[] TIME_INDICATORS = {"TONIGHT", "NOW", "MORNING",
-			"AFTERNOON", "EVENING", "NIGHT"};
+			"AFTERNOON", "NIGHT"};
 	
 	private static ArrayList<String> validTimeFormats;
 	
@@ -53,10 +53,11 @@ public class SingleTimeParser implements Parser{
 			LocalTime time = LocalTime.parse(timeString, formatter);
 			return time;
 			
+		//If DateTimeException is caught
 		} catch (Exception e) {
-			// some exception
+			return null;
 		}
-		return null;
+
 	}
 	
 	private LocalTime parseTimeWord (String time) {

@@ -86,14 +86,15 @@ public class SingleDateParser implements Parser {
 			LocalDate date = LocalDate.parse(dateString, formatter);
 			return date;
 			
+		// DateTimeException is caught
 		} catch (Exception e) {
-			// some exception
+			// nothing
 		}
 		return null;
 		
 	}
 	
-	private Pair<String, Boolean> fixDate(String date) {
+	public Pair<String, Boolean> fixDate(String date) {
 		String fixedDate;
 		boolean hasAppendedYear = false;
 		
@@ -161,9 +162,10 @@ public class SingleDateParser implements Parser {
 	private LocalDate twoWordIndicatorParser (String date) {
 		String precursor = Auxiliary.getFirstWord(date).toUpperCase();
 		String content = Auxiliary.removeFirstWord(date).toUpperCase().trim();
+		LocalDate parsedDay = parseDayOfWeek(content);
 		if (precursor.equals("THIS")) {
-			if (parseDayOfWeek(content).isBefore(LocalDate.now())) {
-				return parseDayOfWeek(content).plusWeeks(1);
+			if (parsedDay != null && parsedDay.isBefore(LocalDate.now())) {
+				return parsedDay.plusWeeks(1);
 			}
 			return parseDayOfWeek(content);
 		} else if (precursor.equals("NEXT")) {
@@ -173,8 +175,8 @@ public class SingleDateParser implements Parser {
 				return LocalDate.now().plusMonths(1);
 			} else if (content.equals("YEAR")) {
 				return LocalDate.now().plusYears(1);
-			} else {
-				return parseDayOfWeek(content).plusWeeks(1);
+			} else if (parsedDay != null) {
+				return parsedDay.plusWeeks(1);
 			}
 		}
 		return null;
@@ -209,10 +211,10 @@ public class SingleDateParser implements Parser {
 		try {
 			Date date = sdf.parse(dateString);
 			return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		// DateTimeException is thrown
 		} catch (Exception e) {
 			// nothing
+			return null;
 		}
-
-		return null;
 	}
 }

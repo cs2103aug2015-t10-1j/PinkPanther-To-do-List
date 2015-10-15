@@ -4,6 +4,7 @@ import common.Task;
 import common.TaskType;
 import common.Auxiliary;
 import common.Display;
+import common.Pair;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -171,6 +172,20 @@ public class AddStringParser implements Parser {
 		
 		// case: both dates are valid dates
 		if (earlierDate != null && laterDate != null) {
+			Pair<String, Boolean> date1Details = sdp.fixDate(date1);
+			Pair<String, Boolean> date2Details = sdp.fixDate(date2);
+			
+			// first date has no year but second has
+			if (date1Details.getSecond() && !date2Details.getSecond()) {
+				earlierDate = earlierDate.withYear(laterDate.getYear());
+			
+			// both dates have no years	
+			// if second date is after today but first day isn't
+			} else if (date1Details.getSecond() && date2Details.getSecond()) {
+				if (laterDate.getYear() < earlierDate.getYear())
+				earlierDate = earlierDate.withYear(laterDate.getYear());
+			}
+			
 			// check chronological
 			if (!earlierDate.isAfter(laterDate)) {
 				setStartDate(earlierDate);
@@ -254,7 +269,7 @@ public class AddStringParser implements Parser {
 		LocalTime laterTime = stp.parse(time2);
 		
 		// case: need to append "am/pm" to first time
-		if (laterTime != null) {
+		if (earlierTime == null && laterTime != null) {
 			if (time2.contains("pm")) {
 				time1 += "pm";
 			} else if (time2.contains("am")) {
