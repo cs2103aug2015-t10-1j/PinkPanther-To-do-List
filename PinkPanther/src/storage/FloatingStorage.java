@@ -16,18 +16,25 @@ import common.Task;
 
 public class FloatingStorage {
 	//Attributes
-	private File floatingFile;
+	private File floatingFile_Undone;
+	private File floatingFile_Done;
 	private Gson gson;
 	
 	protected FloatingStorage(File directory) {
-		floatingFile = new File(directory, "Floating.txt");
+		floatingFile_Undone = new File(directory, "Undone Floating.txt");
+		floatingFile_Done = new File(directory, "Done Floating.txt");
 		gson = new Gson();
 	}
 	
-	protected boolean writeToFile(ArrayList<Task> input_FloatingList) {
+	protected boolean writeToFile(ArrayList<Task> input_FloatingList, boolean isDone) {
 		try {
-			BufferedWriter bw = new BufferedWriter(new FileWriter(floatingFile));
-			
+			BufferedWriter bw;
+			if (isDone) {
+				bw = new BufferedWriter(new FileWriter(floatingFile_Done));
+			}
+			else {
+				bw = new BufferedWriter(new FileWriter(floatingFile_Undone));
+			}
 			for (Task task: input_FloatingList) {
 				performWriting(bw, task);
 			}
@@ -40,11 +47,17 @@ public class FloatingStorage {
 		}
 	}
 	
-	protected ArrayList<Task> readFromFile() {
+	protected ArrayList<Task> readFromFile(boolean isDone) {
 		ArrayList<Task> new_TaskList = new ArrayList<Task>();
 		String newLine = "";
 		try{
-			BufferedReader br = new BufferedReader(new FileReader(floatingFile));
+			BufferedReader br;
+			if (isDone) {
+				br = new BufferedReader(new FileReader(floatingFile_Done));
+			}
+			else {
+				br = new BufferedReader(new FileReader(floatingFile_Undone));
+			}
 			while ((newLine = br.readLine()) != null) {
 				new_TaskList.add(gson.fromJson(newLine, Task.class));
 			}
@@ -67,11 +80,19 @@ public class FloatingStorage {
 		return json; //Primarily for testing purposes.
 	}
 	
-	protected File getFloatingFile() {
-		return floatingFile;
+	protected File getUndoneFloatingFile() {
+		return floatingFile_Undone;
 	}
 	
-	protected void setFloatingFile(File newFloating) {
-		floatingFile = newFloating;
+	protected File getDoneFloatingFile() {
+		return floatingFile_Done;
+	}
+	
+	protected void setUndoneFloatingFile(File newFloating) {
+		floatingFile_Undone = newFloating;
+	}
+	
+	protected void setDoneFloatingFile(File newFloating) {
+		floatingFile_Done = newFloating;
 	}
 }

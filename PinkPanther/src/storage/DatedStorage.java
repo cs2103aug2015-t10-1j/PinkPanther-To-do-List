@@ -18,19 +18,27 @@ import common.Task;
 
 import java.time.LocalDate;
 
-public class ToDoStorage {
+public class DatedStorage {
 	//Attributes
-	private File toDoFile;
+	private File datedFile_Done;
+	private File datedFile_Undone;
 	private Gson gson;
 	
-	protected ToDoStorage(File directory) {
-		toDoFile = new File(directory, "ToDo.txt");
+	protected DatedStorage(File directory) {
+		datedFile_Undone = new File(directory, "Undone Dated.txt");
+		datedFile_Done = new File(directory, "Done Dated.txt");
 		gson = new Gson();
 	}
 	
-	protected boolean writeToFile(SortedMap<LocalDate, ArrayList<Task>> input_ToDoList) {
+	protected boolean writeToFile(SortedMap<LocalDate, ArrayList<Task>> input_ToDoList, boolean isDone) {
 		try{
-			BufferedWriter bw = new BufferedWriter(new FileWriter(toDoFile));
+			BufferedWriter bw;
+			if (isDone) {
+				bw = new BufferedWriter(new FileWriter(datedFile_Done));
+			}
+			else {
+				bw = new BufferedWriter(new FileWriter(datedFile_Undone));
+			}
 			
 			for(LocalDate date: input_ToDoList.keySet()) {
 				for(Task task: input_ToDoList.get(date)) {
@@ -52,11 +60,17 @@ public class ToDoStorage {
 		return json; //Primarily for testing purposes.
 	}
 	
-	protected SortedMap<LocalDate,ArrayList<Task>> readFromFile(){
+	protected SortedMap<LocalDate,ArrayList<Task>> readFromFile(boolean isDone){
 		SortedMap<LocalDate, ArrayList<Task>> new_TaskList = new TreeMap<LocalDate, ArrayList<Task>>();
 		String newLine="";
 		try{
-			BufferedReader br = new BufferedReader(new FileReader(toDoFile));
+			BufferedReader br;
+			if (isDone) {
+				br = new BufferedReader(new FileReader(datedFile_Done));
+			}
+			else {
+				br = new BufferedReader(new FileReader(datedFile_Undone));
+			}
 			while ((newLine=br.readLine()) != null) {
 				Task task = gson.fromJson (newLine, Task.class);
 				LocalDate date = task.getDate();
@@ -77,11 +91,19 @@ public class ToDoStorage {
 		return new_TaskList;
 	}
 	
-	protected File getToDoFile() {
-		return toDoFile;
+	protected File getUndoneDatedFile() {
+		return datedFile_Undone;
 	}
 	
-	protected void setToDoFile(File newToDo) {
-		toDoFile = newToDo;
+	protected File getDoneDatedFile() {
+		return datedFile_Done;
+	}
+	
+	protected void setUndoneDatedFile(File newDated) {
+		datedFile_Undone = newDated;
+	}
+	
+	protected void setDoneDatedFile(File newDated) {
+		datedFile_Done = newDated;
 	}
 }

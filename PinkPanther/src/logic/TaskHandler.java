@@ -18,8 +18,9 @@ public class TaskHandler {
 	private ArrayList<Task>doneFloating;
 
 	public TaskHandler(StorageControl storage){
-		todoList=storage.loadToDo(false);
-		doneTodo=storage.loadTodo(true);
+		storage.createDirectory();
+		todoList=storage.loadDated(false);
+		doneTodo=storage.loadDated(true);
 		floatingList=storage.loadFloating(false);
 		doneFloating=storage.loadFloating(true);
 	}
@@ -35,7 +36,6 @@ public class TaskHandler {
 	public SortedMap<LocalDate,ArrayList<Task>> getDateRangeTodo(LocalDate date1,LocalDate date2){
 		return todoList.subMap(date1, date2);
 	}
-			
 	
 	public SortedMap<LocalDate,ArrayList<Task>>getMatchedTodo(String keyword){
 		SortedMap<LocalDate,ArrayList<Task>>matchedTodo=new TreeMap<LocalDate,ArrayList<Task>>();

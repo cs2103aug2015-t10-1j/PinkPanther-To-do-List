@@ -128,10 +128,10 @@ public class Controller {
 	}
 	
 	private void saveToStorage(){
-		storage.save(handler.getFloating(true));
-		storage.save(handler.getFloating(false));
-		storage.save(handler.getTodo(true));
-		storage.save(handler.getTodo(false));
+		storage.save(handler.getFloating(true), true);
+		storage.save(handler.getFloating(false), false);
+		storage.save(handler.getTodo(true), true);
+		storage.save(handler.getTodo(false), false);
 	}
 	
 	private void changeDisplayMode(String mode){
