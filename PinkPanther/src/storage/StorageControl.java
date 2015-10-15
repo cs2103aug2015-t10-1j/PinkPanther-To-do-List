@@ -22,116 +22,63 @@ import java.time.LocalDate;
 
 public class StorageControl {
 	// Attributes
-	private static File latestDirectoryTextFile = new File("latestDirectory.txt");
+	private static File latestDirectoryTextFile = new File("latest directory.txt");
 	private File directory;
 	private FloatingStorage floating_File;
 	private DatedStorage dated_File;
-	private Gson gson;
-
-	private static boolean hasStorageControl = false;
+	private Gson gson = new Gson();
 
 	// Error Messages
-	private static final String SUCCESSFUL_CREATE_DIRECTORY_MESSAGE = "Directory created at: \"%1$s\"";
+	//private static final String SUCCESSFUL_CREATE_DIRECTORY_MESSAGE = "Directory created at: \"%1$s\"";
 	private static final String SUCCESSFUL_CHANGE_DIRECTORY_MESSAGE = "Directory changed to: \"%1$s\"";
 	private static final String DIRECTORY_ALREADY_EXISTS_MESSAGE = "Directory: \"%1$s\" already exists";
 	private static final String SECURITY_EXCEPTION_MESSAGE = "Security manager exists and denies write access to: \"%1$s\"";
 	private static final String NO_INPUT_DIRECTORY_MESSAGE = "No directory path was entered";
 	private static final String IS_NOT_DIRECTORY_MESSAGE = "\"%1$s\" is not a directory";
 	private static final String SAVE_UNSUCCESSFUL_MESSAGE = "Save unsuccessful";
-
-	//"Default Constructor". Implements Singleton pattern.
-	public static StorageControl createStorageControl() {
-		if (!hasStorageControl) {
-			hasStorageControl = true;
-			return new StorageControl();
+	private static final String INVALID_PATH_MESSAGE = "Invalid path entered.";
+	private static final String COULD_NOT_SET_LATEST_DIRECTORY_MESSAGE = "Error! Could not set the latest directory.";
+	//private static final String COULD_NOT_MAKE_DIRECTORY_MESSAGE = "Error! Could not make directory.";
+	
+	public StorageControl() {
+	}
+	
+	public String setStorageEnvironmentFirstTime(String input_FilePath) {
+		this.directory = new File(input_FilePath);
+		int numOfExistingFiles = 1;
+		while (this.directory.isDirectory() == true) {
+			this.directory = new File(input_FilePath + " (" + numOfExistingFiles + ")");
+			numOfExistingFiles++;
 		}
-		return null;
-	}
-
-	//"Constructor" used during clean starts, when user is prompted to input the directory he wants to save the files in.
-	public static StorageControl createStorageControl(String input_FilePath) {
-		if (!hasStorageControl) {
-			hasStorageControl = true;
-			return new StorageControl(input_FilePath);
+		if (input_FilePath.substring(1, 3).equals(":\\") == false || this.directory.mkdir() == false) {
+			return INVALID_PATH_MESSAGE;
 		}
-		return null;
-	}
-
-	private StorageControl() {
-		gson = new Gson();
-	}
-
-	private StorageControl(String input_FilePath) {
-		gson = new Gson();
-
-		directory = new File(input_FilePath);
-		this.createDirectory();
-		this.setLatestDirectory();
-
 		floating_File = new FloatingStorage(directory);
 		dated_File = new DatedStorage(directory);
-	}
-	
-	public static boolean checkLatestDirectory() {
-		return latestDirectoryTextFile.exists();
-	}
-
-	public String createDirectory() {
-		try {
-			directory = this.getLatestDirectory();
-			if (directory == null || (directory.isDirectory() == false && directory.exists() == false)) {
-				directory = new File("C:\\PPCalendar");
-			}
-			
-			if (directory.isDirectory() == false) {
-				directory.mkdir();
-				if (directory.exists() == false) {
-					return "Invalid File Path";
-				}
-			}
-			floating_File = new FloatingStorage(directory);
-			dated_File = new DatedStorage(directory);
-			
-			Display.setFeedBack(String.format(SUCCESSFUL_CREATE_DIRECTORY_MESSAGE, directory.getAbsolutePath()));
-			Display.showFeedBack();
-			this.setLatestDirectory();
-			return directory.getAbsolutePath();
+		if (this.setLatestDirectory() == false) {
+			return COULD_NOT_SET_LATEST_DIRECTORY_MESSAGE;
 		}
-		catch (SecurityException e) {
-			Display.setFeedBack(String.format(SECURITY_EXCEPTION_MESSAGE, directory.getAbsolutePath()));
-			Display.showFeedBack();
-			return "Security Exception encountered.";
-		}
-	}
-	
-	public String createDirectory(String input_FilePath) {
-		try {
-			directory = this.getLatestDirectory();
-			if (directory == null || (directory.isDirectory() == false && directory.exists() == false)) {
-				directory = new File(input_FilePath);
-			}
-			
-			if (directory.isDirectory() == false) {
-				directory.mkdir();
-				if (directory.exists() == false) {
-					return "Invalid File Path";
-				}
-			}
-			floating_File = new FloatingStorage(directory);
-			dated_File = new DatedStorage(directory);
-			
-			Display.setFeedBack(String.format(SUCCESSFUL_CREATE_DIRECTORY_MESSAGE, directory.getAbsolutePath()));
-			Display.showFeedBack();
-			this.setLatestDirectory();
-			return directory.getAbsolutePath();
-		}
-		catch (SecurityException e) {
-			Display.setFeedBack(String.format(SECURITY_EXCEPTION_MESSAGE, directory.getAbsolutePath()));
-			Display.showFeedBack();
-			return "Security Exception encountered.";
-		}
+		
+		return directory.getPath();
 	}
 
+	public String setStorageEnvironmentNormal() {
+		this.directory = this.getLatestDirectory();
+		if (directory == null || directory.isDirectory() == false) {
+			int numOfExistingFiles = 1;
+			directory = new File("C:\\PPCalendar");
+			while (directory.mkdir() == false) {
+				directory = new File("C:\\PPCalendar" + " (" + numOfExistingFiles + ")");
+				numOfExistingFiles++;
+			}
+			this.setLatestDirectory();
+		}
+		floating_File = new FloatingStorage(directory);
+		dated_File = new DatedStorage(directory);
+		
+		return directory.getPath();
+	}
+	
 	public boolean changeDirectory(String input_NewDirectory) {
 		File newDirectory = new File(input_NewDirectory);
 		File newUndoneFloating = new File(input_NewDirectory + "\\Undone Floating.txt");
@@ -140,37 +87,28 @@ public class StorageControl {
 		File newDoneDated = new File(input_NewDirectory + "\\Done Dated.txt");
 		
 		try {
-			if (directory.isDirectory()) {
-				newDirectory.mkdir();
-				if (newDirectory.exists() == false || input_NewDirectory.substring(1, 3).equals(":\\") == false) {
-					Display.setFeedBack(String.format(IS_NOT_DIRECTORY_MESSAGE, input_NewDirectory));
-					Display.showFeedBack();
-					return false;
-				}
-				
-				floating_File.getUndoneFloatingFile().renameTo(newUndoneFloating);
-				floating_File.setUndoneFloatingFile(newUndoneFloating);
-				floating_File.getDoneFloatingFile().renameTo(newDoneFloating);
-				floating_File.setDoneFloatingFile(newDoneFloating);
-				dated_File.getUndoneDatedFile().renameTo(newUndoneDated);
-				dated_File.setUndoneDatedFile(newUndoneDated);
-				dated_File.getDoneDatedFile().renameTo(newDoneDated);
-				dated_File.setDoneDatedFile(newDoneDated);
-				
-				directory.delete();
-				directory = newDirectory;
-				this.setLatestDirectory();
-				
-				Display.setFeedBack(String.format(SUCCESSFUL_CHANGE_DIRECTORY_MESSAGE, directory.getPath()));
-				Display.showFeedBack();
-
-				return true;
-			}
-			else {
+			if (newDirectory.mkdir() == false || input_NewDirectory.substring(1, 3).equals(":\\") == false) {
 				Display.setFeedBack(String.format(IS_NOT_DIRECTORY_MESSAGE, input_NewDirectory));
 				Display.showFeedBack();
 				return false;
 			}
+			floating_File.getUndoneFloatingFile().renameTo(newUndoneFloating);
+			floating_File.setUndoneFloatingFile(newUndoneFloating);
+			floating_File.getDoneFloatingFile().renameTo(newDoneFloating);
+			floating_File.setDoneFloatingFile(newDoneFloating);
+			dated_File.getUndoneDatedFile().renameTo(newUndoneDated);
+			dated_File.setUndoneDatedFile(newUndoneDated);
+			dated_File.getDoneDatedFile().renameTo(newDoneDated);
+			dated_File.setDoneDatedFile(newDoneDated);
+
+			directory.delete();
+			directory = newDirectory;
+			this.setLatestDirectory();
+
+			Display.setFeedBack(String.format(SUCCESSFUL_CHANGE_DIRECTORY_MESSAGE, directory.getPath()));
+			Display.showFeedBack();
+
+			return true;
 		}
 		catch (SecurityException e) {
 			Display.setFeedBack(String.format(SECURITY_EXCEPTION_MESSAGE, input_NewDirectory));
@@ -191,6 +129,7 @@ public class StorageControl {
 		else {
 			Display.setFeedBack(SAVE_UNSUCCESSFUL_MESSAGE);
 			Display.showFeedBack();
+			
 			return false;
 		}
 	}
@@ -214,6 +153,23 @@ public class StorageControl {
 		return dated_File.readFromFile(isDone);
 	}
 	
+	/*private StorageControl(String input_FilePath) {
+	gson = new Gson();
+	
+	directory = new File(input_FilePath);
+	this.createDirectory();
+	this.setLatestDirectory();
+	
+	floating_File = new FloatingStorage(directory);
+	dated_File = new DatedStorage(directory);
+	}*/
+	
+	public boolean checkLatestDirectoryState() {
+		File checker = this.getLatestDirectory();
+		
+		return (latestDirectoryTextFile.exists() == false || checker.equals(null) == true);
+	}
+
 	private File getLatestDirectory() {
 		String newLine;
 		File latestDirectory = null;
@@ -224,29 +180,25 @@ public class StorageControl {
 			br.close();
 		}
 		catch (FileNotFoundException e) {
-			//Do nothing since file does not exist
+			return null;
 		}
 		catch (IOException e) {
-			e.printStackTrace();
-			//return null;
+			return null;
 		}
 		return latestDirectory;
 	}
 
-	private void setLatestDirectory() {
+	private boolean setLatestDirectory() {
 		try {
-			/*if (Files.isHidden(latestDirectoryTextFile.toPath())) {
-			Files.setAttribute(latestDirectoryTextFile.toPath(), "dos:hidden", false);
-			*/
 			BufferedWriter bw = new BufferedWriter(new FileWriter(latestDirectoryTextFile));
 			String json = gson.toJson(directory);
 			bw.write(json);
 			bw.close();
-
-			//Files.setAttribute(latestDirectoryTextFile.toPath(), "dos:hidden", true);
+			
+			return true;
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			return false;
 		}
 	}
 }

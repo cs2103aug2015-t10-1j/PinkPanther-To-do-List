@@ -26,7 +26,7 @@ public class Controller {
 	private ProgramState state;
 	
 	public Controller(){
-		storage=StorageControl.createStorageControl();
+		storage=new StorageControl();
 		handler=new TaskHandler(storage);
 		commandStack=new CommandStack();
 		parser=new CommandParser();

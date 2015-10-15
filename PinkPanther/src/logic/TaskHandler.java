@@ -18,7 +18,7 @@ public class TaskHandler {
 	private ArrayList<Task>doneFloating;
 
 	public TaskHandler(StorageControl storage){
-		storage.createDirectory();
+		storage.setStorageEnvironmentNormal();
 		todoList=storage.loadDated(false);
 		doneTodo=storage.loadDated(true);
 		floatingList=storage.loadFloating(false);
