@@ -5,8 +5,8 @@ import javafx.scene.shape.Rectangle;
 
 public class TransparentCircle extends Rectangle{
 	public TransparentCircle() {
-        setWidth(80);
-        setHeight(80);
+        setWidth(20);
+        setHeight(20);
         setArcWidth(80);
         setArcHeight(80);                
         setFill(Color.TRANSPARENT);

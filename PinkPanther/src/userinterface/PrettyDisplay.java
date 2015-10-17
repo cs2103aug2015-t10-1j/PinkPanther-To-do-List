@@ -113,8 +113,8 @@ public class PrettyDisplay extends Application {
         //Main Grid: Holds contents for the Calendar
         calendarGrid = new GridPane();
         calendarGrid.setAlignment(Pos.TOP_LEFT);
-        calendarGrid.setHgap(10);
-        calendarGrid.setVgap(10);
+        calendarGrid.setHgap(1);
+        calendarGrid.setVgap(1);
         calendarGrid.setPadding(new Insets(10, 10, 10, 10));
         populateGrid(calendarGrid);	
     }
@@ -127,8 +127,8 @@ public class PrettyDisplay extends Application {
     void implementMainGrid(){
         grid2 = new GridPane();
         grid2.setAlignment(Pos.TOP_LEFT);
-        grid2.setHgap(10);
-        grid2.setVgap(10);
+        grid2.setHgap(1);
+        grid2.setVgap(1);
         grid2.setPadding(new Insets(25, 25, 25, 25));
         grid2.add(s1,0,0);
     }
@@ -141,13 +141,13 @@ public class PrettyDisplay extends Application {
         + "-fx-text-fill: BLACK;"
         + "-fx-border-width: 6px;"
         + "-fx-border-color: DIMGRAY;"
-        + "-fx-background-color: PINK");
+        + "-fx-background-color: WHITE");
         grid2.add(userTextField, 0, 1);
     }
     void implementActionTarget(String newInput){
         actiontarget = new Text(newInput);
         grid2.add(actiontarget, 0, 2);
-        actiontarget.setFont(Font.font("Tahoma", FontWeight.BOLD, 25));
+        actiontarget.setFont(Font.font("Tahoma", FontWeight.BOLD, 15));
         actiontarget.setFill(defaultActionTargetColor);     
     }
     void implementButtons(){
@@ -204,7 +204,7 @@ public class PrettyDisplay extends Application {
         
     }
     void implementScene(){
-        scene = new Scene(grid2, 1080, 650);
+        scene = new Scene(grid2, 740, 650);
         scene.getStylesheets().clear();
         scene.getStylesheets().add(this.getClass().getResource("a.css").toExternalForm());
 
@@ -218,7 +218,7 @@ public class PrettyDisplay extends Application {
     void populateGrid(GridPane grid){
      
         //Scene title
-        scenetitle.setFont(Font.font("Tahoma", FontWeight.BOLD, 66));
+        scenetitle.setFont(Font.font("Tahoma", FontWeight.BOLD, 33));
         scenetitle.setFill(Color.DIMGRAY);
         grid.add(scenetitle, 1, 0);
 
@@ -228,8 +228,8 @@ public class PrettyDisplay extends Application {
     	
     	
         //filler for rightGridColumn; to make sure length of display does not change
-		TransparentRect tRect = new TransparentRect();
-		grid.add(tRect, 2, 0);
+//		TransparentRect tRect = new TransparentRect();
+	//	grid.add(tRect, 2, 0);
 
         //for the actual calendar items
     	int currTaskIndex = 1;
@@ -241,22 +241,28 @@ public class PrettyDisplay extends Application {
     	if (programState != null){
         	ArrayList<Task> floatingTasks = programState.getFloatingList();
 	    	if (floatingTasks != null && floatingTasks.size() != 0){
-	            TextedColorDayBox daydBox = new TextedColorDayBox("Float");
-	        	grid.add(daydBox, 0, currentYPos);
+	         //   TextedColorDayBox daydBox = new TextedColorDayBox("Float");
+	        //	grid.add(daydBox, 0, currentYPos);
+
+	    		currentYPos++;
+	    		currentYPos++;
 		    	int currFloatXPos = 1;
+	    		DayBox dayBox = new DayBox("Floating Tasks");
+	    		grid.add(dayBox, 1, currentYPos++);
 		    	for (int i=0; i<floatingTasks.size(); i++){
-		    		if (currFloatXPos == 3){
-	        			currentYPos++;
-	        			TransparentCircle circle = new TransparentCircle();
-	        			grid.add(circle, 0, currentYPos);
-	        			currFloatXPos = 1;
-	        		}
+		    		currentYPos++;
+	//	    		if (currFloatXPos == 2){
+	  //      			currentYPos++;
+	  //      			TransparentCircle circle = new TransparentCircle();
+	   //     			grid.add(circle, 0, currentYPos);
+	   //     			currFloatXPos = 1;
+	    //    		}
 		    		
 	//	    		String taskName = floatingTasks.get(i).getName();
 		    		//TextedTaskBox taskBox = new TextedTaskBox(taskName , "", "", currTaskIndex);
-		    		TextedTaskBox taskBox = new TextedTaskBox(i+1, floatingTasks.get(i));
+		    		TaskBox taskBox = new TaskBox(i+1, floatingTasks.get(i));
 		    		currTaskIndex++;
-		    		grid.add(taskBox, currFloatXPos++, currentYPos);
+		    		grid.add(taskBox, currFloatXPos, currentYPos);
 	
 		    	}
 		    	currentYPos++;
@@ -265,30 +271,33 @@ public class PrettyDisplay extends Application {
 	    	SortedMap<LocalDate,ArrayList<Task>> todoList = programState.getTodoList();
 	    	if (todoList != null){
 		    	for(LocalDate date:todoList.keySet()){ //looping through dates which have Tasks inside
+		    		grid.add(new TransparentCircle(), 1, currentYPos++);
 		    		String month = date.getMonth().toString().substring(0, 3);
 		    		String currDayNum = Integer.toString(date.getDayOfMonth());
-		            TextedColorDayBox currentDayBox = new TextedColorDayBox(currDayNum + "\n" + month);
-		        	grid.add(currentDayBox, 0, currentYPos);
-		    		
+//		            TextedColorDayBox currentDayBox = new TextedColorDayBox(currDayNum + "\n" + month);
+	//	        	grid.add(currentDayBox, 0, currentYPos);
+		    		DayBox dayBox = new DayBox(currDayNum + " " + month);
+		    		grid.add(dayBox, 1, currentYPos++);
 		    		int currXPos = 1;
 		    		currTaskIndex = 1;
 		    		
 					for(Task task:todoList.get(date)){ //looping through tasks for specified date
-						
-						if (currXPos == 3){
-		        			currentYPos++;
-		        			TransparentCircle circle = new TransparentCircle();
-		        			grid.add(circle, 0, currentYPos);
-		        			currXPos = 1;
-		        		}
+
+			    		currentYPos++;
+			//			if (currXPos == 3){
+		     //   			currentYPos++;
+		      //  			TransparentCircle circle = new TransparentCircle();
+		      //  			grid.add(circle, 0, currentYPos);
+		       // 			currXPos = 1;
+		      //  		}
 						
 		//	    		String taskName = task.getName();
 		//	    		String startTime = task.getStartTimeString();
 		 //   			String endTime = task.getEndTimeString();
 			    		//TextedTaskBox taskBox = new TextedTaskBox(taskName , startTime, endTime, currTaskIndex);
-		    			TextedTaskBox taskBox = new TextedTaskBox(currTaskIndex, task);
+		    			TaskBox taskBox = new TaskBox(currTaskIndex, task);
 		    			currTaskIndex++;
-			    		grid.add(taskBox, currXPos++, currentYPos);
+			    		grid.add(taskBox, currXPos, currentYPos);
 		
 			    		
 					}
@@ -365,11 +374,11 @@ public class PrettyDisplay extends Application {
         
         else if (ke.getCode().equals(KeyCode.DOWN) && !isCalendarHidden)
         {
-    		scrollDown(0.05f);
+    		scrollDown(0.25f);
         }
         else if (ke.getCode().equals(KeyCode.UP) && !isCalendarHidden)
         {
-    		scrollUp(0.05f);
+    		scrollUp(0.25f);
         }
         else if (ke.getCode().equals(KeyCode.PAGE_UP) && !isCalendarHidden)
         {
@@ -407,8 +416,8 @@ public class PrettyDisplay extends Application {
 	void viewHelpScreen(){
     	HelpScreen helpScreen = new HelpScreen();
     	grid2.getChildren().remove(s1);
-    //	grid2.add(helpScreen, 0, 0);
-    	grid2.add(new FirstOpenScreen(), 0, 0);
+    	grid2.add(helpScreen, 0, 0);
+//    	grid2.add(new FirstOpenScreen(), 0, 0);
         actiontarget.setFill(defaultActionTargetColor);
 		actiontarget.setText("Viewing cheatsheet: Press PAGEUP key to resume");
     	isViewingHelpScreen = true;
@@ -427,23 +436,23 @@ public class PrettyDisplay extends Application {
 	}
 	
 	void unHideCalendar(Stage stage){
-        stage.setHeight(890);
+        stage.setHeight(690);
         scenetitle.setText("Calendar");
         s1.setDisable(false);
-        actiontarget.setFill(defaultActionTargetColor);
-        actiontarget.setText(Display.showFeedBack());
+  //      actiontarget.setFill(defaultActionTargetColor);
+ //       actiontarget.setText(Display.showFeedBack());
 		//actiontarget.setText("Input command into the field above");
         isCalendarHidden = false;
  		s1.setVvalue(currentScrollYPos);
 	}
 	
 	void hideCalendar(Stage stage){
-        stage.setHeight(390);
-        scenetitle.setText("Calendar\n Hidden");
+        stage.setHeight(240);
+        scenetitle.setText("Calendar Hidden (Click END to restore)");
         s1.setDisable(true);
         s1.setVvalue(0);
-        actiontarget.setFill(defaultActionTargetColor);
-		actiontarget.setText("Hidden calendar mode: Press END to restore calendar");
+ //       actiontarget.setFill(defaultActionTargetColor);
+//		actiontarget.setText("Hidden calendar mode: Press END to restore calendar");
         isCalendarHidden = true;
 	}
 	

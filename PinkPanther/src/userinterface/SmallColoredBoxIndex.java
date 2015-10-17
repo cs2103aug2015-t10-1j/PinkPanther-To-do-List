@@ -7,9 +7,9 @@ public class SmallColoredBoxIndex extends Rectangle{
 	public SmallColoredBoxIndex() {
         setWidth(20);
         setHeight(20);
-        setArcWidth(20);
-        setArcHeight(20);                
-        setFill(Color.DIMGRAY.deriveColor(0, 1.2, 1, 0.6));
+        setArcWidth(4);
+        setArcHeight(4);                
+        setFill(Color.CORNFLOWERBLUE);
         setStroke(Color.DIMGRAY);
         setStrokeWidth(2.0f);
      }  

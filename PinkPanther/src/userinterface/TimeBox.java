@@ -8,15 +8,17 @@ public class TimeBox extends Rectangle{
 	
 	private Color[] colArray = {(Color.DARKBLUE), (Color.BLUEVIOLET), (Color.FIREBRICK)};
 	public TimeBox() {
-        setWidth(80);
+        setWidth(85);
         setHeight(20);
-        setArcWidth(20);
-        setArcHeight(20);
-        Color textColor = colArray[currColorIndex];
+        setArcWidth(2);
+        setArcHeight(2);
+       // Color textColor = colArray[currColorIndex];
+
+        Color textColor = Color.DIMGRAY;
         
      //   Color textColor = isStartTime ? colArray[0] : colArray[1];
         setFill(textColor.deriveColor(0, 1.2, 1, 0.6));
-        setStroke(textColor);
+   //     setStroke(textColor);
         
    //     isStartTime = !isStartTime;
         
