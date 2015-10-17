@@ -8,11 +8,11 @@ import common.Task;
  * Add class description
  */
 public class AddCommand implements Command{
-	private TaskHandler handler;
+	private TaskManager manager;
 	private Task taskRef;
 	
-	public AddCommand(TaskHandler handler){
-		this.handler=handler;
+	public AddCommand(TaskManager manager){
+		this.manager=manager;
 	}
 	
 	public boolean execute(Task task){	
@@ -21,26 +21,21 @@ public class AddCommand implements Command{
 			return false;
 		}
 		
-	    if(handler.addTask(task,false)){
-	    	taskRef=task;
-	    	LocalDate date = taskRef.getDate();
-	    	String dateString = (date == null) ? "floating tasks" : date.toString();
-	    	Display.setFeedBack("\"" + task.getName()+ "\"" + " has been added to " + dateString + ".");
-	    	return true;
-	    }
-	    else{
-	    	Display.setFeedBack("You have another event during this period, which might cause clashes.");
-	    	return false;
-	    }
+	    taskRef=task;
+	    manager.addTask(task);
+	    LocalDate date = taskRef.getDate();
+	    String dateString = (date == null) ? "floating tasks" : date.toString();
+	    Display.setFeedBack("\"" + task.getName()+ "\"" + " has been added to " + dateString + ".");
+	    return true;
 	}
 	
 	
 	public void undo(){
-		handler.deleteTask(taskRef,false);
+		manager.deleteTask(taskRef);
 	}
 	
 	public void redo(){
-		handler.addTask(taskRef,false);
+		manager.addTask(taskRef);
 	}
 	
 }

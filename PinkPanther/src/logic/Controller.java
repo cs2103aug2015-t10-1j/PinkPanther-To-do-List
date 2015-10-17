@@ -19,7 +19,7 @@ import common.Display;
 public class Controller {
 	private static Pair<Task,Task>taskPair=new Pair<Task,Task>(null,null);
 	
-	private TaskHandler handler;
+	private TaskManager manager;
 	private CommandStack commandStack;
 	private CommandParser parser;
 	private StorageControl storage;
@@ -27,7 +27,7 @@ public class Controller {
 	
 	public Controller(){
 		storage=new StorageControl();
-		handler=new TaskHandler(storage);
+		manager=new TaskManager(storage);
 		commandStack=new CommandStack();
 		parser=new CommandParser();
 		state=new ProgramState();
@@ -35,8 +35,8 @@ public class Controller {
 	}
 	
 	public void initializeProgramState(){
-		state.setFLoatingList(handler.getFloating(false));
-		state.setTodoList(handler.getTwoWeekTodo());
+		state.setFLoatingList(manager.getFloating(false));
+		state.setTodoList(manager.getTwoWeek());
 	}
 	
 	public ProgramState getProgramState(){
@@ -53,7 +53,7 @@ public class Controller {
 		
 		if(taskPair.getFirst()!=null){
 			taskPair.setSecond(parser.createTask(command));
-			EditCommand edit=new EditCommand(handler);
+			EditCommand edit=new EditCommand(manager);
 			if(edit.execute(taskPair)){
 				commandStack.addCommand(edit);
 			}
@@ -64,13 +64,13 @@ public class Controller {
 		else{
 			switch(commandString.toLowerCase()){
 				case "add":
-					AddCommand add = new AddCommand(handler);
+					AddCommand add = new AddCommand(manager);
 					if(add.execute(parser.createTask(parameterString))){
 						commandStack.addCommand(add);
 					}
 					break;
 				case "edit":
-					Task unmodified=handler.searchTasks(parser.query(parameterString)).get(0);
+					Task unmodified=manager.searchTasks(parser.query(parameterString)).get(0);
 					if(unmodified!=null){
 						taskPair.setFirst(unmodified);
 						state.setInputBoxText(unmodified.toString());
@@ -78,21 +78,21 @@ public class Controller {
 					}
 					break;
 				case "done":
-					DoneCommand done = new DoneCommand(handler);
+					DoneCommand done = new DoneCommand(manager);
 					if(done.execute(parser.query(parameterString))){
 						commandStack.addCommand(done);
 					}
 					break;
 				case "del":
 				case "delete":
-					DeleteCommand delete = new DeleteCommand(handler);
+					DeleteCommand delete = new DeleteCommand(manager);
 					if(delete.execute(parser.query(parameterString))){
 						commandStack.addCommand(delete);
 					}
 					break;	
 				case "search":
-					state.setFLoatingList(handler.getMatchedFloating(parameterString));
-					state.setTodoList(handler.getMatchedTodo(parameterString));
+					state.setFLoatingList(manager.getMatchedFloating(parameterString));
+					state.setTodoList(manager.getMatchedDated(parameterString));
 					canSave=false;
 					break;
 				case "view":
@@ -114,7 +114,7 @@ public class Controller {
 					canSave=false;
 					break;
 				case "clear":
-					handler.clearAllTasks();
+					manager.clearAllTasks();
 					break;
 				default:
 					Display.setFeedBack("invalid command");		
@@ -128,25 +128,23 @@ public class Controller {
 	}
 	
 	private void saveToStorage(){
-		storage.save(handler.getFloating(true), true);
-		storage.save(handler.getFloating(false), false);
-		storage.save(handler.getTodo(true), true);
-		storage.save(handler.getTodo(false), false);
+		storage.save(manager.getTaskList(true),true);
+		storage.save(manager.getTaskList(false),false);
 	}
 	
 	private void changeDisplayMode(String mode){
 		Pair<LocalDate,LocalDate>datePair=parser.parseDate(mode);
 		if(datePair!=null){
 			state.setFLoatingList(null);
-			state.setTodoList(handler.getDateRangeTodo(datePair.getFirst(), datePair.getSecond()));
+			state.setTodoList(manager.getDateRange(datePair.getFirst(), datePair.getSecond()));
 		}
 		else if(mode.equals("done")){
-			state.setFLoatingList(handler.getFloating(true));
-			state.setTodoList(handler.getTodo(true));
+			state.setFLoatingList(manager.getFloating(true));
+			state.setTodoList(manager.getDated(true));
 		}
 		else if(mode.equals("normal")){
-			state.setFLoatingList(handler.getFloating(false));
-			state.setTodoList(handler.getTodo(false));
+			state.setFLoatingList(manager.getFloating(false));
+			state.setTodoList(manager.getTwoWeek());
 		}					
 	}
 	

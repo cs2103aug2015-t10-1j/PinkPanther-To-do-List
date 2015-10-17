@@ -11,17 +11,17 @@ import common.Task;
  * Add class description
  */
 public class DeleteCommand implements Command{
-	private TaskHandler handler;
+	private TaskManager manager;
 	private Task taskRef;
 	private ArrayList<Task> taskListRef;
 	
-	public DeleteCommand(TaskHandler handler){
-		this.handler=handler;
+	public DeleteCommand(TaskManager manager){
+		this.manager=manager;
 	}
 	
 	public boolean execute(Pair<LocalDate,ArrayList<Integer>>pair){
 		
-		ArrayList<Task>taskList=handler.searchTasks(pair);
+		ArrayList<Task>taskList=manager.searchTasks(pair);
 		if(taskList==null){
 			return false;
 		}
@@ -29,13 +29,13 @@ public class DeleteCommand implements Command{
 		if(taskList.size()==1){
 			taskRef=taskList.get(0);
 			Display.setFeedBack(taskRef + " has been deleted");
-			handler.deleteTask(taskRef,false);
+			manager.deleteTask(taskRef);
 			return true;
 		}
 		else{
 			taskListRef=taskList;
 			Display.setFeedBack(taskListRef + " have been deleted");
-			handler.deleteMultipleTasks(taskListRef,false);
+			manager.deleteMultipleTasks(taskListRef);
 			return true;
 		}
 		
@@ -43,20 +43,20 @@ public class DeleteCommand implements Command{
 	
 	public void undo(){
 		if(taskRef!=null){
-			handler.addTask(taskRef,false);
+			manager.addTask(taskRef);
 		}
 		else{
-			handler.addMultipleTasks(taskListRef,false);
+			manager.addMultipleTasks(taskListRef);
 		}
 		
 	}
 	
 	public void redo(){
 		if(taskRef!=null){
-			handler.deleteTask(taskRef,false);
+			manager.deleteTask(taskRef);
 		}
 		else{
-			handler.deleteMultipleTasks(taskListRef,false);
+			manager.deleteMultipleTasks(taskListRef);
 		}
 	}
 }

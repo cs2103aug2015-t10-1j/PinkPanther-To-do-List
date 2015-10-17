@@ -9,20 +9,21 @@ import common.Pair;
 import common.Task;
 
 public class DoneCommand implements Command{
-	private TaskHandler handler;
+	private TaskManager manager;
 	private Task taskRef;
 	
-	public DoneCommand(TaskHandler handler){
-		this.handler=handler;
+	public DoneCommand(TaskManager manager){
+		this.manager=manager;
 	}
 	
 	public boolean execute(Pair<LocalDate,ArrayList<Integer>>pair){
 		
-		taskRef=handler.searchTasks(pair).get(0);
+		taskRef=manager.searchTasks(pair).get(0);
 		if(taskRef!=null){
+			//move the task to doneList
+			manager.deleteTask(taskRef);
 			taskRef.setDoneStatus(true);
-			handler.deleteTask(taskRef, false);
-			handler.addTask(taskRef, true);
+			manager.addTask(taskRef);
 			Display.setFeedBack(taskRef.getName()+" is done");
 			return true;
 		}
@@ -31,14 +32,14 @@ public class DoneCommand implements Command{
 	}
 	
 	public void undo(){
+		manager.deleteTask(taskRef);
 		taskRef.setDoneStatus(false);
-		handler.deleteTask(taskRef, true);
-		handler.addTask(taskRef, true);
+		manager.addTask(taskRef);
 	}
 	
 	public void redo(){
+		manager.deleteTask(taskRef);
 		taskRef.setDoneStatus(true);
-		handler.deleteTask(taskRef, false);
-		handler.addTask(taskRef, true);
+		manager.addTask(taskRef);
 	}
 }
