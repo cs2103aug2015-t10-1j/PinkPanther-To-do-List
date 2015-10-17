@@ -25,6 +25,7 @@ public class TaskManager {
 	}
 	
 // --------------------------------------Getters------------------------------------------
+	
 	public SortedMap<LocalDate,ArrayList<Task>>getTaskList(boolean isDone){
 		return isDone?doneList:todoList;
 	} 
@@ -74,7 +75,6 @@ public class TaskManager {
 	
 	
 //-------------------------------Task List Modifiers ---------------------------------------
-	
 	
 	public void addTask(Task task){
 		boolean isDone=task.getDoneStatus();
@@ -146,6 +146,7 @@ public class TaskManager {
 	
 	
 // ------------------------------------- Task Query -----------------------------------------
+	
 	public ArrayList<Task> searchTasks(Pair<LocalDate,ArrayList<Integer>>pair){
 		if(pair==null){
 			return null;
@@ -209,6 +210,7 @@ public class TaskManager {
 	}
 	
 //------------------------------------Auxiliary Methods---------------------------------------
+	
 	private static void sortTaskAtDate(SortedMap<LocalDate,ArrayList<Task>>taskList,
 			LocalDate date){
 		
