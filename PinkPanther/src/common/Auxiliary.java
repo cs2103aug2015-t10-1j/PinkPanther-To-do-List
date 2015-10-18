@@ -30,4 +30,16 @@ public class Auxiliary {
 	public static boolean isNumber(String possiblyNumber) {
 		return !possiblyNumber.isEmpty() && possiblyNumber.replaceAll("[0-9]","").isEmpty();
 	}
+	
+	public static String concatArray(String[] arr) {
+		String arrContents = "";
+		if (arr != null) {
+			arrContents += arr[0];
+			for (int i = 1; i < arr.length; i++) {
+				arrContents += ", ";
+				arrContents += arr[i];
+			}
+		}
+		return arrContents;
+	}
 }

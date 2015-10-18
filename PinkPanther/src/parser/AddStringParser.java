@@ -297,7 +297,8 @@ public class AddStringParser implements Parser {
 		return floating;
 	}
 	
-	private Task addEvent(String[] details) throws Exception {		
+	private Task addEvent(String[] details)  {		
+		String taskFullDetails = Auxiliary.concatArray(details);
 		
 		// case: 1 T 2 D (append time to contents? and add dated(i.e. no time) event)
 		// case: 0 T 2 D (add dated event)
@@ -308,7 +309,7 @@ public class AddStringParser implements Parser {
 			setStartTime(null);
 			setEndTime(null);
 			if (!endDateStore.isAfter(startDateStore)) {
-				throw new Exception("Not chronological!");
+				return addFloating(taskFullDetails);
 			}
 		} else {
 			// case: 2 T 0 D (from time T1-T2 today)
@@ -331,7 +332,7 @@ public class AddStringParser implements Parser {
 				if(!later.isBefore(earlier)) {
 					return addSingleDated(details);
 				}
-				throw new Exception("Not chronological!");
+				return addFloating(taskFullDetails);
 			}
 		}
 		
