@@ -11,21 +11,18 @@ import java.io.IOException;
 //import java.nio.file.Files;
 
 import java.util.ArrayList;
-import java.util.SortedMap;
 
 import com.google.gson.Gson;
 
 import common.Display;
 import common.Task;
 
-import java.time.LocalDate;
 
 public class StorageControl {
 	// Attributes
 	private static File latestDirectoryTextFile = new File("latest directory.txt");
 	private File directory;
-	private FloatingStorage floating_File;
-	private DatedStorage dated_File;
+	private TaskStorage taskFile;
 	private Gson gson = new Gson();
 
 	// Error Messages
@@ -53,8 +50,7 @@ public class StorageControl {
 		if (input_FilePath.substring(1, 3).equals(":\\") == false || this.directory.mkdir() == false) {
 			return INVALID_PATH_MESSAGE;
 		}
-		floating_File = new FloatingStorage(directory);
-		dated_File = new DatedStorage(directory);
+		taskFile = new TaskStorage(directory);
 		if (this.setLatestDirectory() == false) {
 			return COULD_NOT_SET_LATEST_DIRECTORY_MESSAGE;
 		}
@@ -73,9 +69,7 @@ public class StorageControl {
 			}
 			this.setLatestDirectory();
 		}
-		floating_File = new FloatingStorage(directory);
-		dated_File = new DatedStorage(directory);
-		
+		taskFile = new TaskStorage(directory);
 		return directory.getPath();
 	}
 	
@@ -83,8 +77,6 @@ public class StorageControl {
 		File newDirectory = new File(input_NewDirectory);
 		File newUndoneFloating = new File(input_NewDirectory + "\\Undone Floating.txt");
 		File newDoneFloating = new File(input_NewDirectory + "\\Done Floating.txt");
-		File newUndoneDated = new File(input_NewDirectory + "\\Undone Dated.txt");
-		File newDoneDated = new File(input_NewDirectory + "\\Done Dated.txt");
 		
 		try {
 			if (newDirectory.mkdir() == false || input_NewDirectory.substring(1, 3).equals(":\\") == false) {
@@ -92,14 +84,10 @@ public class StorageControl {
 				Display.showFeedBack();
 				return false;
 			}
-			floating_File.getUndoneFloatingFile().renameTo(newUndoneFloating);
-			floating_File.setUndoneFloatingFile(newUndoneFloating);
-			floating_File.getDoneFloatingFile().renameTo(newDoneFloating);
-			floating_File.setDoneFloatingFile(newDoneFloating);
-			dated_File.getUndoneDatedFile().renameTo(newUndoneDated);
-			dated_File.setUndoneDatedFile(newUndoneDated);
-			dated_File.getDoneDatedFile().renameTo(newDoneDated);
-			dated_File.setDoneDatedFile(newDoneDated);
+			taskFile.getUndoneFile().renameTo(newUndoneFloating);
+			taskFile.setUndoneFile(newUndoneFloating);
+			taskFile.getDoneFile().renameTo(newDoneFloating);
+			taskFile.setDoneFile(newDoneFloating);
 
 			directory.delete();
 			directory = newDirectory;
@@ -123,7 +111,7 @@ public class StorageControl {
 	}
 
 	public boolean save(ArrayList<Task> taskList, boolean isDone) {
-		if (floating_File.writeToFile(taskList, isDone)) {
+		if (taskFile.writeToFile(taskList, isDone)) {
 			return true;
 		}
 		else {
@@ -134,24 +122,10 @@ public class StorageControl {
 		}
 	}
 
-	public boolean save(SortedMap<LocalDate, ArrayList<Task>> taskList, boolean isDone) {
-		if (dated_File.writeToFile(taskList, isDone)) {
-			return true;
-		}
-		else {
-			Display.setFeedBack(SAVE_UNSUCCESSFUL_MESSAGE);
-			Display.showFeedBack();
-			return false;
-		}
-	}
-
-	public ArrayList<Task> loadFloating(boolean isDone) {
-		return floating_File.readFromFile(isDone);
+	public ArrayList<Task> loadTaskList(boolean isDone) {
+		return taskFile.readFromFile(isDone);
 	}
 	
-	public SortedMap<LocalDate, ArrayList<Task>> loadDated(boolean isDone) {
-		return dated_File.readFromFile(isDone);
-	}
 	
 	/*private StorageControl(String input_FilePath) {
 	gson = new Gson();
