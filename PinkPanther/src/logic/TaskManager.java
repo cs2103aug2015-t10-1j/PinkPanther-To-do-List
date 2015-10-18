@@ -19,15 +19,28 @@ public class TaskManager {
 	private SortedMap<LocalDate,ArrayList<Task>>todoList;
 	
 	public TaskManager(StorageControl storage){
+		doneList=new TreeMap<LocalDate,ArrayList<Task>>();
+		todoList=new TreeMap<LocalDate,ArrayList<Task>>();
 		storage.setStorageEnvironmentNormal();
-		doneList=storage.loadTaskList(true);
-		todoList=storage.loadTaskList(false);
+		addMultipleTasks(storage.loadTaskList(true));
+		addMultipleTasks(storage.loadTaskList(false));
 	}
 	
 // --------------------------------------Getters------------------------------------------
 	
-	public SortedMap<LocalDate,ArrayList<Task>>getTaskList(boolean isDone){
-		return isDone?doneList:todoList;
+	public ArrayList<Task> getTaskArray(boolean isDone){
+		SortedMap<LocalDate,ArrayList<Task>>taskList=isDone?doneList:todoList;
+		ArrayList<Task>taskArray=new ArrayList<Task>();
+		Task temp=null;
+		for(LocalDate date:taskList.keySet()){
+			for(Task task:taskList.get(date)){
+				if(task!=temp){
+					taskArray.add(task);
+					temp=task;
+				}
+			}
+		}
+		return taskArray;
 	} 
 	
 	public ArrayList<Task> getFloating(boolean isDone){
@@ -256,4 +269,5 @@ public class TaskManager {
 			map.remove(date);
 		}
 	}
+	
 }

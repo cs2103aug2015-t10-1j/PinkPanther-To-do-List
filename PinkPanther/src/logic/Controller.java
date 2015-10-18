@@ -128,8 +128,8 @@ public class Controller {
 	}
 	
 	private void saveToStorage(){
-		storage.save(manager.getTaskList(true),true);
-		storage.save(manager.getTaskList(false),false);
+		storage.save(manager.getTaskArray(true),true);
+		storage.save(manager.getTaskArray(false),false);
 	}
 	
 	private void changeDisplayMode(String mode){
