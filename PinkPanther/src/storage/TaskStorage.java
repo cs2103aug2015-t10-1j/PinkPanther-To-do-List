@@ -26,7 +26,7 @@ public class TaskStorage {
 		gson = new Gson();
 	}
 	
-	protected boolean writeToFile(ArrayList<Task> input_FloatingList, boolean isDone) {
+	protected boolean writeToFile(ArrayList<Task> taskList, boolean isDone) {
 		try {
 			BufferedWriter bw;
 			if (isDone) {
@@ -35,7 +35,7 @@ public class TaskStorage {
 			else {
 				bw = new BufferedWriter(new FileWriter(taskFile_undone));
 			}
-			for (Task task: input_FloatingList) {
+			for (Task task: taskList) {
 				performWriting(bw, task);
 			}
 			bw.close();
