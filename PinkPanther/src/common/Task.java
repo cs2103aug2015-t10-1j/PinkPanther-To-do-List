@@ -160,14 +160,15 @@ public class Task {
 		
 		for (int i = 0; i < nameTokens.length; i++) {
 			String temp = currentLine + nameTokens[i];
-			if (temp.length() <= 22) {
+			
+			if (temp.length() <= 21) {
+				currentLine = temp + " ";
+			} else if (temp.length() == 22) {
 				currentLine = temp;
-			}
-			else {
+			} else {
 				if (currentLine.length() > 0) {
 					formattedName.add(currentLine);
-				}
-					
+				}	
 				if (nameTokens[i].length() < 23) {
 					currentLine = nameTokens[i];
 				} else {
@@ -175,11 +176,11 @@ public class Task {
 						formattedName.add(nameTokens[i].substring(0,21) + "-");
 						nameTokens[i] = nameTokens[i].substring(21, nameTokens[i].length()-1);
 					}
-					currentLine = nameTokens[i];
 				}
+				currentLine = nameTokens[i] + " ";
 			}
-			formattedName.add(currentLine);
 		}
+		formattedName.add(currentLine);
 		return formattedName.toArray(new String[formattedName.size()]);
 	}
 	
