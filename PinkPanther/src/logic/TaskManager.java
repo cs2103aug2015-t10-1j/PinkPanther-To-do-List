@@ -274,10 +274,17 @@ public class TaskManager {
 		Task first,second;
 		for(int i=0;i<eventList.size()-1;i++){
 			first=eventList.get(i);
+			if(first.getClash()==true){
+				continue;
+			}
+			
 			for(int j=i+1;i<eventList.size();j++){
 				second=eventList.get(j);
-				if(first.getStartTime().isBefore(second.getEndTime())&&first.getEndTime().isAfter(second.getStartTime())){
+			    if(first.getStartTime().isBefore(second.getEndTime())&&
+			    		first.getEndTime().isAfter(second.getStartTime())){
+			    	
 					first.setClash(true);
+					second.setClash(true);
 					break;
 				}
 				first.setClash(false);
