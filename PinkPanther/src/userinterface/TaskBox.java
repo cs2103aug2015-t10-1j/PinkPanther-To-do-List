@@ -16,29 +16,64 @@ import javafx.scene.text.TextAlignment;
 public class TaskBox extends StackPane{
 	public TaskBox(int index, Task inputTask){
 		TaskType inputTaskType = inputTask.getTaskType();
-		
+	    String[] splitName = inputTask.getDisplayName();
+	    System.out.println(splitName);
+		int numOfColumnsName = splitName.length;
+		int currRectYPos = 1;
 		
 		GridPane grid = new GridPane();
-		Rectangle box = createTaskHolderBox(inputTaskType);
-		grid.add(box, 1, 1);
+		
+		for (int i=0; i<numOfColumnsName; i++){
+			Rectangle box = createTaskHolderBox(inputTaskType);
+			grid.add(box, 1, currRectYPos++);
+		}
+		
 	//	grid.setGridLinesVisible(true);
 	    grid.setPadding(new Insets(5));
 	    grid.setHgap(5);
-	    grid.setVgap(1);
+	    grid.setVgap(0);
 
 	    ColumnConstraints column1 = new ColumnConstraints(5);
 	    ColumnConstraints column2 = new ColumnConstraints(50, 150, 100);
 	    grid.getColumnConstraints().addAll(column1, column2);
 		
-		Text text = new Text("     " + inputTask.getName());
-		text.setTextAlignment(TextAlignment.LEFT);
-		text.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-		text.setFill(Color.BLACK);
+	    
+		int currYPos = 1;
+		if (false){
+			Text text = new Text("     " + splitName[0]);
+			if (numOfColumnsName > 1){
+				text.setText(text.getText() + "...");
+			}
+			text.setTextAlignment(TextAlignment.LEFT);
+			text.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+			text.setFill(Color.web("212121"));
+			grid.add(text, 0, currYPos++);
+		} else {
+			for (int i=0; i<numOfColumnsName; i++){
+				Text text = new Text("     " + splitName[i]);
+				text.setTextAlignment(TextAlignment.LEFT);
+				text.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+				text.setFill(Color.web("212121"));
+				grid.add(text, 0, currYPos++);
+			}
+		}
+//		Text text = new Text("     " + inputTask.getName());
+//		text.setTextAlignment(TextAlignment.LEFT);
+//		text.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+//		text.setFill(Color.BLACK);
+//		grid.add(text, 0, 1);
 
 		GridPane timeSpanBoxes = createTimeSpanBoxes(inputTask);
-		grid.add(timeSpanBoxes, 65, 1);
 		
-		grid.add(text, 0, 1);
+		if (numOfColumnsName > 1){
+			Rectangle box = createTaskHolderBox(inputTaskType);
+			grid.add(box, 1, currRectYPos++);
+			grid.add(timeSpanBoxes, 65, currRectYPos -1);
+			
+		} else {
+			grid.add(timeSpanBoxes, 65, 1);
+		}
+		
 		
 		
 		if (index != 0){
@@ -55,7 +90,7 @@ public class TaskBox extends StackPane{
 	}
 	
 	private Rectangle createTaskHolderBox(TaskType inputTaskType){
-		Color[] col = {(Color.web("C1D5F8")), (Color.web("EFBAFF")), 
+		Color[] col = {(Color.web("EFBAFF")), (Color.web("C1D5F8")), 
 				(Color.web("EEBCB0")), (Color.web("B9EEB4")), (Color.POWDERBLUE)};
 		Rectangle box = new Rectangle();
 		box.setWidth(600);
@@ -91,6 +126,10 @@ public class TaskBox extends StackPane{
 			
 			TextedTimeBox startTimeBox = new TextedTimeBox(inputTask.getStartTime().toString());
 			timeSpanGridPane.add(startTimeBox, 0, 1);
+			
+		} else {
+			TextedTimeBox startTimeBox = new TextedTimeBox("");
+			timeSpanGridPane.add(startTimeBox, 0, 1);
 		}
 		
 		if (inputTask.getEndTime()!= null){
@@ -104,6 +143,9 @@ public class TaskBox extends StackPane{
 				break;
 			}
 			timeSpanGridPane.add(timeBox, 2, 1);
+		} else {
+			TextedTimeBox startTimeBox = new TextedTimeBox("");
+			timeSpanGridPane.add(startTimeBox, 0, 1);			
 		}
 		
 		if (inputTask.getStartTime()!=null && inputTask.getEndTime()!=null){
@@ -111,15 +153,16 @@ public class TaskBox extends StackPane{
 			dash.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
 			dash.setTextAlignment(TextAlignment.LEFT);
 			dash.setFill(Color.DIMGRAY);
-
+			
 			timeSpanGridPane.add(dash, 1, 1);
+			
 		}
 //		timeSpanGridPane.setGridLinesVisible(true);
 		return timeSpanGridPane;
 	}
 	
 	private StackPane createIndexBox(int index, TaskType inputTaskType){
-		Color[] col = {(Color.web("6495ED")), Color.web("D652FF"), 
+		Color[] col = {(Color.web("D652FF")), Color.web("6495ED"), 
 				(Color.web("D4573A")), (Color.web("51D444")), (Color.POWDERBLUE)};
 		
 		StackPane stackPane = new StackPane();
@@ -154,6 +197,9 @@ public class TaskBox extends StackPane{
 		text.setTextAlignment(TextAlignment.CENTER);
 		text.setFill(Color.WHITE);
 		
+		if (index==0){
+			text.setText("");
+		}
 		stackPane.getChildren().addAll(box, text);
 		
 		return stackPane;

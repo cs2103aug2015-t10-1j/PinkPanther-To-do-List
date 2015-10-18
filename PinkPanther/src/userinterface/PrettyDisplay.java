@@ -271,38 +271,68 @@ public class PrettyDisplay extends Application {
 	    	SortedMap<LocalDate,ArrayList<Task>> todoList = programState.getTodoList();
 	    	if (todoList != null){
 		    	for(LocalDate date:todoList.keySet()){ //looping through dates which have Tasks inside
+		    		int totalFloating = 0, totalDeadline = 0, totalEvent = 0, totalTodo = 0;
 		    		grid.add(new TransparentCircle(), 1, currentYPos++);
 		    		String month = date.getMonth().toString().substring(0, 3);
 		    		String currDayNum = Integer.toString(date.getDayOfMonth());
 //		            TextedColorDayBox currentDayBox = new TextedColorDayBox(currDayNum + "\n" + month);
 	//	        	grid.add(currentDayBox, 0, currentYPos);
+		    		int currDayXPos = 1;
 		    		DayBox dayBox = new DayBox(currDayNum + " " + month);
-		    		grid.add(dayBox, 1, currentYPos++);
+		    		int dayBoxYPos = currentYPos;
+		    		grid.add(dayBox, currDayXPos++, dayBoxYPos);
+		    		currentYPos ++;
 		    		int currXPos = 1;
 		    		currTaskIndex = 1;
 		    		
+		    		
 					for(Task task:todoList.get(date)){ //looping through tasks for specified date
-
-			    		currentYPos++;
-			//			if (currXPos == 3){
-		     //   			currentYPos++;
-		      //  			TransparentCircle circle = new TransparentCircle();
-		      //  			grid.add(circle, 0, currentYPos);
-		       // 			currXPos = 1;
-		      //  		}
+						switch(task.getTaskType()){
+							case DEADLINE:
+								totalDeadline++;
+								break;
+							case TODO:
+								totalTodo++;
+								break;
+							case EVENT:
+								totalEvent++;
+								break;
+							default:
+								totalFloating++;
+								break;
+						}
 						
-		//	    		String taskName = task.getName();
-		//	    		String startTime = task.getStartTimeString();
-		 //   			String endTime = task.getEndTimeString();
-			    		//TextedTaskBox taskBox = new TextedTaskBox(taskName , startTime, endTime, currTaskIndex);
+			    		currentYPos++;
 		    			TaskBox taskBox = new TaskBox(currTaskIndex, task);
 		    			currTaskIndex++;
 			    		grid.add(taskBox, currXPos, currentYPos);
 		
 			    		
 					}
+					
+					GridPane miniTaskIndicators = new GridPane();
+					miniTaskIndicators.setHgap(10);
+					miniTaskIndicators.setVgap(5);
+					currDayXPos = 56;
+		    		for (int i=1; i<todoList.get(date).size(); i++){
+		    			if (i==1 && totalDeadline != 0){
+			    			IndexBox blankColoredBox = new IndexBox(totalDeadline, TaskType.DEADLINE);
+			    			miniTaskIndicators.add(blankColoredBox, currDayXPos--, 3);
+		    			} else if (i==2 && totalTodo != 0){
+			    			IndexBox blankColoredBox = new IndexBox(totalTodo, TaskType.TODO);
+			    			miniTaskIndicators.add(blankColoredBox, currDayXPos--, 3);
+		    			} else if (i==3 && totalEvent != 0){
+			    			IndexBox blankColoredBox = new IndexBox(totalEvent, TaskType.EVENT);
+			    			miniTaskIndicators.add(blankColoredBox, currDayXPos--, 3);
+		    			}
+		    			
+		    		}
+		    		grid.add(miniTaskIndicators, 1, dayBoxYPos);
+					
 					currentYPos++;
 				}
+
+		    	
 		    }
     	}
     }

@@ -27,4 +27,8 @@ public class TimeBox extends Rectangle{
         	currColorIndex = 0;
         }
      }  
+	
+	public void setInvis(){
+		this.setFill(Color.TRANSPARENT);
+	}
 }
