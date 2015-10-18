@@ -150,7 +150,7 @@ public class Task {
 	}
 	
 	public String[] getDisplayName() {
-		return displayName;
+		return formatName(this.name);
 	}
 	
 	private String[] formatName(String taskName) {

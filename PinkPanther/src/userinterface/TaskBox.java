@@ -122,15 +122,21 @@ public class TaskBox extends StackPane{
 		GridPane timeSpanGridPane = new GridPane();
 		timeSpanGridPane.setVgap(10);
 		
+		
 		if (inputTask.getStartTime()!= null){
-			
 			TextedTimeBox startTimeBox = new TextedTimeBox(inputTask.getStartTime().toString());
-			timeSpanGridPane.add(startTimeBox, 0, 1);
+			if (inputTask.getEndTime()!= null){
+				timeSpanGridPane.add(startTimeBox, 0, 1);
+			} else {
+				timeSpanGridPane.add(startTimeBox, 2, 1);
+			}
 			
 		} else {
 			TextedTimeBox startTimeBox = new TextedTimeBox("");
 			timeSpanGridPane.add(startTimeBox, 0, 1);
 		}
+		
+		
 		
 		if (inputTask.getEndTime()!= null){
 			TextedTimeBox timeBox;

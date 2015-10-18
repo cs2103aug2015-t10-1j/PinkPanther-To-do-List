@@ -32,7 +32,7 @@ import common.*;
  
 public class PrettyDisplay extends Application {
 	
-    Text scenetitle = new Text("Calendar");
+    Text scenetitle = new Text("                      Your Calendar");
 	boolean isViewingHelpScreen = false;
     boolean isCalendarHidden = false;
     double currentScrollYPos = 0;
@@ -241,6 +241,7 @@ public class PrettyDisplay extends Application {
     	if (programState != null){
         	ArrayList<Task> floatingTasks = programState.getFloatingList();
 	    	if (floatingTasks != null && floatingTasks.size() != 0){
+	    		int totalFloat = 0;
 	         //   TextedColorDayBox daydBox = new TextedColorDayBox("Float");
 	        //	grid.add(daydBox, 0, currentYPos);
 
@@ -250,6 +251,7 @@ public class PrettyDisplay extends Application {
 	    		DayBox dayBox = new DayBox("Floating Tasks");
 	    		grid.add(dayBox, 1, currentYPos++);
 		    	for (int i=0; i<floatingTasks.size(); i++){
+		    		totalFloat++;
 		    		currentYPos++;
 	//	    		if (currFloatXPos == 2){
 	  //      			currentYPos++;
@@ -265,6 +267,13 @@ public class PrettyDisplay extends Application {
 		    		grid.add(taskBox, currFloatXPos, currentYPos);
 	
 		    	}
+
+				GridPane miniTaskIndicators = new GridPane();
+				miniTaskIndicators.setHgap(10);
+				miniTaskIndicators.setVgap(5);
+    			IndexBox blankColoredBox = new IndexBox(totalFloat, TaskType.FLOATING);
+    			miniTaskIndicators.add(blankColoredBox, 58, 3);
+    			grid.add(miniTaskIndicators, 1, 3);
 		    	currentYPos++;
 	    	}
 	    	
@@ -310,18 +319,19 @@ public class PrettyDisplay extends Application {
 			    		
 					}
 					
+					
 					GridPane miniTaskIndicators = new GridPane();
 					miniTaskIndicators.setHgap(10);
 					miniTaskIndicators.setVgap(5);
-					currDayXPos = 56;
-		    		for (int i=1; i<todoList.get(date).size(); i++){
-		    			if (i==1 && totalDeadline != 0){
+					currDayXPos = 54;
+		    		for (int i=0; i<3; i++){
+		    			if (i==0 && totalDeadline != 0){
 			    			IndexBox blankColoredBox = new IndexBox(totalDeadline, TaskType.DEADLINE);
 			    			miniTaskIndicators.add(blankColoredBox, currDayXPos--, 3);
-		    			} else if (i==2 && totalTodo != 0){
+		    			} else if (i==1 && totalTodo != 0){
 			    			IndexBox blankColoredBox = new IndexBox(totalTodo, TaskType.TODO);
 			    			miniTaskIndicators.add(blankColoredBox, currDayXPos--, 3);
-		    			} else if (i==3 && totalEvent != 0){
+		    			} else if (i==2 && totalEvent != 0){
 			    			IndexBox blankColoredBox = new IndexBox(totalEvent, TaskType.EVENT);
 			    			miniTaskIndicators.add(blankColoredBox, currDayXPos--, 3);
 		    			}
@@ -329,6 +339,7 @@ public class PrettyDisplay extends Application {
 		    		}
 		    		grid.add(miniTaskIndicators, 1, dayBoxYPos);
 					
+		    		
 					currentYPos++;
 				}
 
@@ -467,7 +478,7 @@ public class PrettyDisplay extends Application {
 	
 	void unHideCalendar(Stage stage){
         stage.setHeight(690);
-        scenetitle.setText("Calendar");
+        scenetitle.setText("Your Calendar");
         s1.setDisable(false);
   //      actiontarget.setFill(defaultActionTargetColor);
  //       actiontarget.setText(Display.showFeedBack());
