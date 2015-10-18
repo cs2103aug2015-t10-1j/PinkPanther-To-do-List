@@ -2,6 +2,8 @@ package common;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+
 /*
  * Add class description
  */
@@ -15,15 +17,18 @@ public class Task {
 	private LocalTime endTime;
 	private boolean isDone;
 	private boolean hasClash;
+	private String[] displayName; 
 	
 	public Task(String name){
 		this.name=name;
+		this.displayName = formatName(this.name);
 		this.type=TaskType.FLOATING;
 	}
 	
 	
 	public Task(String name,LocalDate date,LocalTime time, TaskType type){
-		this.name=name;
+		this.name = name;
+		this.displayName = formatName(this.name);
 		if(type==TaskType.TODO){
 			this.startDate=date;
 			this.startTime=time;
@@ -38,6 +43,7 @@ public class Task {
 	public Task(String name,LocalDate startDate,LocalTime startTime,
 			LocalDate endDate,LocalTime endTime){
 		this.name=name;
+		this.displayName=formatName(this.name);
 		this.startDate=startDate;
 		this.startTime=startTime;
 		this.endDate=endDate;
@@ -49,28 +55,32 @@ public class Task {
 		this.name=name;
 	}
 	
-	public void setStartDate(LocalDate date){
+	public void setStartDate(LocalDate date) {
 		this.startDate=date;
 	}
 	
-	public void setStartTime(LocalTime time){
+	public void setStartTime(LocalTime time) {
 		this.startTime=time;
 	}
 	
-	public void setEndDate(LocalDate date){
+	public void setEndDate(LocalDate date) {
 		this.endDate=date;
 	}
 	
-	public void setEndTime(LocalTime time){
+	public void setEndTime(LocalTime time) {
 		this.endTime=time;
 	}
 	
-	public void setDoneStatus(boolean isDone){
+	public void setDoneStatus(boolean isDone) {
 		this.isDone=isDone;
 	}
 	
-	public void setClash(boolean hasClash){
+	public void setClash(boolean hasClash) {
 		this.hasClash=hasClash;
+	}
+	
+	public void setDisplayName(String[] displayName) {
+		this.displayName = displayName;
 	}
 	
 	public String getName(){
@@ -137,6 +147,40 @@ public class Task {
 	
 	public boolean getClash(){
 		return hasClash;
+	}
+	
+	public String[] getDisplayName() {
+		return displayName;
+	}
+	
+	private String[] formatName(String taskName) {
+		ArrayList<String> formattedName = new ArrayList<String>();
+		String[] nameTokens = taskName.split(" ");
+		String currentLine = "";
+		
+		for (int i = 0; i < nameTokens.length; i++) {
+			String temp = currentLine + nameTokens[i];
+			if (temp.length() <= 22) {
+				currentLine = temp;
+			}
+			else {
+				if (currentLine.length() > 0) {
+					formattedName.add(currentLine);
+				}
+					
+				if (nameTokens[i].length() < 23) {
+					currentLine = nameTokens[i];
+				} else {
+					while (nameTokens[i].length() > 22) {
+						formattedName.add(nameTokens[i].substring(0,21) + "-");
+						nameTokens[i] = nameTokens[i].substring(21, nameTokens[i].length()-1);
+					}
+					currentLine = nameTokens[i];
+				}
+			}
+			formattedName.add(currentLine);
+		}
+		return formattedName.toArray(new String[formattedName.size()]);
 	}
 	
 	public String toString(){
