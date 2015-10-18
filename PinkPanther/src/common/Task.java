@@ -21,14 +21,14 @@ public class Task {
 	
 	public Task(String name){
 		this.name=name;
-		this.displayName = formatName(this.name);
+		this.displayName = formatName(this.name, 55);
 		this.type=TaskType.FLOATING;
 	}
 	
 	
 	public Task(String name,LocalDate date,LocalTime time, TaskType type){
 		this.name = name;
-		this.displayName = formatName(this.name);
+		this.displayName = formatName(this.name, 55);
 		if(type==TaskType.TODO){
 			this.startDate=date;
 			this.startTime=time;
@@ -43,7 +43,7 @@ public class Task {
 	public Task(String name,LocalDate startDate,LocalTime startTime,
 			LocalDate endDate,LocalTime endTime){
 		this.name=name;
-		this.displayName=formatName(this.name);
+		this.displayName=formatName(this.name, 55);
 		this.startDate=startDate;
 		this.startTime=startTime;
 		this.endDate=endDate;
@@ -149,15 +149,14 @@ public class Task {
 		return hasClash;
 	}
 	
-	public String[] getDisplayName() {
-		return formatName(this.name);
+	public String[] getDisplayName(int length) {
+		return formatName(this.name, length);
 	}
 	
-	private String[] formatName(String taskName) {
+	private String[] formatName(String taskName, int maxChars) {
 		ArrayList<String> formattedName = new ArrayList<String>();
 		String[] nameTokens = taskName.split(" ");
 		String currentLine = "";
-		int maxChars = 55;
 		for (int i = 0; i < nameTokens.length; i++) {
 			String temp = currentLine + nameTokens[i];
 			

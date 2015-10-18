@@ -48,11 +48,15 @@ public class PrettyDisplay extends Application {
     Color defaultActionTargetColor = Color.BLACK;
     ProgramState programState;
     
+    public static void main(String [ ] args){
+    	PrettyDisplay prettyDisplay = new PrettyDisplay();
+    	prettyDisplay.runApp();
+    }
     
     public void runApp() {
         launch();
     }
-     
+    
     @Override
     public void start(Stage primaryStage) {
  //   	fillPage ("Input command in the field above", primaryStage);
@@ -135,13 +139,14 @@ public class PrettyDisplay extends Application {
     void implementUserTextField(){
         userTextField = new TextField();
         userTextField.setStyle(""
-        + "-fx-font-size: 30px;"
+        + "-fx-font-size: 17px;"
         + "-fx-font-weight: bold;"
         + "-fx-font-family: Tahoma;"
         + "-fx-text-fill: BLACK;"
         + "-fx-border-width: 6px;"
         + "-fx-border-color: DIMGRAY;"
         + "-fx-background-color: WHITE");
+//        userTextField.setPrefWidth(100);
         grid2.add(userTextField, 0, 1);
     }
     void implementActionTarget(String newInput){
@@ -204,7 +209,7 @@ public class PrettyDisplay extends Application {
         
     }
     void implementScene(){
-        scene = new Scene(grid2, 740, 650);
+        scene = new Scene(grid2, 720, 650);
         scene.getStylesheets().clear();
         scene.getStylesheets().add(this.getClass().getResource("a.css").toExternalForm());
 
@@ -216,7 +221,6 @@ public class PrettyDisplay extends Application {
     }
     
     void populateGrid(GridPane grid){
-     
         //Scene title
         scenetitle.setFont(Font.font("Tahoma", FontWeight.BOLD, 33));
         scenetitle.setFill(Color.DIMGRAY);
@@ -231,7 +235,7 @@ public class PrettyDisplay extends Application {
 
     	int currentYPos = 1;
     	
-    	System.out.println(programState.getFloatingList());
+    //	System.out.println(programState.getFloatingList());
     	//for unpacking floatingTasks
     	if (programState != null){
         	ArrayList<Task> floatingTasks = programState.getFloatingList();

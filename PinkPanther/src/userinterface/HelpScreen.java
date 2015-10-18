@@ -36,7 +36,7 @@ public class HelpScreen extends ScrollPane{
         
         TextedColorDayBox addBox = new TextedColorDayBox("add");
         grid.add(addBox, 4, 1);
-        
+     /*   
         TextedTaskBox addInfo = new TextedTaskBox("   add yourEventName, 5pm-8pm", "", "", 0);
         grid.add(addInfo, 5, 1);
         
@@ -77,6 +77,6 @@ public class HelpScreen extends ScrollPane{
         TextedTaskBox saveInfo = new TextedTaskBox("   Instructions for save", "", "", 0);
         grid.add(saveInfo, 5, 6);
         
-        
+        */
 	}
 }

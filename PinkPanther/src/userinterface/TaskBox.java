@@ -16,8 +16,14 @@ import javafx.scene.text.TextAlignment;
 public class TaskBox extends StackPane{
 	public TaskBox(int index, Task inputTask){
 		TaskType inputTaskType = inputTask.getTaskType();
-	    String[] splitName = inputTask.getDisplayName();
-	    System.out.println(splitName);
+		
+		String[] splitName;
+		if (inputTaskType == TaskType.EVENT){
+			splitName = inputTask.getDisplayName(45);
+		} else {
+			splitName = inputTask.getDisplayName(45);
+		}
+	//    System.out.println(splitName);
 		int numOfColumnsName = splitName.length;
 		int currRectYPos = 1;
 		
