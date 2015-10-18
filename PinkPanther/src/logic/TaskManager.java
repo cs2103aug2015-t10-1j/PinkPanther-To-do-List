@@ -212,7 +212,7 @@ public class TaskManager {
 			return new ArrayList<Task>(todoList.get(FLOATING_DATE));
 		}
 		else if(!todoList.containsKey(date)){
-			Display.setFeedBack("you do not have task on this date");
+			Display.setFeedBack("you do not have any task on this date");
 			return null;
 		}
 		else{
@@ -265,6 +265,20 @@ public class TaskManager {
 		map.get(date).remove(task);
 		if(map.get(date).isEmpty()){
 			map.remove(date);
+		}
+	}
+	
+	private static void markClashingTasks(ArrayList<Task>taskList){
+		
+	}
+	
+	private static void checkForClash(SortedMap<LocalDate,ArrayList<Task>>taskMap){
+		for(LocalDate date:taskMap.keySet()){
+			if(date.isEqual(FLOATING_DATE)){
+				continue;
+			}
+			
+			markClashingTasks(taskMap.get(date));
 		}
 	}
 	
