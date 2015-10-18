@@ -69,6 +69,10 @@ public class Task {
 		this.isDone=isDone;
 	}
 	
+	public void setClash(boolean hasClash){
+		this.hasClash=hasClash;
+	}
+	
 	public String getName(){
 		return name;
 	}
@@ -129,6 +133,10 @@ public class Task {
 	
 	public boolean getDoneStatus(){
 		return isDone;
+	}
+	
+	public boolean getClash(){
+		return hasClash;
 	}
 	
 	public String toString(){
