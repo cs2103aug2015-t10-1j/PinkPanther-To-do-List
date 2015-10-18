@@ -266,13 +266,18 @@ public class AddStringParser implements Parser {
 		LocalTime laterTime = stp.parse(time2);
 		
 		// case: need to append "am/pm" to first time
-		if (earlierTime == null && laterTime != null) {
-			if (time2.contains("pm")) {
+		if (laterTime != null) {
+			if (time2.contains("pm") && !time1.contains("pm")) {
 				time1 += "pm";
-			} else if (time2.contains("am")) {
+				if (stp.parse(time1) != null) {
+					earlierTime = stp.parse(time1);
+				}
+			} else if (time2.contains("am") && !time1.contains("am")) {
 				time1 += "am";
+				if (stp.parse(time1) != null) {
+					earlierTime = stp.parse(time1);
+				}
 			}
-			earlierTime = stp.parse(time1);
 		}
 		
 		// case: both times are valid times

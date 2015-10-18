@@ -191,19 +191,28 @@ public class Task {
 		}
 		else if(type==TaskType.DEADLINE){
 			if(endTime!=null){
-				return name+",by "+endTime.format(timeformatter)+","+endDate.format(dateformatter);
+				return name+", by "+endTime.format(timeformatter)+", "+endDate.format(dateformatter);
 			}
-			return name+",by "+endDate.format(dateformatter);
+			return name+", by "+endDate.format(dateformatter);
 		}
 		else if(type==TaskType.TODO){
 			if(startTime!=null){
-				return name+",at "+startTime.format(timeformatter)+","+startDate.format(dateformatter);
+				return name+", at "+startTime.format(timeformatter)+", "+startDate.format(dateformatter);
 			}
-			return name+",at "+startDate.format(dateformatter);
+			return name+", at "+startDate.format(dateformatter);
 			
 		}
 		else{
-			return name+","+startTime.format(timeformatter)+" to "+endTime.format(timeformatter)+","+startDate.format(dateformatter);
+			
+			if (startTime == null && endTime == null) {
+				return name + ", " + startDate.format(dateformatter) + " to " + endDate.format(dateformatter);
+			} else if (startDate.isEqual(endDate)) {
+				return name + ", " + startTime.format(timeformatter) + " to " + endTime.format(timeformatter)
+					+ ", " + startDate.format(dateformatter);
+			} else {
+				return name + ", " + startTime.format(timeformatter) + ", " + startDate.format(dateformatter) 
+					+ ", " + endTime.format(timeformatter) + ", " + endDate.format(dateformatter);
+			}
 		}
 	}
 	
