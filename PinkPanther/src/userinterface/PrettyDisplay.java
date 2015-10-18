@@ -226,11 +226,6 @@ public class PrettyDisplay extends Application {
         
     	setUserTextField(programState.getInputBoxText());
     	
-    	
-        //filler for rightGridColumn; to make sure length of display does not change
-//		TransparentRect tRect = new TransparentRect();
-	//	grid.add(tRect, 2, 0);
-
         //for the actual calendar items
     	int currTaskIndex = 1;
 
@@ -242,8 +237,6 @@ public class PrettyDisplay extends Application {
         	ArrayList<Task> floatingTasks = programState.getFloatingList();
 	    	if (floatingTasks != null && floatingTasks.size() != 0){
 	    		int totalFloat = 0;
-	         //   TextedColorDayBox daydBox = new TextedColorDayBox("Float");
-	        //	grid.add(daydBox, 0, currentYPos);
 
 	    		currentYPos++;
 	    		currentYPos++;
@@ -253,15 +246,6 @@ public class PrettyDisplay extends Application {
 		    	for (int i=0; i<floatingTasks.size(); i++){
 		    		totalFloat++;
 		    		currentYPos++;
-	//	    		if (currFloatXPos == 2){
-	  //      			currentYPos++;
-	  //      			TransparentCircle circle = new TransparentCircle();
-	   //     			grid.add(circle, 0, currentYPos);
-	   //     			currFloatXPos = 1;
-	    //    		}
-		    		
-	//	    		String taskName = floatingTasks.get(i).getName();
-		    		//TextedTaskBox taskBox = new TextedTaskBox(taskName , "", "", currTaskIndex);
 		    		TaskBox taskBox = new TaskBox(i+1, floatingTasks.get(i));
 		    		currTaskIndex++;
 		    		grid.add(taskBox, currFloatXPos, currentYPos);
@@ -281,11 +265,10 @@ public class PrettyDisplay extends Application {
 	    	if (todoList != null){
 		    	for(LocalDate date:todoList.keySet()){ //looping through dates which have Tasks inside
 		    		int totalFloating = 0, totalDeadline = 0, totalEvent = 0, totalTodo = 0;
+		    		
 		    		grid.add(new TransparentCircle(), 1, currentYPos++);
 		    		String month = date.getMonth().toString().substring(0, 3);
 		    		String currDayNum = Integer.toString(date.getDayOfMonth());
-//		            TextedColorDayBox currentDayBox = new TextedColorDayBox(currDayNum + "\n" + month);
-	//	        	grid.add(currentDayBox, 0, currentYPos);
 		    		int currDayXPos = 1;
 		    		DayBox dayBox = new DayBox(currDayNum + " " + month);
 		    		int dayBoxYPos = currentYPos;
@@ -293,6 +276,7 @@ public class PrettyDisplay extends Application {
 		    		currentYPos ++;
 		    		int currXPos = 1;
 		    		currTaskIndex = 1;
+		    		
 		    		
 		    		
 					for(Task task:todoList.get(date)){ //looping through tasks for specified date
@@ -309,6 +293,10 @@ public class PrettyDisplay extends Application {
 							default:
 								totalFloating++;
 								break;
+						}
+						if (task.getClash()){
+							IndexBox testBox = new IndexBox(0);
+							grid.add(testBox, currXPos+1, currentYPos+1);
 						}
 						
 			    		currentYPos++;

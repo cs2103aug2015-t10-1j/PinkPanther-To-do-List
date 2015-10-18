@@ -73,7 +73,8 @@ public class IndexBox extends StackPane{
 		text.setFill(Color.WHITE);
 		
 		if (index==0){
-			text.setText("");
+			text.setText("!");
+			box.setFill(Color.RED);
 		}
 		this.getChildren().addAll(box, text);
 		
