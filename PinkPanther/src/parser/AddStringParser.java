@@ -27,6 +27,8 @@ public class AddStringParser implements Parser {
 	private static final String[] LIST_DEADLINE_MARKERS = {"by", "due", "before"}; 
 	private static final String[] LIST_START_MARKERS = {"at", "after"};
 	
+	private static final LocalDate THE_MYTH_DAY = LocalDate.of(1979, 7, 11);
+	
 	private static SingleDateParser sdp = new SingleDateParser();
 	private static SingleTimeParser stp = new SingleTimeParser();
 
@@ -41,6 +43,7 @@ public class AddStringParser implements Parser {
 		
 		// does not accept empty input
 		if (Auxiliary.isEmptyArray(userInfo)) {
+			Display.setFeedBack("You have not entered a task name.");
 			return null;
 		}
 		
@@ -50,22 +53,16 @@ public class AddStringParser implements Parser {
 		}
 		
 		// create an event
-		// should we catch the exception or be lenient?
 		if (validDateTimes == 2)  {
-			try {
-				return addEvent(userInfo);
-			} catch (Exception e) {
-				Display.setFeedBack(e.getMessage());
-			}
-			return null;
+			return addEvent(userInfo);
 		
 		// create a deadline or to-do
 		} else if (validDateTimes == 1)  {
 			return addSingleDated(userInfo);
 		
-		// invalid task to create; no task created
+		// should not be invoked
 		} else {
-			Display.setFeedBack("Invalid add command");
+			Display.setFeedBack("Hurrah! You have broken the program!");
 			return null;
 		}
 	}
@@ -338,6 +335,12 @@ public class AddStringParser implements Parser {
 		
 		Task event = new Task(details[INDEX_TASKNAME], startDateStore, 
 				 startTimeStore, endDateStore, endTimeStore);			
+		
+		if (isDuringRestrictedDate(event)) {
+			Display.setFeedBack("This day is too mythical for you to perform any tasks!");
+			return null;
+		}
+			
 		return event;
 	}
 	
@@ -360,17 +363,31 @@ public class AddStringParser implements Parser {
 			}
 			Task deadline = new Task(details[INDEX_TASKNAME], endDateStore, endTimeStore,
 					TaskType.DEADLINE);
+			
+			if (deadline.getDate().isEqual(THE_MYTH_DAY)) {
+				Display.setFeedBack("This day is too mythical for you to perform any tasks!");
+				return null;
+			}
 			return deadline;
+			
 		} else if (taskTypeStore == TaskType.TODO 
 				|| (startDateStore != null)) {
 			Task toDoAt = new Task(details[INDEX_TASKNAME], startDateStore, startTimeStore,
 					TaskType.TODO);
+			if (toDoAt.getDate().isEqual(THE_MYTH_DAY)) {
+				Display.setFeedBack("This day is too mythical for you to perform any tasks."
+						+ " Task will not be added!");
+				return null;
+			}			
 			return toDoAt;
 		} else {
 			return null;
 		}
 	}
 	
+	private boolean isDuringRestrictedDate(Task task) {
+		return (!task.getStartDate().isAfter(THE_MYTH_DAY) || !task.getEndDate().isBefore(THE_MYTH_DAY)); 
+	}
 	
 	// auxiliary methods
 	private void clearStores() {
