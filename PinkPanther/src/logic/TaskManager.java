@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -14,7 +16,7 @@ import common.TaskType;
 import storage.StorageControl;
 
 public class TaskManager {
-	private static LocalDate FLOATING_DATE=LocalDate.of(1970, 1, 1);
+	private static LocalDate FLOATING_DATE=LocalDate.of(1979, 7, 11);
 	private SortedMap<LocalDate,ArrayList<Task>>doneList;
 	private SortedMap<LocalDate,ArrayList<Task>>todoList;
 	
@@ -30,17 +32,13 @@ public class TaskManager {
 	
 	public ArrayList<Task> getTaskArray(boolean isDone){
 		SortedMap<LocalDate,ArrayList<Task>>taskList=isDone?doneList:todoList;
-		ArrayList<Task>taskArray=new ArrayList<Task>();
-		Task temp=null;
+		Set<Task>taskSet=new HashSet<Task>();
 		for(LocalDate date:taskList.keySet()){
 			for(Task task:taskList.get(date)){
-				if(task!=temp){
-					taskArray.add(task);
-					temp=task;
-				}
+				taskSet.add(task);
 			}
 		}
-		return taskArray;
+		return new ArrayList<Task>(taskSet);
 	} 
 	
 	public ArrayList<Task> getFloating(boolean isDone){

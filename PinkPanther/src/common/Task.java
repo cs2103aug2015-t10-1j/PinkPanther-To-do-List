@@ -14,6 +14,7 @@ public class Task {
 	private LocalTime startTime;
 	private LocalTime endTime;
 	private boolean isDone;
+	private boolean hasClash;
 	
 	public Task(String name){
 		this.name=name;
