@@ -13,6 +13,7 @@ public class CommandParser {
 	
 	private AddStringParser asp = new AddStringParser();
 	private QueryParser qp = new QueryParser();
+	private DateRangeParser drp = new DateRangeParser(asp);
 	
 	public Task createTask(String userInput){
 		Task task = asp.parse(userInput);
@@ -21,11 +22,10 @@ public class CommandParser {
 	
 	public Pair<LocalDate,ArrayList<Integer>> query(String userInput){
 		return qp.parse(userInput);
-		//return null;
 	}
 	
-	public Pair<LocalDate,LocalDate>parseDate(String userInput){
-		return null;
+	public Pair<LocalDate,LocalDate> queryDateRange(String userInput){
+		return drp.parse(userInput);
 	}
 
 }

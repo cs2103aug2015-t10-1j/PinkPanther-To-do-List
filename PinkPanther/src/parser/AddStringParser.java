@@ -70,7 +70,7 @@ public class AddStringParser implements Parser {
 	
 	// input processing logic methods
 	// beware of exceptions!
-	public int findValidDateTime(String [] possiblyDateTime) {
+	private int findValidDateTime(String [] possiblyDateTime) {
 		int dateCounter = 0;
 		int timeCounter = 0;
 		for (int i = INDEX_TASK_DETAIL; i < possiblyDateTime.length; i++) {
@@ -89,7 +89,7 @@ public class AddStringParser implements Parser {
 	}
 	
 	// counts number of dates
-	private int countValidDates(String dateTimeInfo) {
+	public int countValidDates(String dateTimeInfo) {
 		
 		// itself is a date
 		if (isSingleDate(dateTimeInfo, sdp)) {
@@ -386,7 +386,7 @@ public class AddStringParser implements Parser {
 	}
 	
 	private boolean isDuringRestrictedDate(Task task) {
-		return (!task.getStartDate().isAfter(THE_MYTH_DAY) || !task.getEndDate().isBefore(THE_MYTH_DAY)); 
+		return !(task.getStartDate().isAfter(THE_MYTH_DAY) || task.getEndDate().isBefore(THE_MYTH_DAY)); 
 	}
 	
 	// auxiliary methods
