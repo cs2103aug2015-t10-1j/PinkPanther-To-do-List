@@ -52,10 +52,13 @@ public class Controller {
 		state.setInputBoxText("");
 		
 		if(taskPair.getFirst()!=null){
-			taskPair.setSecond(parser.createTask(command));
-			EditCommand edit=new EditCommand(manager);
-			if(edit.execute(taskPair)){
-				commandStack.addCommand(edit);
+			Task task=parser.createTask(command);
+			if(task!=null){
+				taskPair.setSecond(parser.createTask(command));
+				EditCommand edit=new EditCommand(manager);
+				if(edit.execute(taskPair)){
+					commandStack.addCommand(edit);
+				}
 			}
 			taskPair.setFirst(null);
 			taskPair.setSecond(null);
@@ -133,7 +136,7 @@ public class Controller {
 	}
 	
 	private void changeDisplayMode(String mode){
-		Pair<LocalDate,LocalDate>datePair=parser.parseDate(mode);
+		Pair<LocalDate,LocalDate>datePair=parser.queryDateRange(mode);
 		if(datePair!=null){
 			state.setFLoatingList(null);
 			state.setTodoList(manager.getDateRange(datePair.getFirst(), datePair.getSecond()));

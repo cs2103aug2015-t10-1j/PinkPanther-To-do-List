@@ -57,7 +57,7 @@ public class TaskManager {
 	}
 	
 	public SortedMap<LocalDate,ArrayList<Task>> getDateRange(LocalDate date1,LocalDate date2){
-		return checkForClash(todoList.subMap(date1, date2));
+		return checkForClash(todoList.subMap(date1, date2.plusDays(1)));
 	}
 	
 	public SortedMap<LocalDate,ArrayList<Task>> getMatchedDated(String keyword){
@@ -271,25 +271,23 @@ public class TaskManager {
 	}
 	
 	private static void markClashingEvents(ArrayList<Task>eventList){
+		for(Task task:eventList){
+			task.setClash(false);
+		}
+		
 		Task first,second;
 		for(int i=0;i<eventList.size()-1;i++){
 			first=eventList.get(i);
-			if(first.getClash()==true){
+			second=eventList.get(i+1);
+			if(first.getStartTime().isBefore(second.getEndTime())&&
+					first.getEndTime().isAfter(second.getStartTime())){
+				System.out.println("test");
+				first.setClash(true);
+				second.setClash(true);
 				continue;
 			}
 			
-			for(int j=i+1;i<eventList.size();j++){
-				second=eventList.get(j);
-			    if(first.getStartTime().isBefore(second.getEndTime())&&
-			    		first.getEndTime().isAfter(second.getStartTime())){
-			    	
-					first.setClash(true);
-					second.setClash(true);
-					break;
-				}
-				first.setClash(false);
-				
-			}
+			
 		}
 	}
 	
