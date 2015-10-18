@@ -17,7 +17,6 @@ public class AddCommand implements Command{
 	
 	public boolean execute(Task task){	
 		if(task==null){
-			Display.setFeedBack("You did not enter a valid task name!");
 			return false;
 		}
 		

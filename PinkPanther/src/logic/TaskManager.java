@@ -16,15 +16,15 @@ import common.TaskType;
 import storage.StorageControl;
 
 public class TaskManager {
-	private static LocalDate FLOATING_DATE=LocalDate.of(1979, 7, 11);
+	private static LocalDate THE_MYTH_DAY=LocalDate.of(1979, 7, 11);
 	private SortedMap<LocalDate,ArrayList<Task>>doneList;
 	private SortedMap<LocalDate,ArrayList<Task>>todoList;
 	
 	public TaskManager(StorageControl storage){
 		doneList=new TreeMap<LocalDate,ArrayList<Task>>();
-		doneList.put(FLOATING_DATE, new ArrayList<Task>());
+		doneList.put(THE_MYTH_DAY, new ArrayList<Task>());
 		todoList=new TreeMap<LocalDate,ArrayList<Task>>();
-		todoList.put(FLOATING_DATE, new ArrayList<Task>());
+		todoList.put(THE_MYTH_DAY, new ArrayList<Task>());
 		storage.setStorageEnvironmentNormal();
 		addMultipleTasks(storage.loadTaskList(true));
 		addMultipleTasks(storage.loadTaskList(false));
@@ -44,7 +44,7 @@ public class TaskManager {
 	} 
 	
 	public ArrayList<Task> getFloating(boolean isDone){
-		return isDone?doneList.get(FLOATING_DATE):todoList.get(FLOATING_DATE);
+		return isDone?doneList.get(THE_MYTH_DAY):todoList.get(THE_MYTH_DAY);
 	}
 	
 	public SortedMap<LocalDate, ArrayList<Task>> getDated(boolean isDone){
@@ -63,7 +63,7 @@ public class TaskManager {
 	public SortedMap<LocalDate,ArrayList<Task>> getMatchedDated(String keyword){
 		SortedMap<LocalDate,ArrayList<Task>>matchedList=new TreeMap<LocalDate,ArrayList<Task>>();
 		for(LocalDate date:todoList.keySet()){
-			if(date.isEqual(FLOATING_DATE)){
+			if(date.isEqual(THE_MYTH_DAY)){
 				continue;
 			}
 			
@@ -78,7 +78,7 @@ public class TaskManager {
 	
 	public ArrayList<Task>getMatchedFloating(String keyword){
 		ArrayList<Task>matchedFloating=new ArrayList<Task>();
-		for(Task task:todoList.get(FLOATING_DATE)){
+		for(Task task:todoList.get(THE_MYTH_DAY)){
 			if(task.getName().contains(keyword)){
 				matchedFloating.add(task);
 			}
@@ -94,8 +94,8 @@ public class TaskManager {
 		SortedMap<LocalDate,ArrayList<Task>>taskList=isDone?doneList:todoList;
 		
 		if(task.getTaskType()==TaskType.FLOATING){
-			addTaskAtDate(taskList,FLOATING_DATE,task);
-			sortTaskAtDate(taskList,FLOATING_DATE);
+			addTaskAtDate(taskList,THE_MYTH_DAY,task);
+			sortTaskAtDate(taskList,THE_MYTH_DAY);
 		}
 		else{
 			if(task.getTaskType()==TaskType.EVENT && 
@@ -126,7 +126,7 @@ public class TaskManager {
 		SortedMap<LocalDate,ArrayList<Task>>taskList=isDone?doneList:todoList;
 		
 		if(task.getTaskType()==TaskType.FLOATING){
-			removeTaskAtDate(taskList,FLOATING_DATE,task);
+			removeTaskAtDate(taskList,THE_MYTH_DAY,task);
 		}
 		
 		else{
@@ -195,10 +195,10 @@ public class TaskManager {
 	public Task searchSingleTask(LocalDate date,int displayIndex){
 		int actualIndex=displayIndex-1;
 		if(date==null){
-			if(actualIndex>=todoList.get(FLOATING_DATE).size()){
+			if(actualIndex>=todoList.get(THE_MYTH_DAY).size()){
 				return null;
 			}
-			return todoList.get(FLOATING_DATE).get(actualIndex);
+			return todoList.get(THE_MYTH_DAY).get(actualIndex);
 		}
 		else{
 			if(!todoList.containsKey(date)||actualIndex>=todoList.get(date).size()){
@@ -211,7 +211,7 @@ public class TaskManager {
 	
 	private ArrayList<Task>searchAllTasksAtDate(LocalDate date){
 		if(date==null){
-			return new ArrayList<Task>(todoList.get(FLOATING_DATE));
+			return new ArrayList<Task>(todoList.get(THE_MYTH_DAY));
 		}
 		else if(!todoList.containsKey(date)){
 			Display.setFeedBack("you do not have any task on this date");
@@ -265,19 +265,31 @@ public class TaskManager {
 			LocalDate date,Task task){
 		
 		map.get(date).remove(task);
-		if(map.get(date).isEmpty() && !date.isEqual(FLOATING_DATE)){
+		if(map.get(date).isEmpty() && !date.isEqual(THE_MYTH_DAY)){
 			map.remove(date);
 		}
 	}
 	
 	private static void markClashingEvents(ArrayList<Task>eventList){
-		
+		Task first,second;
+		for(int i=0;i<eventList.size()-1;i++){
+			first=eventList.get(i);
+			for(int j=i+1;i<eventList.size();j++){
+				second=eventList.get(j);
+				if(first.getStartTime().isBefore(second.getEndTime())&&first.getEndTime().isAfter(second.getStartTime())){
+					first.setClash(true);
+					break;
+				}
+				first.setClash(false);
+				
+			}
+		}
 	}
 	
 	
 	private static SortedMap<LocalDate,ArrayList<Task>> checkForClash(SortedMap<LocalDate,ArrayList<Task>>taskMap){
 		for(LocalDate date:taskMap.keySet()){
-			if(date.isEqual(FLOATING_DATE)){
+			if(date.isEqual(THE_MYTH_DAY)){
 				continue;
 			}
 			ArrayList<Task>eventList=new ArrayList<Task>();
