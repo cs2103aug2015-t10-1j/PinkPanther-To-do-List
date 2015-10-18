@@ -15,6 +15,13 @@ public class QueryParser implements Parser {
 	public Pair parse(String commandContent) {
 		String[] userInfo = commandContent.split(",");
 		userInfo = Auxiliary.trimStringArray(userInfo);
+		
+		// there should only be 1 comma
+		if (userInfo.length != 2) {
+			Display.setFeedBack("Invalid Input Format");
+			return null;
+		}
+		
 		String[] indexInfo = userInfo[INDEX_INDEX].split(" ");
 		ArrayList<Integer> indexList = new ArrayList<Integer>();
 		SingleDateParser sdp = new SingleDateParser();
