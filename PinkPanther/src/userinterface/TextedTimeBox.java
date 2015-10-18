@@ -16,7 +16,9 @@ public class TextedTimeBox extends StackPane{
 		text.setTextAlignment(TextAlignment.CENTER);
 		text.setFill(Color.WHITE);
 		
-		
+		if (time.equals("")){
+			box.setInvis();
+		}
 		this.getChildren().addAll(box, text);
 	}
 }

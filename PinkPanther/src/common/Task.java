@@ -157,24 +157,24 @@ public class Task {
 		ArrayList<String> formattedName = new ArrayList<String>();
 		String[] nameTokens = taskName.split(" ");
 		String currentLine = "";
-		
+		int maxChars = 55;
 		for (int i = 0; i < nameTokens.length; i++) {
 			String temp = currentLine + nameTokens[i];
 			
-			if (temp.length() <= 21) {
+			if (temp.length() <= maxChars-1) {
 				currentLine = temp + " ";
-			} else if (temp.length() == 22) {
+			} else if (temp.length() == maxChars) {
 				currentLine = temp;
 			} else {
 				if (currentLine.length() > 0) {
 					formattedName.add(currentLine);
 				}	
-				if (nameTokens[i].length() < 23) {
+				if (nameTokens[i].length() < maxChars+1) {
 					currentLine = nameTokens[i];
 				} else {
-					while (nameTokens[i].length() > 22) {
-						formattedName.add(nameTokens[i].substring(0,21) + "-");
-						nameTokens[i] = nameTokens[i].substring(21, nameTokens[i].length()-1);
+					while (nameTokens[i].length() > maxChars) {
+						formattedName.add(nameTokens[i].substring(0,maxChars-1) + "-");
+						nameTokens[i] = nameTokens[i].substring(maxChars-1, nameTokens[i].length()-1);
 					}
 				}
 				currentLine = nameTokens[i] + " ";
