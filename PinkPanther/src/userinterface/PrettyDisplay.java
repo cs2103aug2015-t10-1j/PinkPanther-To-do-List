@@ -74,7 +74,7 @@ public class PrettyDisplay extends Application {
          //Holds the user input box
          implementUserTextField();
          //text that displays after-action (e.g added x event)
-         implementActionTarget("Input command in the field above")
+         implementActionTarget("Input command in the field above");
          //Allows keyboard inputs to be read as commands
          implementKeystrokeEvents(primaryStage);
          //Implements the scene
