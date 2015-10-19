@@ -96,6 +96,7 @@ public class Controller {
 				case "search":
 					state.setFLoatingList(manager.getMatchedFloating(parameterString));
 					state.setTodoList(manager.getMatchedDated(parameterString));
+					state.setTitle("search result");
 					canSave=false;
 					break;
 				case "view":
@@ -139,15 +140,18 @@ public class Controller {
 		if(mode.equals("done")){
 			state.setFLoatingList(manager.getFloating(true));
 			state.setTodoList(manager.getDated(true));
+			state.setTitle("Done tasks");
 		}
 		else if(mode.equals("normal")){
 			state.setFLoatingList(manager.getFloating(false));
 			state.setTodoList(manager.getTwoWeek());
+			state.setTitle("Calendar");
 		}	
 		else if(parser.queryDateRange(mode)!=null){
 			Pair<LocalDate,LocalDate>datePair=parser.queryDateRange(mode);
 			state.setFLoatingList(null);
 			state.setTodoList(manager.getDateRange(datePair.getFirst(), datePair.getSecond()));
+			state.setTitle(datePair.getFirst()+" to "+datePair.getSecond());
 		}
 	}
 	

@@ -8,6 +8,7 @@ import java.util.TreeMap;
 public class ProgramState {
 	private ArrayList<Task>floatingList;
 	private SortedMap<LocalDate,ArrayList<Task>>todoList;
+	private String title;
 	private String inputBoxText;
 	private boolean isExit;
 	
@@ -34,6 +35,10 @@ public class ProgramState {
 		this.isExit=isExit;
 	}
 	
+	public void setTitle(String title){
+		this.title=title;
+	}
+	
 	public ArrayList<Task>getFloatingList(){
 		return floatingList;
 	}
@@ -46,7 +51,12 @@ public class ProgramState {
 		return inputBoxText;
 	}
 	
+	public String getTitle(){
+		return title;
+	}
+	
 	public boolean getExitState(){
 		return isExit;
 	}
+	
 }
