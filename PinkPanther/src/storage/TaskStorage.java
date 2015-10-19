@@ -16,13 +16,13 @@ import common.Task;
 
 public class TaskStorage {
 	//Attributes
-	private File taskFile_undone;
-	private File taskFile_done;
+	private File taskFile_Undone;
+	private File taskFile_Done;
 	private Gson gson;
 	
 	protected TaskStorage(File directory) {
-		taskFile_undone = new File(directory, "undone tasks.txt");
-		taskFile_done = new File(directory, "done tasks.txt");
+		taskFile_Undone = new File(directory, "Undone tasks.txt");
+		taskFile_Done = new File(directory, "Done tasks.txt");
 		gson = new Gson();
 	}
 	
@@ -30,10 +30,10 @@ public class TaskStorage {
 		try {
 			BufferedWriter bw;
 			if (isDone) {
-				bw = new BufferedWriter(new FileWriter(taskFile_done));
+				bw = new BufferedWriter(new FileWriter(taskFile_Done));
 			}
 			else {
-				bw = new BufferedWriter(new FileWriter(taskFile_undone));
+				bw = new BufferedWriter(new FileWriter(taskFile_Undone));
 			}
 			for (Task task: taskList) {
 				performWriting(bw, task);
@@ -53,10 +53,10 @@ public class TaskStorage {
 		try{
 			BufferedReader br;
 			if (isDone) {
-				br = new BufferedReader(new FileReader(taskFile_done));
+				br = new BufferedReader(new FileReader(taskFile_Done));
 			}
 			else {
-				br = new BufferedReader(new FileReader(taskFile_undone));
+				br = new BufferedReader(new FileReader(taskFile_Undone));
 			}
 			while ((newLine = br.readLine()) != null) {
 				new_TaskList.add(gson.fromJson(newLine, Task.class));
@@ -64,11 +64,11 @@ public class TaskStorage {
 			br.close();
 		}
 		catch (FileNotFoundException e) {
-			//return null;
+			return new ArrayList<Task>();
 		}
 		catch (IOException e) {
 			e.printStackTrace();
-			//return null;
+			return null;
 		}
 		return new_TaskList;
 	}
@@ -81,18 +81,18 @@ public class TaskStorage {
 	}
 	
 	protected File getUndoneFile() {
-		return taskFile_undone;
+		return taskFile_Undone;
 	}
 	
 	protected File getDoneFile() {
-		return taskFile_done;
+		return taskFile_Done;
 	}
 	
 	protected void setUndoneFile(File taskFile) {
-		taskFile_undone = taskFile;
+		taskFile_Undone = taskFile;
 	}
 	
 	protected void setDoneFile(File taskFile) {
-		taskFile_done = taskFile;
+		taskFile_Done = taskFile;
 	}
 }

@@ -33,25 +33,26 @@ public class StorageControl {
 	private static final String NO_INPUT_DIRECTORY_MESSAGE = "No directory path was entered";
 	private static final String IS_NOT_DIRECTORY_MESSAGE = "\"%1$s\" is not a directory";
 	private static final String SAVE_UNSUCCESSFUL_MESSAGE = "Save unsuccessful";
-	private static final String INVALID_PATH_MESSAGE = "Invalid path entered.";
-	private static final String COULD_NOT_SET_LATEST_DIRECTORY_MESSAGE = "Error! Could not set the latest directory.";
+	private static final String INVALID_PATH_MESSAGE = "Invalid path entered";
+	private static final String COULD_NOT_SET_LATEST_DIRECTORY_MESSAGE = "Error! Could not set the latest directory";
+	private static final String SAME_DIRECTORY_MESSAGE = "\"%1$s\" is the current directory, directory remains unchanged";
 	//private static final String COULD_NOT_MAKE_DIRECTORY_MESSAGE = "Error! Could not make directory.";
 	
 	public StorageControl() {
 	}
 	
 	public String setStorageEnvironmentFirstTime(String input_FilePath) {
-		this.directory = new File(input_FilePath);
+		directory = new File(input_FilePath);
 		int numOfExistingFiles = 1;
-		while (this.directory.isDirectory() == true) {
-			this.directory = new File(input_FilePath + " (" + numOfExistingFiles + ")");
+		while (directory.isDirectory() == true) {
+			directory = new File(input_FilePath + " (" + numOfExistingFiles + ")");
 			numOfExistingFiles++;
 		}
-		if (input_FilePath.substring(1, 3).equals(":\\") == false || this.directory.mkdir() == false) {
+		if (input_FilePath.substring(1, 3).equals(":\\") == false || directory.mkdir() == false) {
 			return INVALID_PATH_MESSAGE;
 		}
 		taskFile = new TaskStorage(directory);
-		if (this.setLatestDirectory() == false) {
+		if (setLatestDirectory() == false) {
 			return COULD_NOT_SET_LATEST_DIRECTORY_MESSAGE;
 		}
 		
@@ -59,7 +60,7 @@ public class StorageControl {
 	}
 
 	public String setStorageEnvironmentNormal() {
-		this.directory = this.getLatestDirectory();
+		directory = getLatestDirectory();
 		if (directory == null || directory.isDirectory() == false) {
 			int numOfExistingFiles = 1;
 			directory = new File("C:\\PPCalendar");
@@ -75,19 +76,24 @@ public class StorageControl {
 	
 	public boolean changeDirectory(String input_NewDirectory) {
 		File newDirectory = new File(input_NewDirectory);
-		File newUndoneFloating = new File(input_NewDirectory + "\\Undone Floating.txt");
-		File newDoneFloating = new File(input_NewDirectory + "\\Done Floating.txt");
+		File newUndoneTasks = new File(input_NewDirectory + "\\Undone tasks.txt");
+		File newDoneTasks = new File(input_NewDirectory + "\\Done tasks.txt");
 		
 		try {
-			if (newDirectory.mkdir() == false || input_NewDirectory.substring(1, 3).equals(":\\") == false) {
+			if (newDirectory.equals(getLatestDirectory()) == true) {
+				Display.setFeedBack(String.format(SAME_DIRECTORY_MESSAGE, directory.getPath()));
+				Display.showFeedBack();
+				return false;
+			}
+			else if (newDirectory.mkdir() == false || input_NewDirectory.substring(1, 3).equals(":\\") == false) {
 				Display.setFeedBack(String.format(IS_NOT_DIRECTORY_MESSAGE, input_NewDirectory));
 				Display.showFeedBack();
 				return false;
 			}
-			taskFile.getUndoneFile().renameTo(newUndoneFloating);
-			taskFile.setUndoneFile(newUndoneFloating);
-			taskFile.getDoneFile().renameTo(newDoneFloating);
-			taskFile.setDoneFile(newDoneFloating);
+			taskFile.getUndoneFile().renameTo(newUndoneTasks);
+			taskFile.setUndoneFile(newUndoneTasks);
+			taskFile.getDoneFile().renameTo(newDoneTasks);
+			taskFile.setDoneFile(newDoneTasks);
 
 			directory.delete();
 			directory = newDirectory;
@@ -139,7 +145,7 @@ public class StorageControl {
 	}*/
 	
 	public boolean checkLatestDirectoryState() {
-		File checker = this.getLatestDirectory();
+		File checker = getLatestDirectory();
 		
 		return (latestDirectoryTextFile.exists() == false || checker.equals(null) == true);
 	}
