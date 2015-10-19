@@ -260,7 +260,7 @@ public class PrettyDisplay extends Application {
 				miniTaskIndicators.setHgap(10);
 				miniTaskIndicators.setVgap(5);
     			IndexBox blankColoredBox = new IndexBox(totalFloat, TaskType.FLOATING);
-    			miniTaskIndicators.add(blankColoredBox, 58, 3);
+    			miniTaskIndicators.add(blankColoredBox, 54, 3);
     			grid.add(miniTaskIndicators, 1, 3);
 		    	currentYPos++;
 	    	}
