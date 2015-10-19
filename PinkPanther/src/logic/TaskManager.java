@@ -166,8 +166,10 @@ public class TaskManager {
 	}
 	
 	public void clearAllTasks(){
-		todoList.clear();
-		doneList.clear();		
+		doneList=new TreeMap<LocalDate,ArrayList<Task>>();
+		doneList.put(THE_MYTH_DAY, new ArrayList<Task>());
+		todoList=new TreeMap<LocalDate,ArrayList<Task>>();
+		todoList.put(THE_MYTH_DAY, new ArrayList<Task>());
 	}
 	
 	

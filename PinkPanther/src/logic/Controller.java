@@ -121,6 +121,8 @@ public class Controller {
 					break;
 				case "clear":
 					manager.clearAllTasks();
+					state.setFLoatingList(manager.getFloating(false));
+					state.setTodoList(manager.getDated(false));
 					break;
 				default:
 					Display.setFeedBack("invalid command");		
@@ -154,6 +156,9 @@ public class Controller {
 			state.setFLoatingList(null);
 			state.setTodoList(manager.getDateRange(datePair.getFirst(), datePair.getSecond()));
 			state.setTitle(datePair.getFirst()+" to "+datePair.getSecond());
+		}
+		else{
+			Display.setFeedBack("invalid input");
 		}
 	}
 	

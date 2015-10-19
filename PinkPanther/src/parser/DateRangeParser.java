@@ -18,9 +18,7 @@ public class DateRangeParser implements Parser {
 			return new Pair<LocalDate, LocalDate>(asp.getStartDate(), asp.getStartDate()); 
 		} else if (validDates == 2) {
 			return new Pair<LocalDate, LocalDate>(asp.getStartDate(), asp.getEndDate());
-		} else {
-			Display.setFeedBack("You have entered an invalid date or date range.");
-		}
+		} 
 		return null;
 	}
 
