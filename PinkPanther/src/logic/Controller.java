@@ -12,6 +12,7 @@ import parser.CommandParser;
 import storage.StorageControl;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import common.Auxiliary;
 import common.Display;
@@ -73,8 +74,9 @@ public class Controller {
 					}
 					break;
 				case "edit":
-					Task unmodified=manager.searchTasks(parser.query(parameterString)).get(0);
-					if(unmodified!=null){
+					ArrayList<Task>taskList=manager.searchTasks(parser.query(parameterString));
+					if(taskList!=null && taskList.get(0)!=null){
+						Task unmodified=taskList.get(0);
 						taskPair.setFirst(unmodified);
 						state.setInputBoxText(unmodified.toString());
 						Display.setFeedBack("\"" + unmodified + "\"" + "is being edited.\nEdit it in text box then press ENTER.");

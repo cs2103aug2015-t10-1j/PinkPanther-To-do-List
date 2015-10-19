@@ -105,7 +105,7 @@ public class TaskManager {
 				while(!currentDate.isAfter(task.getEndDate())){
 					addTaskAtDate(taskList,currentDate,task);
 					sortTaskAtDate(taskList,currentDate);
-					updateClashStatus(taskList.get(currentDate));
+//					updateClashStatus(taskList.get(currentDate));
 					currentDate=currentDate.plusDays(1);
 				}
 			}
@@ -141,9 +141,9 @@ public class TaskManager {
 				LocalDate currentDate=task.getStartDate();
 				while(!currentDate.isAfter(task.getEndDate())){
 					removeTaskAtDate(taskList,currentDate,task);
-					if(taskList.containsKey(currentDate)){
-						updateClashStatus(taskList.get(currentDate));
-					}
+//					if(taskList.containsKey(currentDate)){
+//						updateClashStatus(taskList.get(currentDate));
+//					}
 					
 					currentDate=currentDate.plusDays(1);
 				}
