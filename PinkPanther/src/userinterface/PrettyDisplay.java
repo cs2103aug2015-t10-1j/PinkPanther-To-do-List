@@ -59,10 +59,8 @@ public class PrettyDisplay extends Application {
     
     @Override
     public void start(Stage primaryStage) {
- //   	fillPage ("Input command in the field above", primaryStage);
     	objPrimaryStage = primaryStage;
     	mainController = new Controller();
-//    	mainController.setGui(this);
     	
     	 primaryStage.setTitle("PinkPanther: The best to-do list");
          
@@ -76,9 +74,7 @@ public class PrettyDisplay extends Application {
          //Holds the user input box
          implementUserTextField();
          //text that displays after-action (e.g added x event)
-         implementActionTarget("Input command in the field above");
-         //add buttons
-     //    implementButtons();
+         implementActionTarget("Input command in the field above")
          //Allows keyboard inputs to be read as commands
          implementKeystrokeEvents(primaryStage);
          //Implements the scene
@@ -146,7 +142,6 @@ public class PrettyDisplay extends Application {
         + "-fx-border-width: 6px;"
         + "-fx-border-color: DIMGRAY;"
         + "-fx-background-color: WHITE");
-//        userTextField.setPrefWidth(100);
         grid2.add(userTextField, 0, 1);
     }
     void implementActionTarget(String newInput){
@@ -235,7 +230,6 @@ public class PrettyDisplay extends Application {
 
     	int currentYPos = 1;
     	
-    //	System.out.println(programState.getFloatingList());
     	//for unpacking floatingTasks
     	if (programState != null){
         	ArrayList<Task> floatingTasks = programState.getFloatingList();
