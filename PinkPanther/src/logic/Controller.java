@@ -136,19 +136,19 @@ public class Controller {
 	}
 	
 	private void changeDisplayMode(String mode){
-		Pair<LocalDate,LocalDate>datePair=parser.queryDateRange(mode);
-		if(datePair!=null){
-			state.setFLoatingList(null);
-			state.setTodoList(manager.getDateRange(datePair.getFirst(), datePair.getSecond()));
-		}
-		else if(mode.equals("done")){
+		if(mode.equals("done")){
 			state.setFLoatingList(manager.getFloating(true));
 			state.setTodoList(manager.getDated(true));
 		}
 		else if(mode.equals("normal")){
 			state.setFLoatingList(manager.getFloating(false));
 			state.setTodoList(manager.getTwoWeek());
-		}					
+		}	
+		else if(parser.queryDateRange(mode)!=null){
+			Pair<LocalDate,LocalDate>datePair=parser.queryDateRange(mode);
+			state.setFLoatingList(null);
+			state.setTodoList(manager.getDateRange(datePair.getFirst(), datePair.getSecond()));
+		}
 	}
 	
 }
