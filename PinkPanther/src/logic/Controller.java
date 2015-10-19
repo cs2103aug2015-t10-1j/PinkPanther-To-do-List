@@ -77,7 +77,7 @@ public class Controller {
 					if(unmodified!=null){
 						taskPair.setFirst(unmodified);
 						state.setInputBoxText(unmodified.toString());
-						Display.setFeedBack("\"" + unmodified + "\"" + "is being edited. Edit it in text box then press ENTER.");
+						Display.setFeedBack("\"" + unmodified + "\"" + "is being edited.\nEdit it in text box then press ENTER.");
 					}
 					break;
 				case "done":
