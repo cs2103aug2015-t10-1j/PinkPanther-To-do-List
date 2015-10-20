@@ -47,6 +47,7 @@ public class PrettyDisplay extends Application {
     HBox hbBtn;
     Color defaultActionTargetColor = Color.BLACK;
     ProgramState programState;
+    FlowPane programFeedback;
     
     public static void main(String [ ] args){
     	PrettyDisplay prettyDisplay = new PrettyDisplay();
@@ -74,7 +75,9 @@ public class PrettyDisplay extends Application {
          //Holds the user input box
          implementUserTextField();
          //text that displays after-action (e.g added x event)
-         implementActionTarget("Input command in the field above");
+         implementActionTarget("Input command in the field above"); // to remove
+
+         setUserFeedback(parseAndColorize("Input command into the field above"));
          //Allows keyboard inputs to be read as commands
          implementKeystrokeEvents(primaryStage);
          //Implements the scene
@@ -146,9 +149,13 @@ public class PrettyDisplay extends Application {
     }
     void implementActionTarget(String newInput){
         actiontarget = new Text(newInput);
-        grid2.add(actiontarget, 0, 2);
+ //       grid2.add(actiontarget, 0, 2);
         actiontarget.setFont(Font.font("Tahoma", FontWeight.BOLD, 15));
         actiontarget.setFill(defaultActionTargetColor);     
+        
+        
+        programFeedback = new FlowPane();
+        grid2.add(programFeedback, 0, 2);
     }
     void implementButtons(){
     	Button btn = new Button("Enter");
@@ -343,6 +350,11 @@ public class PrettyDisplay extends Application {
     	
     	//actiontarget.setText(showFeedBack(programState.getExitState());
         actiontarget.setText(Display.showFeedBack());
+
+    //	FlowPane colorizedCommand = parseAndColorize(Display.showFeedBack());
+    //	setUserFeedback(colorizedCommand);
+    	setUserFeedback();
+        
     	calendarGrid.getChildren().clear();
         populateGrid(calendarGrid);
         if(mainController.getProgramState().getExitState()){
@@ -351,10 +363,27 @@ public class PrettyDisplay extends Application {
 
     }
     
+    FlowPane parseAndColorize(String text){
+    	ConsoleInputColorizer colorizer = new ConsoleInputColorizer();
+    	FlowPane colorizedText = colorizer.parseInputToArray(text);
+    	return colorizedText;
+    }
+    
+    void setUserFeedback(FlowPane feedback){
+    	grid2.getChildren().remove(2);
+    	grid2.add(feedback, 0, 2);
+    }
+    
     public void setUserTextField(String text){
     	if(userTextField!=null){
     		userTextField.setText(text);
     	}
+    }
+    
+    void setUserFeedback(){
+    	FlowPane feedback = parseAndColorize(Display.showFeedBack());
+    	grid2.getChildren().remove(2);
+    	grid2.add(feedback, 0, 2);
     }
     
     public void clearTextField(){
@@ -429,6 +458,23 @@ public class PrettyDisplay extends Application {
         		currentScrollYPos = (s1.getVvalue());
         		hideCalendar(primaryStage);
         	}
+        } else {
+        	String userText = userTextField.getText();
+        	if (ke.getCode().isLetterKey()){
+        		userText = userText + ke.getCode().toString().toLowerCase() + " ";
+        	}
+        	actiontarget.setText(userText); //remove later
+     //   	ConsoleInputColorizer colorizer = new ConsoleInputColorizer();
+      //  	FlowPane flowPane = colorizer.parseInputToArray(userText);
+    //    	programFeedback = colorizer.parseInputToArray(userText);
+     //   	grid2.getChildren().remove(2);
+      //  	grid2.add(colorizer.parseInputToArray(userText), 0, 2);
+        	
+        	FlowPane colorizedText = parseAndColorize(userText);
+        	setUserFeedback(colorizedText);
+        	
+        //	grid2.add(programFeedback, 0, 2);
+        	
         }
 		
 	}
@@ -454,10 +500,10 @@ public class PrettyDisplay extends Application {
 		grid2.getChildren().clear();
 		grid2.add(s1,0,0);
         grid2.add(userTextField, 0, 1);
-        grid2.add(actiontarget, 0, 2);
+//        grid2.add(actiontarget, 0, 2);
     //    grid2.add(hbBtn, 0, 2);
         actiontarget.setFill(defaultActionTargetColor);
-        actiontarget.setText(Display.showFeedBack());
+        setUserFeedback(parseAndColorize("Input command into the field above"));
 		//actiontarget.setText("Input command into the field above");
 		isViewingHelpScreen = false;
 	}
