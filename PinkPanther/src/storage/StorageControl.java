@@ -36,6 +36,7 @@ public class StorageControl {
 	private static final String INVALID_PATH_MESSAGE = "Invalid path entered";
 	private static final String COULD_NOT_SET_LATEST_DIRECTORY_MESSAGE = "Error! Could not set the latest directory";
 	private static final String SAME_DIRECTORY_MESSAGE = "\"%1$s\" is the current directory, directory remains unchanged";
+	//private static final String NEW_DIRECTORY_MODIFIED_MESSAGE = "Directory path was modified to \"%1$s\" to successfully change the directory";
 	//private static final String COULD_NOT_MAKE_DIRECTORY_MESSAGE = "Error! Could not make directory.";
 	
 	public StorageControl() {
@@ -76,8 +77,8 @@ public class StorageControl {
 	
 	public boolean changeDirectory(String input_NewDirectory) {
 		File newDirectory = new File(input_NewDirectory);
-		File newUndoneTasks = new File(input_NewDirectory + "\\Undone tasks.txt");
-		File newDoneTasks = new File(input_NewDirectory + "\\Done tasks.txt");
+		int numOfExistingFiles = 1;
+		//boolean initialNewDirectoryExists = false;
 		
 		try {
 			if (newDirectory.equals(getLatestDirectory()) == true) {
@@ -85,11 +86,23 @@ public class StorageControl {
 				Display.showFeedBack();
 				return false;
 			}
+			else if (newDirectory.isDirectory() == true) {
+				//initialNewDirectoryExists = true;
+				while (newDirectory.isDirectory() == true) {
+					newDirectory = new File(input_NewDirectory + " (" + numOfExistingFiles + ")");
+					numOfExistingFiles++;
+				}
+				newDirectory.mkdir();
+			}
 			else if (newDirectory.mkdir() == false || input_NewDirectory.substring(1, 3).equals(":\\") == false) {
 				Display.setFeedBack(String.format(IS_NOT_DIRECTORY_MESSAGE, input_NewDirectory));
 				Display.showFeedBack();
 				return false;
 			}
+			
+			File newUndoneTasks = new File(newDirectory.getPath() + "\\Undone tasks.txt");
+			File newDoneTasks = new File(newDirectory.getPath() + "\\Done tasks.txt");
+			
 			taskFile.getUndoneFile().renameTo(newUndoneTasks);
 			taskFile.setUndoneFile(newUndoneTasks);
 			taskFile.getDoneFile().renameTo(newDoneTasks);
@@ -98,9 +111,15 @@ public class StorageControl {
 			directory.delete();
 			directory = newDirectory;
 			this.setLatestDirectory();
-
-			Display.setFeedBack(String.format(SUCCESSFUL_CHANGE_DIRECTORY_MESSAGE, directory.getPath()));
-			Display.showFeedBack();
+			
+			/*if (initialNewDirectoryExists == true) {
+				Display.setFeedBack(String.format(NEW_DIRECTORY_MODIFIED_MESSAGE, directory.getPath()));
+				Display.showFeedBack();
+			}
+			else {*/
+				Display.setFeedBack(String.format(SUCCESSFUL_CHANGE_DIRECTORY_MESSAGE, directory.getPath()));
+				Display.showFeedBack();
+			//}
 
 			return true;
 		}
