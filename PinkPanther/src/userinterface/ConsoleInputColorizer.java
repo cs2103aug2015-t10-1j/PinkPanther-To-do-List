@@ -16,8 +16,9 @@ public class ConsoleInputColorizer {
 	public ConsoleInputColorizer() {}
 
 	public FlowPane parseInputToArray(String input) {
-	    wordList = input.trim().split("[ ]+");
-
+		if (input != null){
+			wordList = input.trim().split("[ ]+");
+		}
 	    return colorize();
 	}
 
@@ -26,30 +27,31 @@ public class ConsoleInputColorizer {
 	    ArrayList<Text> textChunks = new ArrayList<>();
 	    FlowPane bundle = new FlowPane();
 	    
-	    String offset = "    ";
-	    textChunks.add(customize(offset, Color.BROWN));
+	    String offset = "-  ";
+	    textChunks.add(customize(offset, Color.TRANSPARENT));
 	    //Todo: use regex to check for valid words
 	    for (int i=0; i<wordList.length; i++){
 	        String spaced = wordList[i] + " ";
-	        switch (wordList[i]) {
-	            case "add":
-	                textChunks.add(customize(spaced, Color.BLUE));
-	                if (i == wordList.length - 1 && i == 0)
-	                	textChunks.add(customize("[task name], [task date], [task time]", Color.RED));
-	                break;
-	            case "del":
-	                textChunks.add(customize(spaced, Color.BLUE));
-	                if (i == wordList.length - 1 && i == 0)
-	                	textChunks.add(customize("[task date],[index]", Color.RED));
-	                break;
-	            case "edit":
-	                textChunks.add(customize(spaced, Color.BLUE));
-	                if (i == wordList.length - 1 && i == 0)
-	                	textChunks.add(customize("[task date],[index]", Color.RED));
-	                break;
-	            default:
-	                textChunks.add(customize(spaced, Color.BLACK));
-	                break;
+	        switch (wordList[i].toLowerCase()) {
+	        	
+	        case "add":
+	            textChunks.add(customize(spaced, Color.BLUE));
+	            if (i == wordList.length - 1 && i == 0)
+	            	textChunks.add(customize("[task name], [task date], [task time]", Color.RED));
+	        break;
+	        case "del":
+	        	textChunks.add(customize(spaced, Color.BLUE));
+	        	if (i == wordList.length - 1 && i == 0)
+	            	textChunks.add(customize("[task date],[index]", Color.RED));
+	        break;
+	        case "edit":
+	        	textChunks.add(customize(spaced, Color.BLUE));
+	        	if (i == wordList.length - 1 && i == 0)
+	            	textChunks.add(customize("[task date],[index]", Color.RED));
+	        break;
+	        default:
+	        	textChunks.add(customize(spaced, Color.BLACK));
+	        break;
 	        }
 	    }
 

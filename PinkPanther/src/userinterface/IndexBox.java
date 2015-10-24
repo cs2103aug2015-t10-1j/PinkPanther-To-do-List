@@ -13,7 +13,7 @@ public class IndexBox extends StackPane{
 	
 	public IndexBox(int index, TaskType inputTaskType){
 		Color[] col = {(Color.web("D652FF")), Color.web("6495ED"), 
-				(Color.web("D4573A")), (Color.web("51D444")), (Color.POWDERBLUE)};
+				(Color.web("51D444")), (Color.web("D4573A")), (Color.POWDERBLUE)};
 		
 		Rectangle box = new Rectangle();
 		
@@ -53,7 +53,7 @@ public class IndexBox extends StackPane{
 	}
 		
 	
-	public IndexBox(int index){
+	public IndexBox (int index) {
 		Color[] col = {(Color.web("D652FF")), Color.web("6495ED"), 
 				(Color.web("D4573A")), (Color.web("51D444")), (Color.POWDERBLUE)};
 		
@@ -78,5 +78,23 @@ public class IndexBox extends StackPane{
 		}
 		this.getChildren().addAll(box, text);
 		
+	}
+	
+	public IndexBox (String textInput){
+		Rectangle box = new Rectangle();
+		box.setWidth(20);
+		box.setHeight(20);
+		box.setArcWidth(4);
+		box.setArcHeight(4);               
+		box.setStroke(Color.DIMGRAY);
+		box.setStrokeWidth(2.0f);
+
+		Text text = new Text(textInput);
+		text.setFont(Font.font("Tahoma", FontWeight.BOLD, 13));
+		text.setTextAlignment(TextAlignment.CENTER);
+		text.setFill(Color.WHITE);
+
+		box.setFill(Color.DIMGRAY);
+		this.getChildren().addAll(box, text);
 	}
 }

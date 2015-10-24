@@ -2,15 +2,7 @@ package userinterface;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Random;
-import java.util.Set;
 import java.util.SortedMap;
-import java.util.TreeMap;
-
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -41,7 +33,6 @@ public class PrettyDisplay extends Application {
     GridPane grid2;
     ScrollPane s1;
     TextField userTextField;
-    Text actiontarget;
     Scene scene;
     Stage objPrimaryStage;
     HBox hbBtn;
@@ -50,6 +41,8 @@ public class PrettyDisplay extends Application {
     FlowPane programFeedback;
     
     private static String DEFAULT_SCENE_TITLE = "                      Your Calendar";
+    private static String STRING_INVALID_COMMAND = "Unrecognized command. Press PAGE_UP for Help Screen.";
+    private static String STRING_DEFAULT_FEEDBACK = "Input command into the field above";
     
     private enum CurrentState {VIEWING_CALENDAR, VIEWING_HELPSCREEN, VIEWING_HIDDEN}
     private CurrentState currentState = CurrentState.VIEWING_CALENDAR;
@@ -153,12 +146,6 @@ public class PrettyDisplay extends Application {
         grid2.add(userTextField, 0, 1);
     }
     void implementActionTarget(String newInput){
-        actiontarget = new Text(newInput);
- //       grid2.add(actiontarget, 0, 2);
-        actiontarget.setFont(Font.font("Tahoma", FontWeight.BOLD, 15));
-        actiontarget.setFill(defaultActionTargetColor);     
-        
-        
         programFeedback = new FlowPane();
         grid2.add(programFeedback, 0, 2);
     }
@@ -274,7 +261,7 @@ public class PrettyDisplay extends Application {
 	    	SortedMap<LocalDate,ArrayList<Task>> todoList = programState.getTodoList();
 	    	if (todoList != null){
 		    	for(LocalDate date:todoList.keySet()){ //looping through dates which have Tasks inside
-		    		int totalFloating = 0, totalDeadline = 0, totalEvent = 0, totalTodo = 0;
+		    		int totalDeadline = 0, totalEvent = 0, totalTodo = 0;
 		    		
 		    		grid.add(new TransparentCircle(), 1, currentYPos++);
 		    		String month = date.getMonth().toString().substring(0, 3);
@@ -297,11 +284,8 @@ public class PrettyDisplay extends Application {
 							case TODO:
 								totalTodo++;
 								break;
-							case EVENT:
-								totalEvent++;
-								break;
 							default:
-								totalFloating++;
+								totalEvent++;
 								break;
 						}
 						if (task.getClash()){
@@ -348,18 +332,8 @@ public class PrettyDisplay extends Application {
 
     void callControllerToAddCommand(){
     	String command = userTextField.getText();
-    	actiontarget.setFill(defaultActionTargetColor);                	
-    	//actiontarget.setText(command);
-    	
     	mainController.addCommand(command);
-    	
-    	//actiontarget.setText(showFeedBack(programState.getExitState());
-        actiontarget.setText(Display.showFeedBack());
-
-    //	FlowPane colorizedCommand = parseAndColorize(Display.showFeedBack());
-    //	setUserFeedback(colorizedCommand);
     	setUserFeedback();
-        
     	calendarGrid.getChildren().clear();
         populateGrid(calendarGrid);
         if(mainController.getProgramState().getExitState()){
@@ -369,6 +343,9 @@ public class PrettyDisplay extends Application {
     }
     
     FlowPane parseAndColorize(String text){
+    	if (text.equals("INVALID")){
+    		text = STRING_INVALID_COMMAND;
+    	}
     	ConsoleInputColorizer colorizer = new ConsoleInputColorizer();
     	FlowPane colorizedText = colorizer.parseInputToArray(text);
     	return colorizedText;
@@ -398,84 +375,73 @@ public class PrettyDisplay extends Application {
     public void clearTextField(){
     	userTextField.clear();
     }
-    
-    public void setActionResult(String text){
-    	actiontarget.setText(text);
-    	
-    	if (text.equals("Invalid Command")){
-    		actiontarget.setFill(Color.FIREBRICK);
-    	}
-    	else{
-    		actiontarget.setFill(defaultActionTargetColor);    		
-    	}
-    }
-    
 
-    
-	public String getUserInput() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	public void displayInvalidInput(){
-        actiontarget.setFill(Color.FIREBRICK);
-        actiontarget.setText("No input detected!");
-	}
-	
 	public void setMainController(Controller controller){
 		this.mainController = controller;
 	}
 	
+	private void displayInvalidInput(){
+    	setUserFeedback(parseAndColorize(STRING_INVALID_COMMAND));
+	}
+	
 	void executeKeypress(KeyEvent ke, Stage stage){
 		Stage primaryStage = stage;
-		if (ke.getCode().equals(KeyCode.ENTER))
-        {
-        	if ((userTextField.getText() != null && !userTextField.getText().isEmpty())) {
-    			callControllerToAddCommand();
-            } else {
-            	displayInvalidInput();
-            };
+		
+		if (ke.getCode().equals(KeyCode.ENTER)) {
+			processUserEnter();
         }
         
-        else if (ke.getCode().equals(KeyCode.DOWN) && !isCalendarHidden)
-        {
+        else if (ke.getCode().equals(KeyCode.DOWN) && currentState == CurrentState.VIEWING_CALENDAR) {
     		scrollDown(0.25f);
         }
-        else if (ke.getCode().equals(KeyCode.UP) && !isCalendarHidden)
-        {
+        else if (ke.getCode().equals(KeyCode.UP) && currentState == CurrentState.VIEWING_CALENDAR) {
     		scrollUp(0.25f);
         }
         else if (ke.getCode().equals(KeyCode.PAGE_UP)) {
         	attemptToggleHelpScreenView();
         }
         else if (ke.getCode().equals(KeyCode.PAGE_DOWN)) {
+        	//minimize program to tray
             primaryStage.setIconified(true);
         }
         else if (ke.getCode().equals(KeyCode.END)) {
         	attemptToggleCalendarHiddenMode(stage);
         } 
         else if (ke.getCode().equals(KeyCode.ESCAPE)){
-        	
+        	//do nothing
         }
-        else {
+        else if (currentState != CurrentState.VIEWING_HELPSCREEN){ //currently a hack to fix some bug
         	//for all other non-reserved keystrokes
-        	String userText = userTextField.getText();
-        	if (ke.getCode().isLetterKey()){
-        		userText = userText + ke.getCode().toString().toLowerCase() + " ";
-        	}
-     //   	ConsoleInputColorizer colorizer = new ConsoleInputColorizer();
-      //  	FlowPane flowPane = colorizer.parseInputToArray(userText);
-    //    	programFeedback = colorizer.parseInputToArray(userText);
-     //   	grid2.getChildren().remove(2);
-      //  	grid2.add(colorizer.parseInputToArray(userText), 0, 2);
-        	
-        	FlowPane colorizedText = parseAndColorize(userText);
-        	setUserFeedback(colorizedText);
-        	
-        //	grid2.add(programFeedback, 0, 2);
-        	
+        	processNonReservedKeys(ke);
         }
 		
+	}
+	
+	void processNonReservedKeys(KeyEvent ke){
+    	String userText = userTextField.getText();
+    	
+    	if (ke.getCode().isLetterKey()){
+    		userText = userText + ke.getCode().toString().toLowerCase() + " ";
+    	}
+    	
+    	else if (ke.getCode().equals(KeyCode.BACK_SPACE)){
+    		if (userText.length() <= 1) {
+    			userText = STRING_DEFAULT_FEEDBACK;
+    		} else {
+    			userText = userText.substring(0, userText.length()-1);
+    		}
+    	}
+    	
+    	FlowPane colorizedText = parseAndColorize(userText);
+    	setUserFeedback(colorizedText);
+	}
+	
+	void processUserEnter(){
+    	if ((userTextField.getText() != null && !userTextField.getText().isEmpty())) {
+			callControllerToAddCommand();
+        } else {
+        	displayInvalidInput();
+        }
 	}
 	
 	void scrollUp(double scrollValue){
@@ -499,25 +465,18 @@ public class PrettyDisplay extends Application {
     	HelpScreen helpScreen = new HelpScreen();
     	grid2.getChildren().remove(s1);
     	grid2.add(helpScreen, 0, 0);
-        actiontarget.setFill(defaultActionTargetColor);
-		actiontarget.setText("Viewing cheatsheet: Press PAGEUP key to resume");
     	isViewingHelpScreen = true;
     	isCalendarHidden = true;
-    	System.out.println(currentState);
 		currentState = CurrentState.VIEWING_HELPSCREEN;
-    	System.out.println(currentState);
-		
 	}
 	
 	void hideHelpScreen(){
 		grid2.getChildren().clear();
 		grid2.add(s1,0,0);
         grid2.add(userTextField, 0, 1);
-        actiontarget.setFill(defaultActionTargetColor);
         setUserFeedbackFromHelpScreen(parseAndColorize("Input command into the field above"));
 		isViewingHelpScreen = false;
 		currentState = CurrentState.VIEWING_CALENDAR;
-    	System.out.println(currentState);
 	}
 	
 	void unHideCalendar(Stage stage){
@@ -550,7 +509,6 @@ public class PrettyDisplay extends Application {
 		}
 	}
 	
-	//currently not working..
 	public void closeWindow(){
 		Platform.exit();
 	}

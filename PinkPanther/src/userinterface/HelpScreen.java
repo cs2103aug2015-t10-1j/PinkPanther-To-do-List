@@ -1,15 +1,17 @@
 package userinterface;
 
+import common.TaskType;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
+import javafx.scene.text.TextAlignment;
 
 public class HelpScreen extends ScrollPane{
 	public HelpScreen(){
@@ -29,54 +31,46 @@ public class HelpScreen extends ScrollPane{
         
 
         Text scenetitle = new Text("Cheatsheet");
-        scenetitle.setFont(Font.font("Tahoma", FontWeight.BOLD, 66));
+        scenetitle.setFont(Font.font("Tahoma", FontWeight.BOLD, 32));
         scenetitle.setFill(Color.DIMGRAY);
-        grid.add(scenetitle, 2, 2);
+        grid.add(scenetitle, 1, 1);
         
         
-        TextedColorDayBox addBox = new TextedColorDayBox("add");
-        grid.add(addBox, 4, 1);
-     /*   
-        TextedTaskBox addInfo = new TextedTaskBox("   add yourEventName, 5pm-8pm", "", "", 0);
-        grid.add(addInfo, 5, 1);
-        
-        
-        TextedColorDayBox delBox = new TextedColorDayBox("delete");
-        grid.add(delBox, 4, 2);
-        
-        TextedTaskBox delInfo = new TextedTaskBox("   Instructions for del", "", "", 0);
-        grid.add(delInfo, 5, 2);
-        
-        
-        TextedColorDayBox editBox = new TextedColorDayBox("edit");
-        grid.add(editBox, 4, 3);
-        
-        TextedTaskBox editInfo = new TextedTaskBox("   Instructions for edit", "", "", 0);
-        grid.add(editInfo, 5, 3);
-        
-        
-        TextedColorDayBox undoBox = new TextedColorDayBox("undo");
-        grid.add(undoBox, 4, 4);
-        
-        TextedTaskBox undoInfo = new TextedTaskBox("   Instructions for undo", "", "", 0);
-        grid.add(undoInfo, 5, 4);
-        
-        
+        IndexBox addBox = new IndexBox("+");
+        grid.add(addBox, 1, 3);
+        StackPane addCommandRectangle = createColoredBox("add", 0);
+        grid.add(addCommandRectangle, 2, 3);
+        StackPane addCommandRectangle2 = createColoredBox("<Event Name>", 0);
+        grid.add(addCommandRectangle2, 3, 3);
 
-        TextedColorDayBox redoBox = new TextedColorDayBox("redo");
-        grid.add(redoBox, 4, 5);
-        
-        TextedTaskBox redoInfo = new TextedTaskBox("   Instructions for redo", "", "", 0);
-        grid.add(redoInfo, 5, 5);
-        
-        
-        
-        TextedColorDayBox saveBox = new TextedColorDayBox("save");
-        grid.add(saveBox, 4, 6);
+	}
+	
+	private StackPane createColoredBox(String boxText, int colorIndex){
+		Color[] col = {(Color.RED), Color.web("6495ED"), 
+				(Color.web("51D444")), (Color.web("D4573A")), (Color.POWDERBLUE)};
+		
+		StackPane stackPane = new StackPane();
+		
+		Rectangle box = new Rectangle();
+		
+		int textLength = boxText.length();
+		int boxWidth = textLength*10;
+		
+		box.setWidth(boxWidth);
+		box.setHeight(30);
+		box.setArcWidth(4);
+		box.setArcHeight(4);               
+		box.setStroke(Color.DIMGRAY);
+		box.setStrokeWidth(2.0f);
+		box.setFill(col[colorIndex]);
 
-        TextedTaskBox saveInfo = new TextedTaskBox("   Instructions for save", "", "", 0);
-        grid.add(saveInfo, 5, 6);
-        
-        */
+		Text text = new Text(boxText);
+		text.setFont(Font.font("Tahoma", FontWeight.BOLD, 13));
+		text.setTextAlignment(TextAlignment.CENTER);
+		text.setFill(Color.WHITE);
+		
+		stackPane.getChildren().addAll(box, text);
+		
+		return stackPane;
 	}
 }

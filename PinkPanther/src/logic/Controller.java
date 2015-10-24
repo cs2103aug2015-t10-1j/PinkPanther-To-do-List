@@ -125,7 +125,7 @@ public class Controller {
 					state.setTodoList(manager.getDated(false));
 					break;
 				default:
-					Display.setFeedBack("invalid command");		
+					Display.setFeedBack("INVALID");		
 			}
 		}
 		

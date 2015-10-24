@@ -8,7 +8,7 @@ public class TimeBox extends Rectangle{
 	
 	private Color[] colArray = {(Color.DARKBLUE), (Color.BLUEVIOLET), (Color.FIREBRICK)};
 	public TimeBox() {
-        setWidth(85);
+        setWidth(80);
         setHeight(20);
         setArcWidth(20);
         setArcHeight(20);

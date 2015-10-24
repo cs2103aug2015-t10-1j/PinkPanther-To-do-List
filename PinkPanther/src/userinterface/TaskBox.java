@@ -97,7 +97,7 @@ public class TaskBox extends StackPane{
 	
 	private Rectangle createTaskHolderBox(TaskType inputTaskType){
 		Color[] col = {(Color.web("EFBAFF")), (Color.web("C1D5F8")), 
-				(Color.web("EEBCB0")), (Color.web("B9EEB4")), (Color.POWDERBLUE)};
+				(Color.web("B9EEB4")), (Color.web("EEBCB0")), (Color.POWDERBLUE)};
 		Rectangle box = new Rectangle();
 		box.setWidth(600);
 		box.setHeight(40);
@@ -175,7 +175,7 @@ public class TaskBox extends StackPane{
 	
 	private StackPane createIndexBox(int index, TaskType inputTaskType){
 		Color[] col = {(Color.web("D652FF")), Color.web("6495ED"), 
-				(Color.web("D4573A")), (Color.web("51D444")), (Color.POWDERBLUE)};
+				(Color.web("51D444")), (Color.web("D4573A")), (Color.POWDERBLUE)};
 		
 		StackPane stackPane = new StackPane();
 		
