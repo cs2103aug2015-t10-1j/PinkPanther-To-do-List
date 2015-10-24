@@ -10,8 +10,8 @@ public class TimeBox extends Rectangle{
 	public TimeBox() {
         setWidth(85);
         setHeight(20);
-        setArcWidth(2);
-        setArcHeight(2);
+        setArcWidth(20);
+        setArcHeight(20);
        // Color textColor = colArray[currColorIndex];
 
         Color textColor = Color.DIMGRAY;

@@ -32,7 +32,7 @@ import common.*;
  
 public class PrettyDisplay extends Application {
 	
-    Text scenetitle = new Text("                      Your Calendar");
+    Text scenetitle = new Text(DEFAULT_SCENE_TITLE);
 	boolean isViewingHelpScreen = false;
     boolean isCalendarHidden = false;
     double currentScrollYPos = 0;
@@ -48,6 +48,11 @@ public class PrettyDisplay extends Application {
     Color defaultActionTargetColor = Color.BLACK;
     ProgramState programState;
     FlowPane programFeedback;
+    
+    private static String DEFAULT_SCENE_TITLE = "                      Your Calendar";
+    
+    private enum CurrentState {VIEWING_CALENDAR, VIEWING_HELPSCREEN, VIEWING_HIDDEN}
+    private CurrentState currentState = CurrentState.VIEWING_CALENDAR;
     
     public static void main(String [ ] args){
     	PrettyDisplay prettyDisplay = new PrettyDisplay();
@@ -373,6 +378,10 @@ public class PrettyDisplay extends Application {
     	grid2.getChildren().remove(2);
     	grid2.add(feedback, 0, 2);
     }
+    void setUserFeedbackFromHelpScreen(FlowPane feedback){
+   // 	grid2.getChildren().remove(2);
+    	grid2.add(feedback, 0, 2);
+    }
     
     public void setUserTextField(String text){
     	if(userTextField!=null){
@@ -436,34 +445,24 @@ public class PrettyDisplay extends Application {
         {
     		scrollUp(0.25f);
         }
-        else if (ke.getCode().equals(KeyCode.PAGE_UP) && !isCalendarHidden)
-        {
-        	if (!isViewingHelpScreen){
-        		viewHelpScreen();
-        	}
-        	else {
-        		hideHelpScreen();
-        	}
+        else if (ke.getCode().equals(KeyCode.PAGE_UP)) {
+        	attemptToggleHelpScreenView();
         }
-        else if (ke.getCode().equals(KeyCode.PAGE_DOWN))
-        {
+        else if (ke.getCode().equals(KeyCode.PAGE_DOWN)) {
             primaryStage.setIconified(true);
         }
-        else if (ke.getCode().equals(KeyCode.END) && !isViewingHelpScreen)
-        {
-        	if (isCalendarHidden){
-        		unHideCalendar(primaryStage);
-        	}
-        	else{
-        		currentScrollYPos = (s1.getVvalue());
-        		hideCalendar(primaryStage);
-        	}
-        } else {
+        else if (ke.getCode().equals(KeyCode.END)) {
+        	attemptToggleCalendarHiddenMode(stage);
+        } 
+        else if (ke.getCode().equals(KeyCode.ESCAPE)){
+        	
+        }
+        else {
+        	//for all other non-reserved keystrokes
         	String userText = userTextField.getText();
         	if (ke.getCode().isLetterKey()){
         		userText = userText + ke.getCode().toString().toLowerCase() + " ";
         	}
-        	actiontarget.setText(userText); //remove later
      //   	ConsoleInputColorizer colorizer = new ConsoleInputColorizer();
       //  	FlowPane flowPane = colorizer.parseInputToArray(userText);
     //    	programFeedback = colorizer.parseInputToArray(userText);
@@ -486,47 +485,69 @@ public class PrettyDisplay extends Application {
 		s1.setVvalue(s1.getVvalue() + scrollValue);		
 	}
 	
+	void attemptToggleHelpScreenView(){
+		if (currentState != CurrentState.VIEWING_HIDDEN) {
+			if (currentState == CurrentState.VIEWING_CALENDAR) {
+				viewHelpScreen();
+			} else if (currentState == CurrentState.VIEWING_HELPSCREEN) {
+				hideHelpScreen();
+			}
+		}
+	}
+	
 	void viewHelpScreen(){
     	HelpScreen helpScreen = new HelpScreen();
     	grid2.getChildren().remove(s1);
     	grid2.add(helpScreen, 0, 0);
-//    	grid2.add(new FirstOpenScreen(), 0, 0);
         actiontarget.setFill(defaultActionTargetColor);
 		actiontarget.setText("Viewing cheatsheet: Press PAGEUP key to resume");
     	isViewingHelpScreen = true;
+    	isCalendarHidden = true;
+    	System.out.println(currentState);
+		currentState = CurrentState.VIEWING_HELPSCREEN;
+    	System.out.println(currentState);
+		
 	}
 	
 	void hideHelpScreen(){
 		grid2.getChildren().clear();
 		grid2.add(s1,0,0);
         grid2.add(userTextField, 0, 1);
-//        grid2.add(actiontarget, 0, 2);
-    //    grid2.add(hbBtn, 0, 2);
         actiontarget.setFill(defaultActionTargetColor);
-        setUserFeedback(parseAndColorize("Input command into the field above"));
-		//actiontarget.setText("Input command into the field above");
+        setUserFeedbackFromHelpScreen(parseAndColorize("Input command into the field above"));
 		isViewingHelpScreen = false;
+		currentState = CurrentState.VIEWING_CALENDAR;
+    	System.out.println(currentState);
 	}
 	
 	void unHideCalendar(Stage stage){
         stage.setHeight(690);
-        scenetitle.setText("Your Calendar");
+        scenetitle.setText(DEFAULT_SCENE_TITLE);
         s1.setDisable(false);
-  //      actiontarget.setFill(defaultActionTargetColor);
- //       actiontarget.setText(Display.showFeedBack());
-		//actiontarget.setText("Input command into the field above");
         isCalendarHidden = false;
  		s1.setVvalue(currentScrollYPos);
+		currentState = CurrentState.VIEWING_CALENDAR;
 	}
 	
 	void hideCalendar(Stage stage){
-        stage.setHeight(240);
-        scenetitle.setText("Calendar Hidden (Click END to restore)");
-        s1.setDisable(true);
-        s1.setVvalue(0);
- //       actiontarget.setFill(defaultActionTargetColor);
-//		actiontarget.setText("Hidden calendar mode: Press END to restore calendar");
-        isCalendarHidden = true;
+		if (currentState != CurrentState.VIEWING_HELPSCREEN){
+	    stage.setHeight(200);
+	    scenetitle.setText("   Crouching Tiger; Hidden Calendar");
+	    s1.setDisable(true);
+	    s1.setVvalue(0);
+	    isCalendarHidden = true;
+		currentState = CurrentState.VIEWING_HIDDEN;
+		}
+	}
+	
+	void attemptToggleCalendarHiddenMode(Stage stage){
+		if (currentState != CurrentState.VIEWING_HELPSCREEN){
+			if (currentState == CurrentState.VIEWING_CALENDAR){
+				hideCalendar(stage);
+			} else if (currentState == CurrentState.VIEWING_HIDDEN){
+				unHideCalendar(stage);
+			}
+		}
 	}
 	
 	//currently not working..

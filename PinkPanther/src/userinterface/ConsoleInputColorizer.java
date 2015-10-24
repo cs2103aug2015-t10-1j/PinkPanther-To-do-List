@@ -26,11 +26,11 @@ public class ConsoleInputColorizer {
 	    ArrayList<Text> textChunks = new ArrayList<>();
 	    FlowPane bundle = new FlowPane();
 	    
-	    String offset = "   ";
+	    String offset = "    ";
 	    textChunks.add(customize(offset, Color.BROWN));
 	    //Todo: use regex to check for valid words
 	    for (int i=0; i<wordList.length; i++){
-	        String spaced = wordList[i].toLowerCase() + " ";
+	        String spaced = wordList[i] + " ";
 	        switch (wordList[i]) {
 	            case "add":
 	                textChunks.add(customize(spaced, Color.BLUE));
