@@ -20,7 +20,7 @@ import common.Task;
 
 public class StorageControl {
 	// Attributes
-	private static File latestDirectoryTextFile = new File("latest directory.txt");
+	private static File latestDirectoryTextFile = new File("Latest directory.txt");
 	private File directory;
 	private TaskStorage taskFile;
 	private Gson gson = new Gson();
@@ -28,7 +28,7 @@ public class StorageControl {
 	// Error Messages
 	//private static final String SUCCESSFUL_CREATE_DIRECTORY_MESSAGE = "Directory created at: \"%1$s\"";
 	private static final String SUCCESSFUL_CHANGE_DIRECTORY_MESSAGE = "Directory changed to: \"%1$s\"";
-	private static final String DIRECTORY_ALREADY_EXISTS_MESSAGE = "Directory: \"%1$s\" already exists";
+	//private static final String DIRECTORY_ALREADY_EXISTS_MESSAGE = "Directory: \"%1$s\" already exists";
 	private static final String SECURITY_EXCEPTION_MESSAGE = "Security manager exists and denies write access to: \"%1$s\"";
 	private static final String NO_INPUT_DIRECTORY_MESSAGE = "No directory path was entered";
 	private static final String IS_NOT_DIRECTORY_MESSAGE = "\"%1$s\" is not a directory";
@@ -100,13 +100,17 @@ public class StorageControl {
 				return false;
 			}
 			
-			File newUndoneTasks = new File(newDirectory.getPath() + "\\Undone tasks.txt");
-			File newDoneTasks = new File(newDirectory.getPath() + "\\Done tasks.txt");
+			taskFile.moveFiles(newDirectory);
 			
-			taskFile.getUndoneFile().renameTo(newUndoneTasks);
+			//File newUndoneTasks = new File(newDirectory.getPath() + "Undone tasks.txt"/*taskFile.getUndoneFile().getName()*/);
+			//File newDoneTasks = new File(newDirectory.getPath() + "Done tasks.txt"/*taskFile.getDoneFile().getName()*/);
+			
+			/*taskFile.getUndoneFile().renameTo(newUndoneTasks);
+			System.out.println("undone file path = " + taskFile.getUndoneFile().getPath());
 			taskFile.setUndoneFile(newUndoneTasks);
 			taskFile.getDoneFile().renameTo(newDoneTasks);
-			taskFile.setDoneFile(newDoneTasks);
+			System.out.println("Done file path = " + taskFile.getDoneFile().getPath());
+			taskFile.setDoneFile(newDoneTasks);*/
 
 			directory.delete();
 			directory = newDirectory;
