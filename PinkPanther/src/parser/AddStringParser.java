@@ -12,6 +12,7 @@ import java.time.LocalTime;
 
 public class AddStringParser implements Parser {
 	
+	private String taskNameStore;
 	private LocalDate startDateStore;
 	private LocalDate endDateStore;
 	private LocalTime startTimeStore;
@@ -19,7 +20,7 @@ public class AddStringParser implements Parser {
 	private TaskType taskTypeStore;
 	
 	// indexes of various arrays
-	private static final int INDEX_TASKNAME = 0;
+//	private static final int INDEX_TASKNAME = 0;
 	private static final int INDEX_TASK_DETAIL = 1;
 	
 	// word list
@@ -39,13 +40,15 @@ public class AddStringParser implements Parser {
 		clearStores();
 		String[] userInfo = commandContent.split(",");
 		userInfo = Auxiliary.trimStringArray(userInfo);
-		int validDateTimes = findValidDateTime(userInfo);
 		
 		// does not accept empty input
 		if (Auxiliary.isEmptyArray(userInfo)) {
 			Display.setFeedBack("You have not entered a task name.");
 			return null;
 		}
+		
+		taskNameStore = userInfo[0];
+		int validDateTimes = findValidDateTime(userInfo);
 		
 		// create a floating task
 		if (userInfo.length == 1 || validDateTimes == 0) {
@@ -58,7 +61,7 @@ public class AddStringParser implements Parser {
 		
 		// create a deadline or to-do
 		} else if (validDateTimes == 1)  {
-			return addSingleDated(userInfo);
+			return addSingleDated();
 		
 		// should not be invoked
 		} else {
@@ -78,9 +81,16 @@ public class AddStringParser implements Parser {
 			int timeCount = countValidTimes(possiblyDateTime[i]);
 			dateCounter += dateCount;
 			timeCounter += timeCount;
-			if (dateCount == 0 && timeCount == 0 ) {
-				return 0;
-			}
+			
+			if (dateCount == 0 && timeCount == 0) {
+				if (dateCounter == 0 && timeCounter == 0) {
+					String appendedTaskName = taskNameStore + ", " + possiblyDateTime[i];
+							setTaskName(appendedTaskName);
+				} else {
+					return 0;
+				}
+			} 
+			
 		}
 		if (Math.max(dateCounter, timeCounter) > 2) {
 			return 0;
@@ -306,7 +316,7 @@ public class AddStringParser implements Parser {
 		// case: 0 T 2 D (add dated event)
 		if (startTimeStore == null || endTimeStore == null) {
 			if (startDateStore.equals(endDateStore)) {
-				return addSingleDated(details);
+				return addSingleDated();
 			}
 			setStartTime(null);
 			setEndTime(null);
@@ -332,13 +342,13 @@ public class AddStringParser implements Parser {
 			LocalDateTime later = endDateStore.atTime(endTimeStore);
 			if (!later.isAfter(earlier)) {
 				if(!later.isBefore(earlier)) {
-					return addSingleDated(details);
+					return addSingleDated();
 				}
 				return addFloating(taskFullDetails);
 			}
 		}
 		
-		Task event = new Task(details[INDEX_TASKNAME], startDateStore, 
+		Task event = new Task(taskNameStore, startDateStore, 
 				 startTimeStore, endDateStore, endTimeStore);			
 		
 		if (isDuringRestrictedDate(event)) {
@@ -350,7 +360,7 @@ public class AddStringParser implements Parser {
 	}
 	
 	// throw exception when more than one date or time found?
-	private Task addSingleDated(String[] details) {
+	private Task addSingleDated() {
 		
 		// case: 1 T 0 D (add todo/deadline today)
 		if (startDateStore == null && endDateStore == null) {
@@ -366,7 +376,7 @@ public class AddStringParser implements Parser {
 			if (endTimeStore == null && startTimeStore != null) {
 				setEndTime(startTimeStore);
 			}
-			Task deadline = new Task(details[INDEX_TASKNAME], endDateStore, endTimeStore,
+			Task deadline = new Task(taskNameStore, endDateStore, endTimeStore,
 					TaskType.DEADLINE);
 			
 			if (deadline.getDate().isEqual(THE_MYTH_DAY)) {
@@ -377,7 +387,7 @@ public class AddStringParser implements Parser {
 			
 		} else if (taskTypeStore == TaskType.TODO 
 				|| (startDateStore != null)) {
-			Task toDoAt = new Task(details[INDEX_TASKNAME], startDateStore, startTimeStore,
+			Task toDoAt = new Task(taskNameStore, startDateStore, startTimeStore,
 					TaskType.TODO);
 			if (toDoAt.getDate().isEqual(THE_MYTH_DAY)) {
 				Display.setFeedBack("This day is too mythical for you to perform any tasks."
@@ -396,6 +406,7 @@ public class AddStringParser implements Parser {
 	
 	// auxiliary methods
 	private void clearStores() {
+		setTaskName(null);
 		setStartDate(null);
 		setEndDate(null);
 		setStartTime(null);
@@ -404,6 +415,10 @@ public class AddStringParser implements Parser {
 	}
 	
 	// accessors for testing
+	public String getTaskName() {
+		return taskNameStore;
+	}
+	
 	public LocalDate getStartDate() {
 		return startDateStore;
 	}
@@ -425,6 +440,10 @@ public class AddStringParser implements Parser {
 	}
 	
 	// mutators
+	public void setTaskName(String newName) {
+		taskNameStore = newName;
+	}
+	
 	public void setStartDate(LocalDate date) {
 		startDateStore = date;
 	}
