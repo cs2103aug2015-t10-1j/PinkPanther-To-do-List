@@ -13,6 +13,7 @@ public class DateRangeParser implements Parser {
 	}
 	
 	public Pair<LocalDate, LocalDate> parse(String commandContent) {
+		asp.clearStores();
 		int validDates = asp.countValidDates(commandContent);
 		if (validDates == 1) {
 			return new Pair<LocalDate, LocalDate>(asp.getStartDate(), asp.getStartDate()); 

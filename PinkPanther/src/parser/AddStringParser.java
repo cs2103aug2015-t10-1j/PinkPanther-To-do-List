@@ -99,7 +99,7 @@ public class AddStringParser implements Parser {
 	}
 	
 	// counts number of dates
-	public int countValidDates(String dateTimeInfo) {
+	protected int countValidDates(String dateTimeInfo) {
 		
 		// itself is a date
 		if (isSingleDate(dateTimeInfo, sdp)) {
@@ -405,7 +405,7 @@ public class AddStringParser implements Parser {
 	}
 	
 	// auxiliary methods
-	private void clearStores() {
+	protected void clearStores() {
 		setTaskName(null);
 		setStartDate(null);
 		setEndDate(null);
