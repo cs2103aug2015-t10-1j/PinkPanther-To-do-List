@@ -57,7 +57,9 @@ public class TaskManager {
 	}
 	
 	public SortedMap<LocalDate,ArrayList<Task>> getDateRange(LocalDate date1,LocalDate date2){
+		
 		return todoList.subMap(date1, date2.plusDays(1));
+
 	}
 	
 	public SortedMap<LocalDate,ArrayList<Task>> getMatchedDated(String keyword){
@@ -310,6 +312,15 @@ public class TaskManager {
 					second.setClash(true);
 				}
 			}		
+		}
+	}
+	
+	
+	public static void printMap(SortedMap<LocalDate,ArrayList<Task>>map){
+		for(LocalDate date:map.keySet()){
+			for(Task task:map.get(date)){
+				System.out.println(task);
+			}
 		}
 	}
 	

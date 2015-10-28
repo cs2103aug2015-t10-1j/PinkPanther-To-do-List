@@ -28,14 +28,18 @@ public class DeleteCommand implements Command{
 		
 		if(taskList.size()==1){
 			taskRef=taskList.get(0);
-			Display.setFeedBack("task has been deleted");
 			manager.deleteTask(taskRef);
+			LocalDate date=taskRef.getDate();
+			String dateString = (date == null) ? "floating tasks" : date.toString();
+			Display.setFeedBack("\""+taskRef.getName()+"\""+" has been deleted from "+dateString);
 			return true;
 		}
 		else{
 			taskListRef=taskList;
-			Display.setFeedBack("tasks have been deleted");
 			manager.deleteMultipleTasks(taskListRef);
+			LocalDate date=taskList.get(0).getDate();
+			String dateString = (date == null) ? "floating tasks" : date.toString();
+			Display.setFeedBack("Tasks have been deleted from "+dateString);
 			return true;
 		}
 		

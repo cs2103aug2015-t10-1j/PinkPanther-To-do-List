@@ -79,7 +79,7 @@ public class Controller {
 						Task unmodified=taskList.get(0);
 						taskPair.setFirst(unmodified);
 						state.setInputBoxText(unmodified.toString());
-						Display.setFeedBack("\"" + unmodified + "\"" + "is being edited.\nEdit it in text box then press ENTER.");
+						Display.setFeedBack("Edit the task in text box, then press ENTER.");
 					}
 					break;
 				case "done":
@@ -98,7 +98,7 @@ public class Controller {
 				case "search":
 					state.setFLoatingList(manager.getMatchedFloating(parameterString));
 					state.setTodoList(manager.getMatchedDated(parameterString));
-					state.setTitle("search result");
+					state.setTitle("Search result");
 					canSave=false;
 					break;
 				case "view":
@@ -111,9 +111,11 @@ public class Controller {
 					break;
 				case "undo":
 					commandStack.undoOperation();
+					Display.setFeedBack("");
 					break;
 				case "redo":
 					commandStack.redoOperation();
+					Display.setFeedBack("");
 					break;
 				case "exit":
 					state.setExitState(true);
@@ -123,9 +125,10 @@ public class Controller {
 					manager.clearAllTasks();
 					state.setFLoatingList(manager.getFloating(false));
 					state.setTodoList(manager.getDated(false));
+					Display.setFeedBack("All tasks have been cleared");
 					break;
 				default:
-					Display.setFeedBack("INVALID");		
+					Display.setFeedBack("Invalid command. Press PageUp for a list of valid commands");		
 			}
 		}
 		
@@ -145,20 +148,23 @@ public class Controller {
 			state.setFLoatingList(manager.getFloating(true));
 			state.setTodoList(manager.getDated(true));
 			state.setTitle("Done tasks");
+			Display.setFeedBack("");
 		}
 		else if(mode.equals("normal")){
 			state.setFLoatingList(manager.getFloating(false));
 			state.setTodoList(manager.getTwoWeek());
 			state.setTitle("Calendar");
+			Display.setFeedBack("");
 		}	
 		else if(parser.queryDateRange(mode)!=null){
 			Pair<LocalDate,LocalDate>datePair=parser.queryDateRange(mode);
 			state.setFLoatingList(null);
 			state.setTodoList(manager.getDateRange(datePair.getFirst(), datePair.getSecond()));
 			state.setTitle(datePair.getFirst()+" to "+datePair.getSecond());
+			Display.setFeedBack("");
 		}
 		else{
-			Display.setFeedBack("invalid input");
+			Display.setFeedBack("Invalid input");
 		}
 	}
 	

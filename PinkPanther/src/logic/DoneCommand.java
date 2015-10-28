@@ -24,7 +24,7 @@ public class DoneCommand implements Command{
 			manager.deleteTask(taskRef);
 			taskRef.setDoneStatus(true);
 			manager.addTask(taskRef);
-			Display.setFeedBack(taskRef.getName()+" is done");
+			Display.setFeedBack("\"" + taskRef.getName()+"\""+" is done");
 			return true;
 		}
 		return false;
