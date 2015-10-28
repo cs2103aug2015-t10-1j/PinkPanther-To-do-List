@@ -130,7 +130,9 @@ public class Controller {
 				default:
 					Display.setFeedBack("Invalid command. Press PageUp for a list of valid commands");		
 			}
+			state.addCommandToHistory(command);
 		}
+		
 		
 		if(canSave){
 			saveToStorage();

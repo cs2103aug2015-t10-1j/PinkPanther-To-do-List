@@ -8,6 +8,7 @@ import java.util.TreeMap;
 public class ProgramState {
 	private ArrayList<Task>floatingList;
 	private SortedMap<LocalDate,ArrayList<Task>>todoList;
+	private ArrayList<String>commandHistory;
 	private String title;
 	private String inputBoxText;
 	private boolean isExit;
@@ -15,6 +16,7 @@ public class ProgramState {
 	public ProgramState(){
 		this.floatingList = new ArrayList<Task>();
 		this.todoList = new TreeMap<LocalDate,ArrayList<Task>>();
+		this.commandHistory=new ArrayList<String>();
 		this.inputBoxText = "";
 		this.isExit = false;
 	}
@@ -39,12 +41,20 @@ public class ProgramState {
 		this.title=title;
 	}
 	
+	public void addCommandToHistory(String commandString){
+		this.commandHistory.add(commandString);
+	}
+	
 	public ArrayList<Task>getFloatingList(){
 		return floatingList;
 	}
 	
 	public SortedMap<LocalDate,ArrayList<Task>>getTodoList(){
 		return todoList;
+	}
+	
+	public ArrayList<String>getCommandHistory(){
+		return commandHistory;
 	}
 	
 	public String getInputBoxText(){
