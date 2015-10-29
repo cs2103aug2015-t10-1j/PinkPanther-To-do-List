@@ -11,6 +11,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
@@ -60,6 +62,7 @@ public class PrettyDisplay extends Application {
     public void start(Stage primaryStage) {
     	objPrimaryStage = primaryStage;
     	mainController = new Controller();
+    	primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream( "PPLogo.png" ))); 
     	
     	 primaryStage.setTitle("PinkPanther: The best to-do list");
          
@@ -132,6 +135,7 @@ public class PrettyDisplay extends Application {
         grid2.setVgap(1);
         grid2.setPadding(new Insets(25, 25, 25, 25));
         grid2.add(s1,0,0);
+        
     }
     void implementUserTextField(){
         userTextField = new TextField();
@@ -290,7 +294,7 @@ public class PrettyDisplay extends Application {
 						}
 						if (task.getClash()){
 							IndexBox testBox = new IndexBox(0);
-							grid.add(testBox, currXPos+1, currentYPos+1);
+							grid.add(testBox, currXPos+14, currentYPos+1);
 						}
 						
 			    		currentYPos++;

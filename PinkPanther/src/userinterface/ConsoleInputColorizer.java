@@ -22,7 +22,6 @@ public class ConsoleInputColorizer {
 		if (input != null){
 			wordList = input.trim().split("[ ]+");
 			inputString = input;
-			System.out.println(input);
 		}
 	    return colorize();
 	}
@@ -68,6 +67,10 @@ public class ConsoleInputColorizer {
 	        
 	        case "exit":
 	        	textChunks.add(customize("Exit command detected: Program will close if you press ENTER.", Color.RED));
+	        break;
+	        
+	        case "invalid":
+	        	textChunks.add(customize("Invalid command. Press PageUp for a list of valid commands", Color.RED));
 	        break;
 	        
 	        default :
