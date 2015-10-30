@@ -29,7 +29,7 @@ public class QueryParser implements Parser {
 		indexList = generateIndexList(indexInfo);
 		
 		// retrieving multiple floating tasks
-		if (userInfo[INDEX_KEYWORD].equalsIgnoreCase("float")) {
+		if (userInfo[INDEX_KEYWORD].equalsIgnoreCase("undated")) {
 			
 			if (indexInfo.length == 1 && indexInfo[INDEX_KEYWORD].equalsIgnoreCase("all")) {
 				return new Pair<LocalDate, ArrayList<Integer>>(null, indexList);

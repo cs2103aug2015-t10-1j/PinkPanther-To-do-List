@@ -11,6 +11,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
@@ -60,6 +62,7 @@ public class PrettyDisplay extends Application {
     public void start(Stage primaryStage) {
     	objPrimaryStage = primaryStage;
     	mainController = new Controller();
+    	primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream( "PPLogo.png" ))); 
     	
     	 primaryStage.setTitle("PinkPanther: The best to-do list");
          
@@ -132,6 +135,7 @@ public class PrettyDisplay extends Application {
         grid2.setVgap(1);
         grid2.setPadding(new Insets(25, 25, 25, 25));
         grid2.add(s1,0,0);
+        
     }
     void implementUserTextField(){
         userTextField = new TextField();
@@ -238,7 +242,7 @@ public class PrettyDisplay extends Application {
 	    		currentYPos++;
 	    		currentYPos++;
 		    	int currFloatXPos = 1;
-	    		DayBox dayBox = new DayBox("Floating Tasks");
+	    		DayBox dayBox = new DayBox("Undated Tasks");
 	    		grid.add(dayBox, 1, currentYPos++);
 		    	for (int i=0; i<floatingTasks.size(); i++){
 		    		totalFloat++;
@@ -264,7 +268,8 @@ public class PrettyDisplay extends Application {
 		    		int totalDeadline = 0, totalEvent = 0, totalTodo = 0;
 		    		
 		    		grid.add(new TransparentCircle(), 1, currentYPos++);
-		    		String month = date.getMonth().toString().substring(0, 3);
+		    		String month = date.getMonth().toString();
+		    		month = month.substring(0, 1)+ month.substring(1, month.length()).toLowerCase();
 		    		String currDayNum = Integer.toString(date.getDayOfMonth());
 		    		int currDayXPos = 1;
 		    		DayBox dayBox = new DayBox(currDayNum + " " + month);
@@ -290,7 +295,7 @@ public class PrettyDisplay extends Application {
 						}
 						if (task.getClash()){
 							IndexBox testBox = new IndexBox(0);
-							grid.add(testBox, currXPos+1, currentYPos+1);
+							grid.add(testBox, currXPos+14, currentYPos+1);
 						}
 						
 			    		currentYPos++;
@@ -335,6 +340,7 @@ public class PrettyDisplay extends Application {
     	mainController.addCommand(command);
     	setUserFeedback();
     	calendarGrid.getChildren().clear();
+    	scenetitle.setText(programState.getTitle());
         populateGrid(calendarGrid);
         if(mainController.getProgramState().getExitState()){
         	closeWindow();
@@ -481,7 +487,7 @@ public class PrettyDisplay extends Application {
 	
 	void unHideCalendar(Stage stage){
         stage.setHeight(690);
-        scenetitle.setText(DEFAULT_SCENE_TITLE);
+        scenetitle.setText(programState.getTitle());
         s1.setDisable(false);
         isCalendarHidden = false;
  		s1.setVvalue(currentScrollYPos);

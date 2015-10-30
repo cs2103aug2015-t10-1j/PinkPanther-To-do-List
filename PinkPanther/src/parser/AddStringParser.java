@@ -337,13 +337,16 @@ public class AddStringParser implements Parser {
 					setStartDate(endDateStore);
 				}
 			}
-			// case: 2 T 2 D (ok)
-			LocalDateTime earlier = startDateStore.atTime(startTimeStore);
-			LocalDateTime later = endDateStore.atTime(endTimeStore);
-			if (!later.isAfter(earlier)) {
-				if(!later.isBefore(earlier)) {
+			// case: 2 T 2 D (ok)	
+			if (endTimeStore.isBefore(startTimeStore)) {
+				return addFloating(taskFullDetails);
+			}
+			
+			if (endDateStore.isEqual(startDateStore)) {
+				if  (!endTimeStore.isAfter(startTimeStore)){
 					return addSingleDated();
 				}
+			} else if (endDateStore.isBefore(startDateStore)) {
 				return addFloating(taskFullDetails);
 			}
 		}
