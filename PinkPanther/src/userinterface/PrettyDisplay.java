@@ -340,6 +340,7 @@ public class PrettyDisplay extends Application {
     	mainController.addCommand(command);
     	setUserFeedback();
     	calendarGrid.getChildren().clear();
+    	scenetitle.setText(programState.getTitle());
         populateGrid(calendarGrid);
         if(mainController.getProgramState().getExitState()){
         	closeWindow();
@@ -486,7 +487,7 @@ public class PrettyDisplay extends Application {
 	
 	void unHideCalendar(Stage stage){
         stage.setHeight(690);
-        scenetitle.setText(DEFAULT_SCENE_TITLE);
+        scenetitle.setText(programState.getTitle());
         s1.setDisable(false);
         isCalendarHidden = false;
  		s1.setVvalue(currentScrollYPos);

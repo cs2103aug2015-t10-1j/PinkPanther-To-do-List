@@ -19,6 +19,7 @@ public class ProgramState {
 		this.commandHistory=new ArrayList<String>();
 		this.inputBoxText = "";
 		this.isExit = false;
+		this.title = "                      Your Calendar";
 	}
 	
 	public void setFLoatingList(ArrayList<Task>floatingList){

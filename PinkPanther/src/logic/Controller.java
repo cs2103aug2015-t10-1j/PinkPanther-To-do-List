@@ -149,24 +149,32 @@ public class Controller {
 		if(mode.equals("done")){
 			state.setFLoatingList(manager.getFloating(true));
 			state.setTodoList(manager.getDated(true));
-			state.setTitle("Done tasks");
-			Display.setFeedBack("");
+			state.setTitle("              ● Viewing: Done Tasks ●");
+			Display.setFeedBack("Input 'view normal' to return to main calendar.");
 		}
 		else if(mode.equals("normal")){
 			state.setFLoatingList(manager.getFloating(false));
 			state.setTodoList(manager.getTwoWeek());
-			state.setTitle("Calendar");
-			Display.setFeedBack("");
+			state.setTitle("                      Your Calendar");
+			Display.setFeedBack("Input command into the field above");
 		}	
 		else if(parser.queryDateRange(mode)!=null){
 			Pair<LocalDate,LocalDate>datePair=parser.queryDateRange(mode);
 			state.setFLoatingList(null);
 			state.setTodoList(manager.getDateRange(datePair.getFirst(), datePair.getSecond()));
-			state.setTitle(datePair.getFirst()+" to "+datePair.getSecond());
-			Display.setFeedBack("");
+			String dateRange = datePair.getFirst().toString();
+			if (datePair.getFirst().equals(datePair.getSecond())){
+				dateRange = datePair.getFirst().toString();
+				state.setTitle("     ● Viewing: Tasks on " + dateRange + " ●");
+			} else {
+				dateRange = "" + datePair.getFirst() + " - " +  datePair.getSecond();
+				state.setTitle("● Viewing: " + dateRange + " ●");
+			
+			}
+			Display.setFeedBack("Input 'view normal' to return to main calendar.");
 		}
 		else{
-			Display.setFeedBack("Invalid input");
+			Display.setFeedBack("INVALID");
 		}
 	}
 	
