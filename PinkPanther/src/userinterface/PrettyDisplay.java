@@ -224,7 +224,12 @@ public class PrettyDisplay extends Application {
         scenetitle.setFont(Font.font("Tahoma", FontWeight.BOLD, 33));
         scenetitle.setFill(Color.DIMGRAY);
         grid.add(scenetitle, 1, 0);
-
+        
+        try{
+        	scenetitle.setText(programState.getTitle());
+        } catch (NullPointerException e) {
+        	scenetitle.setText(DEFAULT_SCENE_TITLE);
+        }
     	programState = mainController.getProgramState();
         
     	setUserTextField(programState.getInputBoxText());
@@ -359,24 +364,24 @@ public class PrettyDisplay extends Application {
     }
     
     void setUserFeedback(FlowPane feedback){
-    	grid2.getChildren().remove(2);
-    	grid2.add(feedback, 0, 2);
+    	if (!grid2.getChildren().remove(programFeedback)){
+    		if (currentState != CurrentState.VIEWING_HELPSCREEN){
+    			grid2.getChildren().remove(2);
+    		}
+    	}
+    	programFeedback = feedback;
+    	grid2.add(programFeedback , 0, 2);
     }
-    void setUserFeedbackFromHelpScreen(FlowPane feedback){
-   // 	grid2.getChildren().remove(2);
-    	grid2.add(feedback, 0, 2);
+    
+    void setUserFeedback(){
+    	FlowPane feedback = parseAndColorize(Display.showFeedBack());
+    	setUserFeedback(feedback);
     }
     
     public void setUserTextField(String text){
     	if(userTextField!=null){
     		userTextField.setText(text);
     	}
-    }
-    
-    void setUserFeedback(){
-    	FlowPane feedback = parseAndColorize(Display.showFeedBack());
-    	grid2.getChildren().remove(2);
-    	grid2.add(feedback, 0, 2);
     }
     
     public void clearTextField(){
@@ -414,16 +419,13 @@ public class PrettyDisplay extends Application {
         else if (ke.getCode().equals(KeyCode.END)) {
         	attemptToggleCalendarHiddenMode(stage);
         } 
-        else if (ke.getCode().equals(KeyCode.ESCAPE)){
-        	//do nothing
-        }
         else if (ke.getCode().equals(KeyCode.F1)){
         	isTruncatedMode = !isTruncatedMode;
         	calendarGrid.getChildren().clear();
         	scenetitle.setText(programState.getTitle());
             populateGrid(calendarGrid);
         }
-        else if (currentState != CurrentState.VIEWING_HELPSCREEN){ //currently a hack to fix some bug
+        else { //currently a hack to fix some bug
         	//for all other non-reserved keystrokes
         	processNonReservedKeys(ke);
         }
@@ -440,6 +442,10 @@ public class PrettyDisplay extends Application {
     	else if (ke.getCode().equals(KeyCode.BACK_SPACE)){
     		if (userText.length() <= 1) {
     			userText = STRING_DEFAULT_FEEDBACK;
+    			if (!programState.getTitle().equals(DEFAULT_SCENE_TITLE)){
+    				userTextField.setText("view normal");
+    				callControllerToAddCommand();
+    			}
     		} else {
     			userText = userText.substring(0, userText.length()-1);
     		}
@@ -487,7 +493,7 @@ public class PrettyDisplay extends Application {
 		grid2.getChildren().clear();
 		grid2.add(s1,0,0);
         grid2.add(userTextField, 0, 1);
-        setUserFeedbackFromHelpScreen(parseAndColorize("Input command into the field above"));
+        setUserFeedback(parseAndColorize("Input command into the field above"));
 		isViewingHelpScreen = false;
 		currentState = CurrentState.VIEWING_CALENDAR;
 	}
@@ -513,12 +519,10 @@ public class PrettyDisplay extends Application {
 	}
 	
 	void attemptToggleCalendarHiddenMode(Stage stage){
-		if (currentState != CurrentState.VIEWING_HELPSCREEN){
-			if (currentState == CurrentState.VIEWING_CALENDAR){
-				hideCalendar(stage);
-			} else if (currentState == CurrentState.VIEWING_HIDDEN){
-				unHideCalendar(stage);
-			}
+		if (currentState == CurrentState.VIEWING_CALENDAR){
+			hideCalendar(stage);
+		} else if (currentState == CurrentState.VIEWING_HIDDEN){
+			unHideCalendar(stage);
 		}
 	}
 	
