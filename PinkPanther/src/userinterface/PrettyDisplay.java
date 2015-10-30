@@ -359,6 +359,7 @@ public class PrettyDisplay extends Application {
     		text = STRING_INVALID_COMMAND;
     	}
     	ConsoleInputColorizer colorizer = new ConsoleInputColorizer();
+    	colorizer.setController(mainController);
     	FlowPane colorizedText = colorizer.parseInputToArray(text);
     	return colorizedText;
     }
@@ -374,7 +375,13 @@ public class PrettyDisplay extends Application {
     }
     
     void setUserFeedback(){
-    	FlowPane feedback = parseAndColorize(Display.showFeedBack());
+    	FlowPane feedback;
+    	if (Display.showFeedBack() != null){
+    		feedback = parseAndColorize(Display.showFeedBack());
+    	} else {
+    		feedback = parseAndColorize(STRING_DEFAULT_FEEDBACK);
+    	}
+    	
     	setUserFeedback(feedback);
     }
     
@@ -437,6 +444,8 @@ public class PrettyDisplay extends Application {
     	
     	if (ke.getCode().isLetterKey()){
     		userText = userText + ke.getCode().toString().toLowerCase() + " ";
+    	} else if (ke.getCode().isDigitKey()) {
+    		userText = userText + ke.getCode().getName() + " ";
     	}
     	
     	else if (ke.getCode().equals(KeyCode.BACK_SPACE)){
@@ -493,7 +502,8 @@ public class PrettyDisplay extends Application {
 		grid2.getChildren().clear();
 		grid2.add(s1,0,0);
         grid2.add(userTextField, 0, 1);
-        setUserFeedback(parseAndColorize("Input command into the field above"));
+        setUserFeedback();
+   //     setUserFeedback(parseAndColorize("Input command into the field above"));
 		isViewingHelpScreen = false;
 		currentState = CurrentState.VIEWING_CALENDAR;
 	}

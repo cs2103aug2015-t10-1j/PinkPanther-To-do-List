@@ -137,7 +137,7 @@ public class Controller {
 					Display.setFeedBack("All tasks have been cleared");
 					break;
 				default:
-					Display.setFeedBack("Invalid command. Press PageUp for a list of valid commands");		
+					Display.setFeedBack("Unrecognized command. Press PAGE_UP for Help Screen.");		
 			}
 			state.addCommandToHistory(command);
 		}
@@ -183,7 +183,7 @@ public class Controller {
 			Display.setFeedBack("Input 'view normal' to return to main calendar.");
 		}
 		else{
-			Display.setFeedBack("INVALID");
+			Display.setFeedBack("Invalid view range specified!");
 		}
 	}
 	

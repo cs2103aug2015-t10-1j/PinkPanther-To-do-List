@@ -8,6 +8,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import logic.Controller;
 import parser.*;
 import javax.swing.*;
 
@@ -16,14 +17,18 @@ public class ConsoleInputColorizer {
 	public ConsoleInputColorizer() {}
 	private String inputString;
 	CommandParser parser = new CommandParser();
+	private Controller controller;
 	
 	public FlowPane parseInputToArray(String input) {
-		
 		if (input != null){
 			wordList = input.trim().split("[ ]+");
 			inputString = input;
 		}
 	    return colorize();
+	}
+	
+	public void setController(Controller mainController){
+		controller = mainController;
 	}
 
 	public FlowPane colorize() {
@@ -45,24 +50,41 @@ public class ConsoleInputColorizer {
 	      //  	bundle.getChildren().add(customize("Adding \u25b6", Color.BLACK));
 	        	if (wordList.length > 1){
 		        	String taskInfo = inputString.split(" ", 2)[1];	
-		        	try{
+		//        	try{
+		        	if (taskInfo != null){
 		        		textChunks.addAll(breakTaskIntoFlowPane(addParser.parse(taskInfo)));
-		        	} catch (ArrayIndexOutOfBoundsException e) {
-		        		
 		        	}
+		//        	} catch (ArrayIndexOutOfBoundsException e) {
+		        		
+		//        	}
 	        	}
 	        	break;
 	        	
 	        case "del":
+	        case "delete":
 	        	textChunks.add(customize("Deleting \u25b6", Color.BROWN));
-	        	//need CS to help me search for Task object?
-	            textChunks.add(customize(" [ENTER TASK DATE],[ENTER TASK INDEX]", Color.RED));
+	        	if (wordList.length > 1){
+		        	String taskInfo = inputString.split(" ", 2)[1];	
+		        	if (taskInfo != null){
+		        		Task task = controller.findTask(taskInfo);
+		        		if (task != null) {
+		        			textChunks.addAll(breakTaskIntoFlowPane(task));
+		        		}
+		        	}
+	        	}
 	        break;
 	        
 	        case "edit":
 	        	textChunks.add(customize("Editing \u25b6", Color.BROWN));
-	        	//need CS to help me search for Task object?
-	            textChunks.add(customize(" [ENTER TASK DATE],[ENTER TASK INDEX]", Color.RED));
+	        	if (wordList.length > 1){
+		        	String taskInfo = inputString.split(" ", 2)[1];	
+		        	if (taskInfo != null){
+		        		Task task = controller.findTask(taskInfo);
+		        		if (task != null) {
+		        			textChunks.addAll(breakTaskIntoFlowPane(task));
+		        		}
+		        	}
+	        	}
 	        break;
 	        
 	        case "exit":
@@ -70,7 +92,8 @@ public class ConsoleInputColorizer {
 	        break;
 	        
 	        case "invalid":
-	        	textChunks.add(customize("Invalid command. Press PageUp for a list of valid commands", Color.RED));
+	        case "unrecognized":
+	        	textChunks.add(customize(inputString, Color.RED));
 	        break;
 	        
 	        default :
