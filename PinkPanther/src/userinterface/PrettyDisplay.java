@@ -41,6 +41,7 @@ public class PrettyDisplay extends Application {
     Color defaultActionTargetColor = Color.BLACK;
     ProgramState programState;
     FlowPane programFeedback;
+    private boolean isTruncatedMode = false;
     
     private static String DEFAULT_SCENE_TITLE = "                      Your Calendar";
     private static String STRING_INVALID_COMMAND = "Unrecognized command. Press PAGE_UP for Help Screen.";
@@ -247,7 +248,7 @@ public class PrettyDisplay extends Application {
 		    	for (int i=0; i<floatingTasks.size(); i++){
 		    		totalFloat++;
 		    		currentYPos++;
-		    		TaskBox taskBox = new TaskBox(i+1, floatingTasks.get(i));
+		    		TaskBox taskBox = new TaskBox(i+1, floatingTasks.get(i), isTruncatedMode);
 		    		currTaskIndex++;
 		    		grid.add(taskBox, currFloatXPos, currentYPos);
 	
@@ -299,7 +300,7 @@ public class PrettyDisplay extends Application {
 						}
 						
 			    		currentYPos++;
-		    			TaskBox taskBox = new TaskBox(currTaskIndex, task);
+		    			TaskBox taskBox = new TaskBox(currTaskIndex, task, isTruncatedMode);
 		    			currTaskIndex++;
 			    		grid.add(taskBox, currXPos, currentYPos);
 		
@@ -415,6 +416,12 @@ public class PrettyDisplay extends Application {
         } 
         else if (ke.getCode().equals(KeyCode.ESCAPE)){
         	//do nothing
+        }
+        else if (ke.getCode().equals(KeyCode.F1)){
+        	isTruncatedMode = !isTruncatedMode;
+        	calendarGrid.getChildren().clear();
+        	scenetitle.setText(programState.getTitle());
+            populateGrid(calendarGrid);
         }
         else if (currentState != CurrentState.VIEWING_HELPSCREEN){ //currently a hack to fix some bug
         	//for all other non-reserved keystrokes

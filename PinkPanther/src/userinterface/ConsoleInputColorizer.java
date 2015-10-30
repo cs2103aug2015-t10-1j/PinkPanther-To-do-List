@@ -74,7 +74,7 @@ public class ConsoleInputColorizer {
 	        break;
 	        
 	        default :
-	        	textChunks.add(customize(inputString, Color.GREEN));
+	        	textChunks.add(customize(inputString, Color.BLACK));
 	        break;
 	        	
 	        }

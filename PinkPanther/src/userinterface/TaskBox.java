@@ -14,7 +14,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 public class TaskBox extends StackPane{
-	public TaskBox(int index, Task inputTask){
+	public TaskBox(int index, Task inputTask, boolean isTruncatedMode){
 		TaskType inputTaskType = inputTask.getTaskType();
 		
 		String[] splitName;
@@ -28,10 +28,14 @@ public class TaskBox extends StackPane{
 		int currRectYPos = 1;
 		
 		GridPane grid = new GridPane();
-		
-		for (int i=0; i<numOfColumnsName; i++){
-			Rectangle box = createTaskHolderBox(inputTaskType);
-			grid.add(box, 1, currRectYPos++);
+
+		Rectangle mainBox = createTaskHolderBox(inputTaskType);
+		grid.add(mainBox, 1, currRectYPos++);
+		if (!isTruncatedMode){
+			for (int i=1; i<numOfColumnsName; i++){
+				Rectangle box = createTaskHolderBox(inputTaskType);
+				grid.add(box, 1, currRectYPos++);
+			}
 		}
 		
 	//	grid.setGridLinesVisible(true);
@@ -45,7 +49,7 @@ public class TaskBox extends StackPane{
 		
 	    
 		int currYPos = 1;
-		if (false){
+		if (isTruncatedMode){
 			Text text = new Text("     " + splitName[0]);
 			if (numOfColumnsName > 1){
 				text.setText(text.getText() + "...");
@@ -71,7 +75,7 @@ public class TaskBox extends StackPane{
 
 		GridPane timeSpanBoxes = createTimeSpanBoxes(inputTask);
 		
-		if (numOfColumnsName > 1){
+		if (numOfColumnsName > 1 && inputTask.getTaskType() != TaskType.FLOATING){
 			Rectangle box = createTaskHolderBox(inputTaskType);
 			grid.add(box, 1, currRectYPos++);
 			grid.add(timeSpanBoxes, 65, currRectYPos -1);
