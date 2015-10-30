@@ -44,6 +44,15 @@ public class Controller {
 		return state;
 	}
 	
+	public Task findTask(String string){
+		
+		ArrayList<Task> output = manager.searchTasks(parser.query(string));
+		if(output == null){
+			return null;
+		}
+		return output.get(0);
+	}
+	
 	
 	public void addCommand(String command){
     	System.out.println("Called mainController to add command: " + command);
