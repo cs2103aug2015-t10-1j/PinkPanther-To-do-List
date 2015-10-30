@@ -16,7 +16,7 @@ import javafx.scene.text.TextAlignment;
 public class DayBox extends StackPane{
 	public DayBox(String day){
 	    String dayString, monthString;
-	    if (day.equals("Floating Tasks")){
+	    if (day.equals("Undated Tasks")){
 	    	dayString = "~";
 	    	monthString = day;
 	    } else {

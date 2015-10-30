@@ -242,7 +242,7 @@ public class PrettyDisplay extends Application {
 	    		currentYPos++;
 	    		currentYPos++;
 		    	int currFloatXPos = 1;
-	    		DayBox dayBox = new DayBox("Floating Tasks");
+	    		DayBox dayBox = new DayBox("Undated Tasks");
 	    		grid.add(dayBox, 1, currentYPos++);
 		    	for (int i=0; i<floatingTasks.size(); i++){
 		    		totalFloat++;
@@ -268,7 +268,8 @@ public class PrettyDisplay extends Application {
 		    		int totalDeadline = 0, totalEvent = 0, totalTodo = 0;
 		    		
 		    		grid.add(new TransparentCircle(), 1, currentYPos++);
-		    		String month = date.getMonth().toString().substring(0, 3);
+		    		String month = date.getMonth().toString();
+		    		month = month.substring(0, 1)+ month.substring(1, month.length()).toLowerCase();
 		    		String currDayNum = Integer.toString(date.getDayOfMonth());
 		    		int currDayXPos = 1;
 		    		DayBox dayBox = new DayBox(currDayNum + " " + month);
