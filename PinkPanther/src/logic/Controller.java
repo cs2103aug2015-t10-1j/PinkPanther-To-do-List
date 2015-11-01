@@ -167,6 +167,12 @@ public class Controller {
 			state.setTitle("                      Your Calendar");
 			Display.setFeedBack("Input command into the field above");
 		}	
+		else if(mode.equals("all")){
+			state.setFLoatingList(manager.getFloating(false));
+			state.setTodoList(manager.getDated(false));
+			state.setTitle("                     All Tasks");
+			Display.setFeedBack("");
+		}
 		else if(parser.queryDateRange(mode)!=null){
 			Pair<LocalDate,LocalDate>datePair=parser.queryDateRange(mode);
 			state.setFLoatingList(null);
