@@ -69,7 +69,9 @@ public class ConsoleInputColorizer {
 		        		Task task = controller.findTask(taskInfo);
 		        		if (task != null) {
 		        			textChunks.addAll(breakTaskIntoFlowPane(task));
-		        		}
+		        		} else {
+				        	textChunks.add(customize(" [Specify task date and index]", Color.RED));
+			        	}
 		        	}
 	        	}
 	        break;
@@ -82,7 +84,9 @@ public class ConsoleInputColorizer {
 		        		Task task = controller.findTask(taskInfo);
 		        		if (task != null) {
 		        			textChunks.addAll(breakTaskIntoFlowPane(task));
-		        		}
+		        		} else {
+				        	textChunks.add(customize(" [Specify task date and index]", Color.RED));
+			        	}
 		        	}
 	        	}
 	        break;
@@ -130,7 +134,7 @@ public class ConsoleInputColorizer {
 	    	}
 	    	textChunks.add(customize("]", Color.GREEN));
 	    } else if(task.getEndTime()!=null){
-	    	textChunks.add(customize("[by " + task.getEndTime().toString() + "]", Color.GREEN));
+	    	textChunks.add(customize(" [by " + task.getEndTime().toString() + "]", Color.GREEN));
 	    }
 	    if(task.getStartDate()!=null){
 	    	textChunks.add(customize(" [📅  " + task.getStartDate().toString(), Color.BLUE));
@@ -140,7 +144,7 @@ public class ConsoleInputColorizer {
 	    	textChunks.add(customize("]", Color.BLUE));
 	    }
 	    else if(task.getEndDate()!=null){
-	    	textChunks.add(customize(" [" + task.getEndDate().toString() + "]", Color.BLACK));
+	    	textChunks.add(customize(" [" + task.getEndDate().toString() + "]", Color.BLUE));
 	    }
 	    
 	    bundle.getChildren().addAll(textChunks);

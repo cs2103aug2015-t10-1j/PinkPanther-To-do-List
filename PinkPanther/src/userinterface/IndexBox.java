@@ -68,7 +68,7 @@ public class IndexBox extends StackPane{
 		box.setStrokeWidth(2.0f);
 
 		Text text = new Text(Integer.toString(index));
-		text.setFont(Font.font("Tahoma", FontWeight.BOLD, 13));
+		text.setFont(Font.font("Tahoma", FontWeight.BOLD, 15));
 		text.setTextAlignment(TextAlignment.CENTER);
 		text.setFill(Color.WHITE);
 		
