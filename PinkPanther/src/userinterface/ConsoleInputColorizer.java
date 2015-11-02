@@ -46,7 +46,7 @@ public class ConsoleInputColorizer {
 	        	
 	        case "add":
 	        	AddStringParser addParser = new AddStringParser();
-	        	textChunks.add(customize("Adding \u25b6 ", Color.BROWN));
+	        	textChunks.add(customize("Adding \u25b6 ", Color.GREEN));
 	      //  	bundle.getChildren().add(customize("Adding \u25b6", Color.BLACK));
 	        	if (wordList.length > 1){
 		        	String taskInfo = inputString.split(" ", 2)[1];	
@@ -62,7 +62,7 @@ public class ConsoleInputColorizer {
 	        	
 	        case "del":
 	        case "delete":
-	        	textChunks.add(customize("Deleting \u25b6", Color.BROWN));
+	        	textChunks.add(customize("Delete  \u25b6", Color.GREEN));
 	        	if (wordList.length > 1){
 		        	String taskInfo = inputString.split(" ", 2)[1];	
 		        	if (taskInfo != null){
@@ -70,14 +70,14 @@ public class ConsoleInputColorizer {
 		        		if (task != null) {
 		        			textChunks.addAll(breakTaskIntoFlowPane(task));
 		        		} else {
-				        	textChunks.add(customize(" [Specify task date and index]", Color.RED));
+				        	textChunks.add(customize(" [Valid task date and index not detected yet]", Color.RED));
 			        	}
 		        	}
 	        	}
 	        break;
 	        
 	        case "edit":
-	        	textChunks.add(customize("Editing \u25b6", Color.BROWN));
+	        	textChunks.add(customize("Editing \u25b6", Color.GREEN));
 	        	if (wordList.length > 1){
 		        	String taskInfo = inputString.split(" ", 2)[1];	
 		        	if (taskInfo != null){
@@ -95,20 +95,43 @@ public class ConsoleInputColorizer {
 	        	textChunks.add(customize("Exit command detected: Program will close if you press ENTER.", Color.RED));
 	        break;
 	        
+	        case "search":
+	        	textChunks.add(customize("Search \u25b6 ", Color.GREEN));
+	        	if (wordList.length > 1){
+		        	String taskInfo = inputString.split(" ", 2)[1];
+		        	textChunks.add(customize(trimWord(taskInfo, 55), Color.BLACK));
+	        	}
+	        break;
+	        
+	        case "view":
+	        	textChunks.add(customize("Search \u25b6 ", Color.GREEN));
+	        	if (wordList.length > 1){
+		        	String taskInfo = inputString.split(" ", 2)[1];
+		        	textChunks.add(customize(trimWord(taskInfo, 55), Color.BLACK));
+	        	}
+	        break;
+	        
 	        case "invalid":
 	        case "unrecognized":
 	        	textChunks.add(customize(inputString, Color.RED));
 	        break;
 	        
 	        default :
-	        	textChunks.add(customize("\u25b6 ", Color.BROWN));
-	        	textChunks.add(customize(inputString, Color.BLACK));
+	        	textChunks.add(customize("             \u25b6  ", Color.BROWN));
+	        	textChunks.add(customize(trimWord(inputString, 50)+ "\"", Color.BLACK));
 	        break;
 	        	
 	        }
 
 	    bundle.getChildren().addAll(textChunks);
 	    return bundle;
+	}
+	
+	private String trimWord(String input, int maxLength){
+		if (input.length() >= maxLength){
+			return input.substring(0, maxLength) + "...";
+		}
+		return input;
 	}
 	
 	public Text customize(String word, Color color) {
@@ -125,27 +148,34 @@ public class ConsoleInputColorizer {
 	    ArrayList<Text> textChunks = new ArrayList<>();
 	    FlowPane bundle = new FlowPane();
 	    
-	    String taskName = task.getName();
-	    if (taskName != null)
-	    	textChunks.add(customize("\"" + taskName + "\"", Color.BLACK));
+	    try {
+	    if (task.getName() != null){
+	    	String taskName = task.getName();
+	    	textChunks.add(customize("\"" + trimWord(taskName, 20) + "\"", Color.BLACK));
+	    }
+	    
 	    if(task.getStartTime()!=null){
-	    	textChunks.add(customize(" [⏰  " + task.getStartTime().toString(), Color.GREEN));
+	    	textChunks.add(customize(" [⏰  " + task.getStartTime().toString(), Color.DARKCYAN));
 	    	if(task.getEndTime()!=null){
-		    	textChunks.add(customize(" \u25b6 " + task.getEndTime().toString(), Color.GREEN));
+		    	textChunks.add(customize(" \u25b6 " + task.getEndTime().toString(), Color.DARKCYAN));
 	    	}
-	    	textChunks.add(customize("]", Color.GREEN));
+	    	textChunks.add(customize("]", Color.DARKCYAN));
 	    } else if(task.getEndTime()!=null){
-	    	textChunks.add(customize(" [by " + task.getEndTime().toString() + "]", Color.GREEN));
+	    	textChunks.add(customize(" [by " + task.getEndTime().toString() + "]", Color.DARKCYAN));
 	    }
 	    if(task.getStartDate()!=null){
-	    	textChunks.add(customize(" [📅  " + task.getStartDate().toString(), Color.BLUE));
+	    	textChunks.add(customize(" [📅  " + task.getStartDate().toString(), Color.TOMATO));
 	    	if(task.getEndDate()!=null && !task.getEndDate().equals(task.getStartDate())){
-		    	textChunks.add(customize(" \u25b6 " + task.getEndDate().toString(), Color.BLUE));
+		    	textChunks.add(customize(" \u25b6 " + task.getEndDate().toString(), Color.TOMATO));
 		    }
-	    	textChunks.add(customize("]", Color.BLUE));
+	    	textChunks.add(customize("]", Color.TOMATO));
 	    }
 	    else if(task.getEndDate()!=null){
-	    	textChunks.add(customize(" [" + task.getEndDate().toString() + "]", Color.BLUE));
+	    	textChunks.add(customize(" [" + task.getEndDate().toString() + "]", Color.TOMATO));
+	    }
+	    
+	    } catch (NullPointerException e){
+	    	textChunks.add(customize(" [Please specify valid task name]", Color.RED));
 	    }
 	    
 	    bundle.getChildren().addAll(textChunks);

@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -26,7 +27,7 @@ import common.*;
  
 public class PrettyDisplay extends Application {
 	
-    Text scenetitle = new Text(DEFAULT_SCENE_TITLE);
+	Text scenetitle = new Text(DEFAULT_SCENE_TITLE);
 	boolean isViewingHelpScreen = false;
     boolean isCalendarHidden = false;
     double currentScrollYPos = 0;
@@ -41,11 +42,14 @@ public class PrettyDisplay extends Application {
     Color defaultActionTargetColor = Color.BLACK;
     ProgramState programState;
     FlowPane programFeedback;
+    private int currentStageHeight = DEFAULT_STAGE_HEIGHT;
     private boolean isTruncatedMode = false;
+    
     
     private static String DEFAULT_SCENE_TITLE = "                      Your Calendar";
     private static String STRING_INVALID_COMMAND = "Unrecognized command. Press PAGE_UP for Help Screen.";
     private static String STRING_DEFAULT_FEEDBACK = "Input command into the field above";
+    private static int DEFAULT_STAGE_HEIGHT = 1060;
     
     private enum CurrentState {VIEWING_CALENDAR, VIEWING_HELPSCREEN, VIEWING_HIDDEN}
     private CurrentState currentState = CurrentState.VIEWING_CALENDAR;
@@ -125,7 +129,7 @@ public class PrettyDisplay extends Application {
     }
     void implementScrollPane(){
     	s1 = new ScrollPane();
-        s1.setPrefSize(1080, 660);
+        s1.setPrefSize(1080, 1060);
         s1.setContent(calendarGrid);
         s1.setStyle("-fx-background-color: transparent;");
     }
@@ -208,7 +212,7 @@ public class PrettyDisplay extends Application {
         
     }
     void implementScene(){
-        scene = new Scene(grid2, 720, 650);
+        scene = new Scene(grid2, 720, DEFAULT_STAGE_HEIGHT);
         scene.getStylesheets().clear();
         scene.getStylesheets().add(this.getClass().getResource("a.css").toExternalForm());
 
@@ -217,6 +221,7 @@ public class PrettyDisplay extends Application {
         primaryStage.setResizable(false);
         primaryStage.setScene(scene);
         primaryStage.show();
+        setStageHeight();
     }
     
     void populateGrid(GridPane grid){
@@ -416,49 +421,86 @@ public class PrettyDisplay extends Application {
         else if (ke.getCode().equals(KeyCode.UP) && currentState == CurrentState.VIEWING_CALENDAR) {
     		scrollUp(0.25f);
         }
-        else if (ke.getCode().equals(KeyCode.PAGE_UP)) {
+        else if (ke.getCode().equals(KeyCode.F2)) {
         	attemptToggleHelpScreenView();
         }
+        else if (ke.getCode().equals(KeyCode.PAGE_UP)) {
+        	if (currentStageHeight > 210){
+        		currentStageHeight -= 30;
+        	}
+        	setScrollPaneHeight();
+        	setStageHeight();
+        }
         else if (ke.getCode().equals(KeyCode.PAGE_DOWN)) {
+        	if (currentStageHeight < DEFAULT_STAGE_HEIGHT){
+        		currentStageHeight += 30;
+        	}
+        	setScrollPaneHeight();
+        	setStageHeight();
+        }
+        else if (ke.getCode().equals(KeyCode.ESCAPE)) {
         	//minimize program to tray
             primaryStage.setIconified(true);
         }
-        else if (ke.getCode().equals(KeyCode.END)) {
+        else if (ke.getCode().equals(KeyCode.F1)) {
         	attemptToggleCalendarHiddenMode(stage);
         } 
-        else if (ke.getCode().equals(KeyCode.F1)){
+        else if (ke.getCode().equals(KeyCode.F3) && currentState == CurrentState.VIEWING_CALENDAR){
         	isTruncatedMode = !isTruncatedMode;
         	calendarGrid.getChildren().clear();
         	scenetitle.setText(programState.getTitle());
             populateGrid(calendarGrid);
         }
-        else { //currently a hack to fix some bug
+        else if (ke.getCode().equals(KeyCode.BACK_SPACE)) {
+        	processBackSpace();
+        }
+        
+        else if (ke.getCode().isLetterKey() ||  ke.getCode().isDigitKey() || ke.getCode().equals(KeyCode.SPACE)){
         	//for all other non-reserved keystrokes
         	processNonReservedKeys(ke);
         }
 		
 	}
 	
+	void setStageHeight(){
+		objPrimaryStage.setHeight(currentStageHeight);
+	}
+	
+	void setScrollPaneHeight(){
+        s1.setPrefSize(1080, currentStageHeight);
+		objPrimaryStage.setHeight(currentStageHeight);
+	}
+	
+	void processBackSpace(){
+    	String userText = userTextField.getText();
+    	if (userText.length() == 0) {
+    		userText = STRING_DEFAULT_FEEDBACK;
+    		if (!programState.getTitle().equals(DEFAULT_SCENE_TITLE)){
+    			userTextField.setText("view normal");
+    			callControllerToAddCommand();
+    		}
+    			
+    	} else if (userText.length() == 1) {
+    		userText = STRING_DEFAULT_FEEDBACK;
+		} else {
+    		userText = userText.substring(0, userText.length()-1);
+    	}
+    	FlowPane colorizedText = parseAndColorize(userText);
+    	setUserFeedback(colorizedText);
+	}
+	
 	void processNonReservedKeys(KeyEvent ke){
     	String userText = userTextField.getText();
     	
     	if (ke.getCode().isLetterKey()){
-    		userText = userText + ke.getCode().toString().toLowerCase() + " ";
+    		userText = userText + ke.getCode().toString().toLowerCase();
     	} else if (ke.getCode().isDigitKey()) {
-    		userText = userText + ke.getCode().getName() + " ";
+    		userText = userText + ke.getCode().getName();
+    	} else if (ke.getCode().equals(KeyCode.SPACE)){
+    		userText = userText + " ";
     	}
     	
-    	else if (ke.getCode().equals(KeyCode.BACK_SPACE)){
-    		if (userText.length() <= 1) {
-    			userText = STRING_DEFAULT_FEEDBACK;
-    			if (!programState.getTitle().equals(DEFAULT_SCENE_TITLE)){
-    				userTextField.setText("view normal");
-    				callControllerToAddCommand();
-    			}
-    		} else {
-    			userText = userText.substring(0, userText.length()-1);
-    		}
-    	}
+    	
     	
     	FlowPane colorizedText = parseAndColorize(userText);
     	setUserFeedback(colorizedText);
@@ -468,7 +510,7 @@ public class PrettyDisplay extends Application {
     	if ((userTextField.getText() != null && !userTextField.getText().isEmpty())) {
 			callControllerToAddCommand();
         } else {
-        	displayInvalidInput();
+        //	displayInvalidInput();
         }
 	}
 	
@@ -509,7 +551,7 @@ public class PrettyDisplay extends Application {
 	}
 	
 	void unHideCalendar(Stage stage){
-        stage.setHeight(690);
+        stage.setHeight(currentStageHeight);
         scenetitle.setText(programState.getTitle());
         s1.setDisable(false);
         isCalendarHidden = false;

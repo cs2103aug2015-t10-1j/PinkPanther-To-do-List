@@ -110,7 +110,7 @@ public class Controller {
 				case "search":
 					state.setFLoatingList(manager.getMatchedFloating(parameterString));
 					state.setTodoList(manager.getMatchedDated(parameterString));
-					state.setTitle("              ● Viewing: Search Result ●");
+					state.setTitle("         ● Searching: [" + parameterString + "] ●");
 					Display.setFeedBack("Input 'view normal' to return to main calendar.");
 					canSave=false;
 					break;

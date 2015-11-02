@@ -28,7 +28,11 @@ public class AddCommand implements Command{
 	    taskRef=task;
 	    LocalDate date = taskRef.getDate();
 	    String dateString = (date == null) ? "floating tasks" : date.toString();
-	    Display.setFeedBack("\"" + task.getName()+ "\"" + " has been added to " + dateString + ".");
+	    String taskName = task.getName();
+	    if (taskName.length() > 30){
+	    	taskName = taskName.substring(0,30) + "...";
+	    }
+	    Display.setFeedBack("Task added: " + "[" + dateString + "] " + "\"" + taskName + "\"");
 	    return true;
 	}
 	
