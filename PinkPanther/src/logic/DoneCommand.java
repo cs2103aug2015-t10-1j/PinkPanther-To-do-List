@@ -17,8 +17,12 @@ public class DoneCommand implements Command{
 	}
 	
 	public boolean execute(Pair<LocalDate,ArrayList<Integer>>pair){
+		ArrayList<Task>taskList=manager.searchTasks(pair);
+		if(taskList==null){
+			return false;
+		}
 		
-		taskRef=manager.searchTasks(pair).get(0);
+		taskRef=taskList.get(0);
 		if(taskRef!=null){
 			//move the task to doneList
 			manager.deleteTask(taskRef);
