@@ -76,7 +76,7 @@ public class Controller {
 					AddCommand add = new AddCommand(manager);
 					if(add.execute(parser.createTask(parameterString))){
 						commandStack.addCommand(add);
-					}
+					}				
 					break;
 				case "edit":
 					ArrayList<Task>taskList=manager.searchTasks(parser.query(parameterString));
@@ -85,12 +85,17 @@ public class Controller {
 						taskPair.setFirst(unmodified);
 						state.setInputBoxText(unmodified.toString());
 						Display.setFeedBack("Edit the task in text box, then press ENTER.");
+					} else{
+						state.setInputBoxText(command);
 					}
+					
 					break;
 				case "done":
 					DoneCommand done = new DoneCommand(manager);
 					if(done.execute(parser.query(parameterString))){
 						commandStack.addCommand(done);
+					} else{
+						state.setInputBoxText(command);
 					}
 					break;
 				case "del":
@@ -98,6 +103,8 @@ public class Controller {
 					DeleteCommand delete = new DeleteCommand(manager);
 					if(delete.execute(parser.query(parameterString))){
 						commandStack.addCommand(delete);
+					} else{
+						state.setInputBoxText(command);
 					}
 					break;	
 				case "search":
@@ -107,7 +114,9 @@ public class Controller {
 					canSave=false;
 					break;
 				case "view":
-					changeDisplayMode(parameterString);
+					if(!changeDisplayMode(parameterString)){
+						state.setInputBoxText(command);
+					}
 					canSave=false;
 					break;
 				case "save":
@@ -133,7 +142,8 @@ public class Controller {
 					Display.setFeedBack("All tasks have been cleared");
 					break;
 				default:
-					Display.setFeedBack("Unrecognized command. Press PAGE_UP for Help Screen.");		
+					Display.setFeedBack("Unrecognized command. Press PAGE_UP for Help Screen.");
+					state.setInputBoxText(command);
 			}
 			state.addCommandToHistory(command);
 		}
@@ -150,7 +160,8 @@ public class Controller {
 		storage.save(manager.getTaskArray(false),false);
 	}
 	
-	private void changeDisplayMode(String mode){
+	private boolean changeDisplayMode(String mode){
+		boolean canView = true;
 		if(mode.equals("done")){
 			state.setFLoatingList(manager.getFloating(true));
 			state.setTodoList(manager.getDated(true));
@@ -192,7 +203,9 @@ public class Controller {
 		}
 		else{
 			Display.setFeedBack("Invalid view range specified!");
+			canView = false;
 		}
+		return canView;
 	}
 	
 }
