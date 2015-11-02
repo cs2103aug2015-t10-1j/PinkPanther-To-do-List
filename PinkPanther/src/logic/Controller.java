@@ -1,9 +1,5 @@
 package logic;
 
-//import java.time.LocalDate;
-
-//import java.util.ArrayList;
-//import java.util.TreeMap;
 
 import common.Pair;
 import common.ProgramState;
@@ -161,7 +157,7 @@ public class Controller {
 			state.setTitle("              ● Viewing: Done Tasks ●");
 			Display.setFeedBack("Input 'view normal' to return to main calendar.");
 		}
-		else if(mode.equals("normal")){
+		else if(mode.equals("normal") || mode.equals("norm")){
 			state.setFLoatingList(manager.getFloating(false));
 			state.setTodoList(manager.getTwoWeek());
 			state.setTitle("                      Your Calendar");
@@ -170,8 +166,14 @@ public class Controller {
 		else if(mode.equals("all")){
 			state.setFLoatingList(manager.getFloating(false));
 			state.setTodoList(manager.getDated(false));
-			state.setTitle("                     All Tasks");
-			Display.setFeedBack("");
+			state.setTitle("              ● Viewing: All Tasks ●");
+			Display.setFeedBack("Input 'view normal' to return to main calendar.");
+		}
+		else if(mode.equals("previous") || mode.equals("prev")){
+			state.setFLoatingList(null);
+			state.setTodoList(manager.getDatedPrevious());
+			state.setTitle("              ● Viewing: Overdue Tasks ●");
+			Display.setFeedBack("Input 'view normal' to return to main calendar.");
 		}
 		else if(parser.queryDateRange(mode)!=null){
 			Pair<LocalDate,LocalDate>datePair=parser.queryDateRange(mode);

@@ -20,8 +20,12 @@ public class AddCommand implements Command{
 			return false;
 		}
 		
+	    if(!manager.addTask(task)){
+	    	Display.setFeedBack("You have already added this task");
+	    	return false;
+	    }
+	    
 	    taskRef=task;
-	    manager.addTask(task);
 	    LocalDate date = taskRef.getDate();
 	    String dateString = (date == null) ? "floating tasks" : date.toString();
 	    Display.setFeedBack("\"" + task.getName()+ "\"" + " has been added to " + dateString + ".");

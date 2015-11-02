@@ -216,5 +216,37 @@ public class Task {
 		}
 	}
 	
+	public boolean isEqual(Task other){		
+		if(!this.getName().equals(other.getName()) || this.getTaskType() != other.getTaskType()){
+			return false;
+		}
+		
+		if(this.getTaskType() == TaskType.FLOATING){
+			return true;
+		} else if(this.getTaskType() == TaskType.DEADLINE){
+			return this.getEndDate().equals(other.getEndDate()) && this.getEndTime().equals(other.getEndTime());
+		} else if(this.getTaskType() == TaskType.TODO){
+			return this.getStartDate().equals(other.getStartDate()) && this.getStartTime().equals(other.getStartTime());
+		} else{
+			boolean sameDate = this.getStartDate().equals(other.getStartDate()) && 
+					this.getEndDate().equals(other.getEndDate());
+			if(this.getStartTime() == null && other.getStartTime() == null){
+				return sameDate;
+			}
+			else if(this.getStartTime() != null && other.getStartTime() != null){
+				return sameDate && this.getStartTime().equals(other.getStartTime()) &&
+						this.getEndTime().equals(other.getEndTime());
+			}else{
+				return false;
+			}
+		}
+
+		
+		
+		
+		
+		
+	}
+	
 	
 }

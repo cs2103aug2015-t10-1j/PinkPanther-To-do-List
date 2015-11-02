@@ -48,12 +48,15 @@ public class TaskManager {
 	}
 	
 	public SortedMap<LocalDate, ArrayList<Task>> getDated(boolean isDone){
-		LocalDate date=LocalDate.of(1979, 7, 12);
-		return isDone?doneList.tailMap(date):todoList.tailMap(date);
+		return isDone?doneList.tailMap(THE_MYTH_DAY.plusDays(1)):todoList.tailMap(THE_MYTH_DAY.plusDays(1));
 	}
 	
 	public SortedMap<LocalDate, ArrayList<Task>> getTwoWeek(){
 		return todoList.subMap(LocalDate.now(), LocalDate.now().plusWeeks(2));
+	}
+	
+	public SortedMap<LocalDate, ArrayList<Task>> getDatedPrevious(){
+		return todoList.subMap(THE_MYTH_DAY.plusDays(1), LocalDate.now());
 	}
 	
 	public SortedMap<LocalDate,ArrayList<Task>> getDateRange(LocalDate date1,LocalDate date2){
@@ -91,31 +94,40 @@ public class TaskManager {
 	
 //-------------------------------Task List Modifiers ---------------------------------------
 	
-	public void addTask(Task task){
-		boolean isDone=task.getDoneStatus();
+	public boolean addTask(Task task){
+		boolean isDone = task.getDoneStatus();
 		SortedMap<LocalDate,ArrayList<Task>>taskList=isDone?doneList:todoList;
 		
 		if(task.getTaskType()==TaskType.FLOATING){
-			addTaskAtDate(taskList,THE_MYTH_DAY,task);
+			if(!addTaskAtDate(taskList,THE_MYTH_DAY,task)){
+				return false;
+			}
 			sortTaskAtDate(taskList,THE_MYTH_DAY);
-		}
-		else{
+			return true;
+		} else{
 			if(task.getTaskType()==TaskType.EVENT && 
 					task.getStartDate().isBefore(task.getEndDate())){
 				
 				LocalDate currentDate=task.getStartDate();
 				while(!currentDate.isAfter(task.getEndDate())){
-					addTaskAtDate(taskList,currentDate,task);
+					
+					if(!addTaskAtDate(taskList,currentDate,task)){
+						return false;
+					}
 					sortTaskAtDate(taskList,currentDate);
 //					updateClashStatus(taskList.get(currentDate));
 					currentDate=currentDate.plusDays(1);
 				}
-			}
-			else{
+				return true;
+				
+			} else{
 				LocalDate date=task.getDate();
-				addTaskAtDate(taskList,date,task);
+				if(!addTaskAtDate(taskList,date,task)){
+					return false;
+				}
 				sortTaskAtDate(taskList,task.getDate());
 				updateClashStatus(taskList.get(date));
+				return true;
 			}
 			
 			
@@ -269,13 +281,20 @@ public class TaskManager {
 	}
 	
 	
-	private static void addTaskAtDate(SortedMap<LocalDate,ArrayList<Task>>map,
-			LocalDate date,Task task){
+	private static boolean addTaskAtDate(SortedMap<LocalDate,ArrayList<Task>>map,
+			LocalDate date,Task input){
 		
 		if(!map.containsKey(date)){
 			map.put(date, new ArrayList<Task>());
 		}
-		map.get(date).add(task);
+		for(Task task:map.get(date)){
+			if(input.isEqual(task)){
+				return false;
+			}
+		}
+		
+		map.get(date).add(input);
+		return true;
 	}
 	
 	private static void removeTaskAtDate(SortedMap<LocalDate,ArrayList<Task>>map,
