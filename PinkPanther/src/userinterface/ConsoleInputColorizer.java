@@ -36,7 +36,7 @@ public class ConsoleInputColorizer {
 	    ArrayList<Text> textChunks = new ArrayList<>();
 	    FlowPane bundle = new FlowPane();
 	    
-	    String offset = "-";
+	    String offset = "";
 	    textChunks.add(customize(offset, Color.TRANSPARENT));
     	bundle.getChildren().add(customize(offset, Color.TRANSPARENT));
 	    //Todo: use regex to check for valid words
@@ -101,6 +101,7 @@ public class ConsoleInputColorizer {
 	        break;
 	        
 	        default :
+	        	textChunks.add(customize("\u25b6 ", Color.BROWN));
 	        	textChunks.add(customize(inputString, Color.BLACK));
 	        break;
 	        	
