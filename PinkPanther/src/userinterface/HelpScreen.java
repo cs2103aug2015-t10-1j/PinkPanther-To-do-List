@@ -21,12 +21,12 @@ public class HelpScreen extends ScrollPane{
 		
 		grid = new GridPane();
         grid.setAlignment(Pos.TOP_LEFT);
-        grid.setHgap(10);
+        grid.setHgap(5);
         grid.setVgap(7);
         grid.setPadding(new Insets(10, 10, 10, 10));
 			
 
-		this.setPrefSize(1080, 660);
+		this.setPrefSize(1080, 1060);
 		this.setContent(grid);
 		this.setStyle("-fx-background-color: transparent;");
         
@@ -46,12 +46,83 @@ public class HelpScreen extends ScrollPane{
         implementUndoBoxes();
         implementRedoBoxes();
         implementExitBoxes();
+        implementShortcuts();
 
+	}
+	
+	private void implementShortcuts(){
+		int currYPos = 25;
+		
+        Text hiddenCalendarText = new Text("  :  Hidden-Calendar Mode");
+        hiddenCalendarText.setFont(Font.font("Tahoma", FontWeight.BOLD, 20));
+        hiddenCalendarText.setFill(Color.DIMGRAY);
+		GridPane addPane = new GridPane();
+		addPane.setHgap(5);
+		addPane.setVgap(3);
+        IndexBox nameBox = new IndexBox("F1");
+        addPane.add(nameBox, 3, 3);
+        addPane.add(hiddenCalendarText, 4, 3);
+        grid.add(addPane, 2, currYPos++);
+        
+        Text cheatSheetText = new Text("  :  Cheat Sheet");
+        cheatSheetText.setFont(Font.font("Tahoma", FontWeight.BOLD, 20));
+        cheatSheetText.setFill(Color.DIMGRAY);
+		GridPane cheatPane = new GridPane();
+		cheatPane.setHgap(5);
+		cheatPane.setVgap(3);
+        IndexBox cheatBox = new IndexBox("F2");
+        cheatPane.add(cheatBox, 3, 3);
+        cheatPane.add(cheatSheetText, 4, 3);
+        grid.add(cheatPane, 2, currYPos++);
+        
+        Text truncatedText = new Text("  :  Task Name Truncation");
+        truncatedText.setFont(Font.font("Tahoma", FontWeight.BOLD, 20));
+        truncatedText.setFill(Color.DIMGRAY);
+		GridPane truncatedPane = new GridPane();
+		truncatedPane.setHgap(5);
+		truncatedPane.setVgap(3);
+        IndexBox truncatedBox = new IndexBox("F3");
+        truncatedPane.add(truncatedBox, 3, 3);
+        truncatedPane.add(truncatedText, 4, 3);
+        grid.add(truncatedPane, 2, currYPos++);
+        
+        Text minimizedText = new Text("  :  Minimize Program");
+        minimizedText.setFont(Font.font("Tahoma", FontWeight.BOLD, 20));
+        minimizedText.setFill(Color.DIMGRAY);
+		GridPane minimizedPane = new GridPane();
+		minimizedPane.setHgap(5);
+		minimizedPane.setVgap(3);
+        IndexBox minimizedBox = new IndexBox("F4");
+        minimizedPane.add(minimizedBox, 3, 3);
+        minimizedPane.add(minimizedText, 4, 3);
+        grid.add(minimizedPane, 2, currYPos++);
+        
+        Text lengthenText = new Text("  :  Lengthen Window");
+        lengthenText.setFont(Font.font("Tahoma", FontWeight.BOLD, 20));
+        lengthenText.setFill(Color.DIMGRAY);
+		GridPane lengthenPane = new GridPane();
+		lengthenPane.setHgap(5);
+		lengthenPane.setVgap(3);
+        IndexBox lengthenBox = new IndexBox("F5");
+        lengthenPane.add(lengthenBox, 3, 3);
+        lengthenPane.add(lengthenText, 4, 3);
+        grid.add(lengthenPane, 2, currYPos++);
+        
+        Text shortenText = new Text("  :  Shorten Window");
+        shortenText.setFont(Font.font("Tahoma", FontWeight.BOLD, 20));
+        shortenText.setFill(Color.DIMGRAY);
+		GridPane shortenPane = new GridPane();
+		shortenPane.setHgap(5);
+		shortenPane.setVgap(3);
+        IndexBox shortenBox = new IndexBox("F6");
+        shortenPane.add(shortenBox, 3, 3);
+        shortenPane.add(shortenText, 4, 3);
+        grid.add(shortenPane, 2, currYPos++);
 	}
 	
 	private void implementAddBoxes(){
 		GridPane labelPane = new GridPane();
-		labelPane.setHgap(10);
+		labelPane.setHgap(5);
 		labelPane.setVgap(3);
         IndexBox nameBox = new IndexBox("+");
         labelPane.add(nameBox, 1, 3);
@@ -61,16 +132,16 @@ public class HelpScreen extends ScrollPane{
         labelPane.add(addText, 2, 3);
         
 		GridPane addPane = new GridPane();
-		addPane.setHgap(10);
+		addPane.setHgap(5);
 		addPane.setVgap(3);
         
         StackPane addCommandRectangle = createColoredBox(" add ", 1);
         addPane.add(addCommandRectangle, 3, 3);
         StackPane addCommandRectangleN = createColoredBox("<Event Name>", 1);
         addPane.add(addCommandRectangleN, 4, 3);
-        StackPane addCommandRectangleD2 = createColoredBox("<Event Date>", 2);
+        StackPane addCommandRectangleD2 = createColoredBox(",<Event Date>", 2);
         addPane.add(addCommandRectangleD2, 5, 3);
-        StackPane addCommandRectangleT = createColoredBox("<Event Time>", 2);
+        StackPane addCommandRectangleT = createColoredBox(",<Event Time>", 2);
         addPane.add(addCommandRectangleT, 6, 3);
 
         grid.add(labelPane, 1, 3);
@@ -79,7 +150,7 @@ public class HelpScreen extends ScrollPane{
 	
 	private void implementDeleteBoxes(){
 		GridPane labelPane = new GridPane();
-		labelPane.setHgap(10);
+		labelPane.setHgap(5);
 		labelPane.setVgap(3);
         IndexBox nameBox = new IndexBox("-");
         labelPane.add(nameBox, 1, 3);
@@ -89,14 +160,14 @@ public class HelpScreen extends ScrollPane{
         labelPane.add(addText, 2, 3);
         
 		GridPane addPane = new GridPane();
-		addPane.setHgap(10);
+		addPane.setHgap(5);
 		addPane.setVgap(3);
         
         StackPane addCommandRectangle = createColoredBox(" del ", 1);
         addPane.add(addCommandRectangle, 3, 3);
         StackPane addCommandRectangleN = createColoredBox("<Event Date>", 1);
         addPane.add(addCommandRectangleN, 4, 3);
-        StackPane addCommandRectangleD2 = createColoredBox("<Event Index>", 2);
+        StackPane addCommandRectangleD2 = createColoredBox(",<Event Index>", 2);
         addPane.add(addCommandRectangleD2, 5, 3);
 
         grid.add(labelPane, 1, 4);
@@ -105,7 +176,7 @@ public class HelpScreen extends ScrollPane{
 	
 	private void implementEditBoxes(){
 		GridPane labelPane = new GridPane();
-		labelPane.setHgap(10);
+		labelPane.setHgap(5);
 		labelPane.setVgap(3);
         IndexBox nameBox = new IndexBox("✎");
         labelPane.add(nameBox, 1, 3);
@@ -115,14 +186,14 @@ public class HelpScreen extends ScrollPane{
         labelPane.add(addText, 2, 3);
         
 		GridPane addPane = new GridPane();
-		addPane.setHgap(10);
+		addPane.setHgap(5);
 		addPane.setVgap(3);
         
         StackPane addCommandRectangle = createColoredBox(" del ", 1);
         addPane.add(addCommandRectangle, 3, 3);
         StackPane addCommandRectangleN = createColoredBox("<Event Date>", 1);
         addPane.add(addCommandRectangleN, 4, 3);
-        StackPane addCommandRectangleD2 = createColoredBox("<Event Index>", 2);
+        StackPane addCommandRectangleD2 = createColoredBox(",<Event Index>", 2);
         addPane.add(addCommandRectangleD2, 5, 3);
 
         grid.add(labelPane, 1, 5);
@@ -131,7 +202,7 @@ public class HelpScreen extends ScrollPane{
 	
 	private void implementDoneBoxes(){
 		GridPane labelPane = new GridPane();
-		labelPane.setHgap(10);
+		labelPane.setHgap(5);
 		labelPane.setVgap(3);
         IndexBox nameBox = new IndexBox("✓");
         labelPane.add(nameBox, 1, 3);
@@ -141,14 +212,14 @@ public class HelpScreen extends ScrollPane{
         labelPane.add(addText, 2, 3);
         
 		GridPane addPane = new GridPane();
-		addPane.setHgap(10);
+		addPane.setHgap(5);
 		addPane.setVgap(3);
         
         StackPane addCommandRectangle = createColoredBox(" del ", 1);
         addPane.add(addCommandRectangle, 3, 3);
         StackPane addCommandRectangleN = createColoredBox("<Event Date>", 1);
         addPane.add(addCommandRectangleN, 4, 3);
-        StackPane addCommandRectangleD2 = createColoredBox("<Event Index>", 2);
+        StackPane addCommandRectangleD2 = createColoredBox(",<Event Index>", 2);
         addPane.add(addCommandRectangleD2, 5, 3);
 
         grid.add(labelPane, 1, 6);
@@ -157,7 +228,7 @@ public class HelpScreen extends ScrollPane{
 	
 	private void implementSearchBoxes(){
 		GridPane labelPane = new GridPane();
-		labelPane.setHgap(10);
+		labelPane.setHgap(5);
 		labelPane.setVgap(3);
         IndexBox nameBox = new IndexBox("🔍");
         labelPane.add(nameBox, 1, 3);
@@ -167,7 +238,7 @@ public class HelpScreen extends ScrollPane{
         labelPane.add(addText, 2, 3);
         
 		GridPane addPane = new GridPane();
-		addPane.setHgap(10);
+		addPane.setHgap(5);
 		addPane.setVgap(3);
         
         StackPane addCommandRectangle = createColoredBox(" search ", 1);
@@ -181,7 +252,7 @@ public class HelpScreen extends ScrollPane{
 	
 	private void implementViewBoxes(){
 		GridPane labelPane = new GridPane();
-		labelPane.setHgap(10);
+		labelPane.setHgap(5);
 		labelPane.setVgap(3);
         IndexBox nameBox = new IndexBox("👓");
         labelPane.add(nameBox, 1, 3);
@@ -191,7 +262,7 @@ public class HelpScreen extends ScrollPane{
         labelPane.add(addText, 2, 3);
         
 		GridPane addPane = new GridPane();
-		addPane.setHgap(10);
+		addPane.setHgap(5);
 		addPane.setVgap(3);
         
         StackPane addCommandRectangle = createColoredBox(" view ", 1);
@@ -206,7 +277,7 @@ public class HelpScreen extends ScrollPane{
 
 	private void implementUndoBoxes(){
 		GridPane labelPane = new GridPane();
-		labelPane.setHgap(10);
+		labelPane.setHgap(5);
 		labelPane.setVgap(3);
         IndexBox nameBox = new IndexBox("←");
         labelPane.add(nameBox, 1, 3);
@@ -216,7 +287,7 @@ public class HelpScreen extends ScrollPane{
         labelPane.add(addText, 2, 3);
         
 		GridPane addPane = new GridPane();
-		addPane.setHgap(10);
+		addPane.setHgap(5);
 		addPane.setVgap(3);
         
         StackPane addCommandRectangle = createColoredBox(" undo ", 1);
@@ -229,7 +300,7 @@ public class HelpScreen extends ScrollPane{
 
 	private void implementRedoBoxes(){
 		GridPane labelPane = new GridPane();
-		labelPane.setHgap(10);
+		labelPane.setHgap(5);
 		labelPane.setVgap(3);
         IndexBox nameBox = new IndexBox("→");
         labelPane.add(nameBox, 1, 3);
@@ -239,7 +310,7 @@ public class HelpScreen extends ScrollPane{
         labelPane.add(addText, 2, 3);
         
 		GridPane addPane = new GridPane();
-		addPane.setHgap(10);
+		addPane.setHgap(5);
 		addPane.setVgap(3);
         
         StackPane addCommandRectangle2 = createColoredBox(" redo ", 1);
@@ -252,7 +323,7 @@ public class HelpScreen extends ScrollPane{
 
 	private void implementExitBoxes(){
 		GridPane labelPane = new GridPane();
-		labelPane.setHgap(10);
+		labelPane.setHgap(5);
 		labelPane.setVgap(3);
         IndexBox nameBox = new IndexBox("X");
         labelPane.add(nameBox, 1, 3);
@@ -262,7 +333,7 @@ public class HelpScreen extends ScrollPane{
         labelPane.add(addText, 2, 3);
         
 		GridPane addPane = new GridPane();
-		addPane.setHgap(10);
+		addPane.setHgap(5);
 		addPane.setVgap(3);
         
         StackPane addCommandRectangle = createColoredBox(" exit ", 1);

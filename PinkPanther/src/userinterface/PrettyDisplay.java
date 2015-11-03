@@ -424,21 +424,21 @@ public class PrettyDisplay extends Application {
         else if (ke.getCode().equals(KeyCode.F2)) {
         	attemptToggleHelpScreenView();
         }
-        else if (ke.getCode().equals(KeyCode.PAGE_UP)) {
+        else if (ke.getCode().equals(KeyCode.PAGE_UP) || ke.getCode().equals(KeyCode.F6)) {
         	if (currentStageHeight > 210){
         		currentStageHeight -= 30;
         	}
         	setScrollPaneHeight();
         	setStageHeight();
         }
-        else if (ke.getCode().equals(KeyCode.PAGE_DOWN)) {
+        else if (ke.getCode().equals(KeyCode.PAGE_DOWN) || ke.getCode().equals(KeyCode.F5)) {
         	if (currentStageHeight < DEFAULT_STAGE_HEIGHT){
         		currentStageHeight += 30;
         	}
         	setScrollPaneHeight();
         	setStageHeight();
         }
-        else if (ke.getCode().equals(KeyCode.ESCAPE)) {
+        else if (ke.getCode().equals(KeyCode.ESCAPE) || ke.getCode().equals(KeyCode.F4)) {
         	//minimize program to tray
             primaryStage.setIconified(true);
         }
