@@ -26,11 +26,11 @@ public class Controller {
 	private ProgramState state;
 	
 	public Controller(){
-		storage=new StorageControl();
-		manager=new TaskManager(storage);
-		commandStack=new CommandStack();
-		parser=new CommandParser();
-		state=new ProgramState();
+		storage = new StorageControl();
+		manager = new TaskManager(storage);
+		commandStack = new CommandStack();
+		parser = new CommandParser();
+		state = new ProgramState();
 		initializeProgramState();
 	}
 	
@@ -55,17 +55,17 @@ public class Controller {
 	
 	public void addCommand(String command){
     	System.out.println("Called mainController to add command: " + command);
-		String commandString=Auxiliary.getFirstWord(command);
-		String parameterString=Auxiliary.removeFirstWord(command);
-		boolean canSave=true;
+		String commandString = Auxiliary.getFirstWord(command);
+		String parameterString = Auxiliary.removeFirstWord(command);
+		boolean canSave = true;
 		state.setInputBoxText("");
 		
-		if(taskPair.getFirst()!=null){
-			Task task=parser.createTask(command);
+		if(taskPair.getFirst() != null){
+			Task task = parser.createTask(command);
 			if(task!=null){
 				taskPair.setSecond(parser.createTask(command));
 				log.log(Level.FINE, "called parser to create a task");
-				EditCommand edit=new EditCommand(manager);
+				EditCommand edit = new EditCommand(manager);
 				if(edit.execute(taskPair)){
 					commandStack.addCommand(edit);
 				}
@@ -84,9 +84,9 @@ public class Controller {
 					log.log(Level.FINE, "called parser to create a task");
 					break;
 				case "edit":
-					ArrayList<Task>taskList=manager.searchTasks(parser.query(parameterString));
-					if(taskList!=null && taskList.get(0)!=null){
-						Task unmodified=taskList.get(0);
+					ArrayList<Task>taskList = manager.searchTasks(parser.query(parameterString));
+					if(taskList != null && taskList.get(0) != null){
+						Task unmodified = taskList.get(0);
 						taskPair.setFirst(unmodified);
 						state.setInputBoxText(unmodified.toString());
 						Display.setFeedBack("Edit the task in text box, then press ENTER.");
@@ -119,7 +119,7 @@ public class Controller {
 					state.setTodoList(manager.getMatchedDated(parameterString));
 					state.setTitle("         ● Searching: [" + parameterString + "] ●");
 					Display.setFeedBack("Input 'view normal' to return to main calendar.");
-					canSave=false;
+					canSave = false;
 					break;
 				case "view":
 					if(!changeDisplayMode(parameterString)){
@@ -129,7 +129,7 @@ public class Controller {
 					break;
 				case "save":
 					storage.changeDirectory(parameterString);
-					canSave=false;
+					canSave = false;
 					break;
 				case "undo":
 					commandStack.undoOperation();
@@ -141,7 +141,7 @@ public class Controller {
 					break;
 				case "exit":
 					state.setExitState(true);
-					canSave=false;
+					canSave = false;
 					break;
 				case "clear":
 					manager.clearAllTasks();
@@ -190,8 +190,8 @@ public class Controller {
 			state.setTodoList(manager.getDatedPrevious());
 			state.setTitle("              ● Viewing: Overdue Tasks ●");
 			Display.setFeedBack("Input 'view normal' to return to main calendar.");
-		} else if(parser.queryDateRange(mode)!=null){
-			Pair<LocalDate,LocalDate>datePair=parser.queryDateRange(mode);
+		} else if(parser.queryDateRange(mode) != null){
+			Pair<LocalDate,LocalDate>datePair = parser.queryDateRange(mode);
 			log.log(Level.FINE, "called parser to create date pair");
 			state.setFLoatingList(null);
 			state.setTodoList(manager.getDateRange(datePair.getFirst(), datePair.getSecond()));
