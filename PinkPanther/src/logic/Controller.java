@@ -9,12 +9,15 @@ import storage.StorageControl;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import common.Auxiliary;
 import common.Display;
 
 public class Controller {
-	private static Pair<Task,Task>taskPair=new Pair<Task,Task>(null,null);
+	private static Pair<Task,Task>taskPair = new Pair<Task,Task>(null,null);
+	private static final Logger log = Logger.getLogger("controller");
 	
 	private TaskManager manager;
 	private CommandStack commandStack;
@@ -61,6 +64,7 @@ public class Controller {
 			Task task=parser.createTask(command);
 			if(task!=null){
 				taskPair.setSecond(parser.createTask(command));
+				log.log(Level.FINE, "called parser to create a task");
 				EditCommand edit=new EditCommand(manager);
 				if(edit.execute(taskPair)){
 					commandStack.addCommand(edit);
@@ -76,7 +80,8 @@ public class Controller {
 					AddCommand add = new AddCommand(manager);
 					if(add.execute(parser.createTask(parameterString))){
 						commandStack.addCommand(add);
-					}				
+					}	
+					log.log(Level.FINE, "called parser to create a task");
 					break;
 				case "edit":
 					ArrayList<Task>taskList=manager.searchTasks(parser.query(parameterString));
@@ -88,7 +93,7 @@ public class Controller {
 					} else{
 						state.setInputBoxText(command);
 					}
-					
+					log.log(Level.FINE, "called parser to create date index pair");
 					break;
 				case "done":
 					DoneCommand done = new DoneCommand(manager);
@@ -97,6 +102,7 @@ public class Controller {
 					} else{
 						state.setInputBoxText(command);
 					}
+					log.log(Level.FINE, "called parser to create date index pair");
 					break;
 				case "del":
 				case "delete":
@@ -106,6 +112,7 @@ public class Controller {
 					} else{
 						state.setInputBoxText(command);
 					}
+					log.log(Level.FINE, "called parser to create date index pair");
 					break;	
 				case "search":
 					state.setFLoatingList(manager.getMatchedFloating(parameterString));
@@ -168,27 +175,24 @@ public class Controller {
 			state.setTodoList(manager.getDated(true));
 			state.setTitle("              ● Viewing: Done Tasks ●");
 			Display.setFeedBack("Input 'view normal' to return to main calendar.");
-		}
-		else if(mode.equals("normal") || mode.equals("norm")){
+		} else if(mode.equals("normal") || mode.equals("norm")){
 			state.setFLoatingList(manager.getFloating(false));
 			state.setTodoList(manager.getTwoWeek());
 			state.setTitle("                      Your Calendar");
 			Display.setFeedBack("Input command into the field above");
-		}	
-		else if(mode.equals("all")){
+		} else if(mode.equals("all")){
 			state.setFLoatingList(manager.getFloating(false));
 			state.setTodoList(manager.getDated(false));
 			state.setTitle("              ● Viewing: All Tasks ●");
 			Display.setFeedBack("Input 'view normal' to return to main calendar.");
-		}
-		else if(mode.equals("previous") || mode.equals("prev")){
+		} else if(mode.equals("previous") || mode.equals("prev")){
 			state.setFLoatingList(null);
 			state.setTodoList(manager.getDatedPrevious());
 			state.setTitle("              ● Viewing: Overdue Tasks ●");
 			Display.setFeedBack("Input 'view normal' to return to main calendar.");
-		}
-		else if(parser.queryDateRange(mode)!=null){
+		} else if(parser.queryDateRange(mode)!=null){
 			Pair<LocalDate,LocalDate>datePair=parser.queryDateRange(mode);
+			log.log(Level.FINE, "called parser to create date pair");
 			state.setFLoatingList(null);
 			state.setTodoList(manager.getDateRange(datePair.getFirst(), datePair.getSecond()));
 			String dateRange = datePair.getFirst().toString();
@@ -201,8 +205,7 @@ public class Controller {
 			
 			}
 			Display.setFeedBack("Input 'view normal' to return to main calendar.");
-		}
-		else{
+		} else{
 			Display.setFeedBack("Invalid view range specified!");
 			canView = false;
 		}
