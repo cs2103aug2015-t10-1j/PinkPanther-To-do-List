@@ -38,8 +38,6 @@ public class PrettyDisplay extends Application {
     TextField userTextField;
     Scene scene;
     Stage objPrimaryStage;
-    HBox hbBtn;
-    Color defaultActionTargetColor = Color.BLACK;
     ProgramState programState;
     FlowPane programFeedback;
     private int currentStageHeight = DEFAULT_STAGE_HEIGHT;
@@ -80,10 +78,10 @@ public class PrettyDisplay extends Application {
          implementMainGrid();
          //Holds the user input box
          implementUserTextField();
-         //text that displays after-action (e.g added x event)
-         implementActionTarget("Input command in the field above"); // to remove
-
-         setUserFeedback(parseAndColorize("Input command into the field above"));
+         //Text that displays after-action (e.g added x event)
+         implementUserFeedback("Input command in the field above"); // to remove
+         //Set feedback to default string
+         setUserFeedback(parseAndColorize(STRING_DEFAULT_FEEDBACK));
          //Allows keyboard inputs to be read as commands
          implementKeystrokeEvents(primaryStage);
          //Implements the scene
@@ -106,9 +104,7 @@ public class PrettyDisplay extends Application {
         //Holds the user input box
         implementUserTextField();
         //text that displays after-action (e.g added x event)
-        implementActionTarget(newInput);
-        //add buttons
-        implementButtons();
+        implementUserFeedback(newInput);
         //Allows keyboard inputs to be read as commands
         implementKeystrokeEvents(primaryStage);
         //Implements the scene
@@ -154,52 +150,11 @@ public class PrettyDisplay extends Application {
         + "-fx-background-color: WHITE");
         grid2.add(userTextField, 0, 1);
     }
-    void implementActionTarget(String newInput){
+    void implementUserFeedback(String newInput){
         programFeedback = new FlowPane();
         grid2.add(programFeedback, 0, 2);
     }
-    void implementButtons(){
-    	Button btn = new Button("Enter");
-        btn.getStyleClass().add("button1");
-        Button scrollUpButton = new Button("Scroll Up");
-        scrollUpButton.getStyleClass().add("button1");
-        Button scrollDownButton = new Button("Scroll Down");
-        scrollDownButton.getStyleClass().add("button1");
-        hbBtn = new HBox(10);
-        hbBtn.setAlignment(Pos.TOP_RIGHT);
-        hbBtn.getChildren().addAll(btn, scrollUpButton, scrollDownButton);
-        grid2.add(hbBtn, 0, 2);
-        
 
-    	btn.setOnAction(new EventHandler<ActionEvent>() {
-       	 
-        	@Override
-            public void handle(ActionEvent e) {
-        		if ((userTextField.getText() != null && !userTextField.getText().isEmpty())) {
-        			callControllerToAddCommand();
-                } else {
-                	displayInvalidInput();
-                };
-             }
-         });
-
-        scrollUpButton.setOnAction(new EventHandler<ActionEvent>() {
-       	 
-        	@Override
-            public void handle(ActionEvent e) {
-        		scrollUp(0.2f);
-             }
-         });
-        
-        scrollDownButton.setOnAction(new EventHandler<ActionEvent>() {
-          	 
-        	@Override
-            public void handle(ActionEvent e) {
-        		scrollDown(0.2f);
-             }
-         });
-
-    }
     void implementKeystrokeEvents(Stage primaryStage){
         userTextField.setOnKeyPressed(new EventHandler<KeyEvent>()
         {
@@ -236,114 +191,152 @@ public class PrettyDisplay extends Application {
         	scenetitle.setText(DEFAULT_SCENE_TITLE);
         }
     	programState = mainController.getProgramState();
-        
     	setUserTextField(programState.getInputBoxText());
-    	
-        //for the actual calendar items
+    	unpackTasks(grid);
+    }
+    
+    void unpackTasks(GridPane grid){
     	int currTaskIndex = 1;
-
     	int currentYPos = 1;
     	
-    	//for unpacking floatingTasks
     	if (programState != null){
-        	ArrayList<Task> floatingTasks = programState.getFloatingList();
-	    	if (floatingTasks != null && floatingTasks.size() != 0){
-	    		int totalFloat = 0;
+    		currentYPos = displayNumOverdueTasks(grid, currTaskIndex, currentYPos);
+        	currentYPos = unpackFloatingTasks(grid, currTaskIndex, currentYPos);
+        	currentYPos = unpackDatedTasks(grid, currTaskIndex, currentYPos);
+    	}
+    }
+    
+    int displayNumOverdueTasks(GridPane grid, int currTaskIndex, int currentYPos){
 
+		if (programState.getTitle().equals(DEFAULT_SCENE_TITLE)){
+	    	SortedMap<LocalDate,ArrayList<Task>> overdueList = programState.getOverdueList();
+	    	if (overdueList != null){
+	    		grid.add(new TransparentCircle(), 1, currentYPos++);
+	    		int numOverdueTasks = 0;
+	    		for(LocalDate date:overdueList.keySet()){
+	    			for(Task task:overdueList.get(date)){ 
+	    				numOverdueTasks++;
+	    			}
+	    		}
+	    		
 	    		currentYPos++;
+	    		TaskBox overdueTaskReminder = new TaskBox(numOverdueTasks + " OVERDUE TASKS : CLICK F8 TO VIEW ");
+				currTaskIndex++;
+	    		grid.add(overdueTaskReminder, 1, currentYPos);
+	    		
 	    		currentYPos++;
-		    	int currFloatXPos = 1;
-	    		DayBox dayBox = new DayBox("Undated Tasks");
-	    		grid.add(dayBox, 1, currentYPos++);
-		    	for (int i=0; i<floatingTasks.size(); i++){
-		    		totalFloat++;
+	    	}
+		}
+    	return currentYPos;
+    }
+    
+    int unpackDatedTasks(GridPane grid, int currTaskIndex, int currentYPos){
+    	//for unpacking datedTasks
+    	SortedMap<LocalDate,ArrayList<Task>> todoList = programState.getTodoList();
+    	if (todoList != null){
+	    	for(LocalDate date:todoList.keySet()){ //looping through dates which have Tasks inside
+	    		int totalDeadline = 0, totalEvent = 0, totalTodo = 0;
+	    		
+	    		grid.add(new TransparentCircle(), 1, currentYPos++);
+	    		String month = date.getMonth().toString();
+	    		month = month.substring(0, 1)+ month.substring(1, month.length()).toLowerCase();
+	    		String currDayNum = Integer.toString(date.getDayOfMonth());
+	    		int currDayXPos = 1;
+	    		DayBox dayBox = new DayBox(currDayNum + " " + month);
+	    		int dayBoxYPos = currentYPos;
+	    		grid.add(dayBox, currDayXPos++, dayBoxYPos);
+	    		currentYPos ++;
+	    		int currXPos = 1;
+	    		currTaskIndex = 1;
+	    		
+	    		
+	    		//count total number of tasks of particular types
+				for(Task task:todoList.get(date)){ 
+					switch(task.getTaskType()){
+						case DEADLINE:
+							totalDeadline++;
+							break;
+						case TODO:
+							totalTodo++;
+							break;
+						default:
+							totalEvent++;
+							break;
+					}
+					if (task.getClash()){
+						IndexBox testBox = new IndexBox(0);
+						grid.add(testBox, currXPos+14, currentYPos+1);
+					}
+					
 		    		currentYPos++;
-		    		TaskBox taskBox = new TaskBox(i+1, floatingTasks.get(i), isTruncatedMode);
-		    		currTaskIndex++;
-		    		grid.add(taskBox, currFloatXPos, currentYPos);
+	    			TaskBox taskBox = new TaskBox(currTaskIndex, task, isTruncatedMode);
+	    			currTaskIndex++;
+		    		grid.add(taskBox, currXPos, currentYPos);
 	
-		    	}
-
+		    		
+				}
+				
+				
 				GridPane miniTaskIndicators = new GridPane();
 				miniTaskIndicators.setHgap(10);
 				miniTaskIndicators.setVgap(5);
-    			IndexBox blankColoredBox = new IndexBox(totalFloat, TaskType.FLOATING);
-    			miniTaskIndicators.add(blankColoredBox, 54, 3);
-    			grid.add(miniTaskIndicators, 1, 3);
-		    	currentYPos++;
-	    	}
-	    	
-	    	SortedMap<LocalDate,ArrayList<Task>> todoList = programState.getTodoList();
-	    	if (todoList != null){
-		    	for(LocalDate date:todoList.keySet()){ //looping through dates which have Tasks inside
-		    		int totalDeadline = 0, totalEvent = 0, totalTodo = 0;
-		    		
-		    		grid.add(new TransparentCircle(), 1, currentYPos++);
-		    		String month = date.getMonth().toString();
-		    		month = month.substring(0, 1)+ month.substring(1, month.length()).toLowerCase();
-		    		String currDayNum = Integer.toString(date.getDayOfMonth());
-		    		int currDayXPos = 1;
-		    		DayBox dayBox = new DayBox(currDayNum + " " + month);
-		    		int dayBoxYPos = currentYPos;
-		    		grid.add(dayBox, currDayXPos++, dayBoxYPos);
-		    		currentYPos ++;
-		    		int currXPos = 1;
-		    		currTaskIndex = 1;
-		    		
-		    		
-		    		
-					for(Task task:todoList.get(date)){ //looping through tasks for specified date
-						switch(task.getTaskType()){
-							case DEADLINE:
-								totalDeadline++;
-								break;
-							case TODO:
-								totalTodo++;
-								break;
-							default:
-								totalEvent++;
-								break;
-						}
-						if (task.getClash()){
-							IndexBox testBox = new IndexBox(0);
-							grid.add(testBox, currXPos+14, currentYPos+1);
-						}
-						
-			    		currentYPos++;
-		    			TaskBox taskBox = new TaskBox(currTaskIndex, task, isTruncatedMode);
-		    			currTaskIndex++;
-			    		grid.add(taskBox, currXPos, currentYPos);
-		
-			    		
-					}
-					
-					
-					GridPane miniTaskIndicators = new GridPane();
-					miniTaskIndicators.setHgap(10);
-					miniTaskIndicators.setVgap(5);
-					currDayXPos = 54;
-		    		for (int i=0; i<3; i++){
-		    			if (i==0 && totalDeadline != 0){
-			    			IndexBox blankColoredBox = new IndexBox(totalDeadline, TaskType.DEADLINE);
-			    			miniTaskIndicators.add(blankColoredBox, currDayXPos--, 3);
-		    			} else if (i==1 && totalTodo != 0){
-			    			IndexBox blankColoredBox = new IndexBox(totalTodo, TaskType.TODO);
-			    			miniTaskIndicators.add(blankColoredBox, currDayXPos--, 3);
-		    			} else if (i==2 && totalEvent != 0){
-			    			IndexBox blankColoredBox = new IndexBox(totalEvent, TaskType.EVENT);
-			    			miniTaskIndicators.add(blankColoredBox, currDayXPos--, 3);
-		    			}
-		    			
-		    		}
-		    		grid.add(miniTaskIndicators, 1, dayBoxYPos);
-					
-		    		
-					currentYPos++;
-				}
+				currDayXPos = 54;
+	    		for (int i=0; i<3; i++){
+	    			if (i==0 && totalDeadline != 0){
+		    			IndexBox blankColoredBox = new IndexBox(totalDeadline, TaskType.DEADLINE);
+		    			miniTaskIndicators.add(blankColoredBox, currDayXPos--, 3);
+	    			} else if (i==1 && totalTodo != 0){
+		    			IndexBox blankColoredBox = new IndexBox(totalTodo, TaskType.TODO);
+		    			miniTaskIndicators.add(blankColoredBox, currDayXPos--, 3);
+	    			} else if (i==2 && totalEvent != 0){
+		    			IndexBox blankColoredBox = new IndexBox(totalEvent, TaskType.EVENT);
+		    			miniTaskIndicators.add(blankColoredBox, currDayXPos--, 3);
+	    			}
+	    			
+	    		}
+	    		grid.add(miniTaskIndicators, 1, dayBoxYPos);
+				
+	    		
+				currentYPos++;
+			}
 
-		    	
-		    }
+	    	
+	    }
+    	return currentYPos;
+    }
+    
+    int unpackFloatingTasks(GridPane grid, int currTaskIndex, int currentYPos){
+    	//for unpacking floatingTasks
+    	ArrayList<Task> floatingTasks = programState.getFloatingList();	
+    	if (floatingTasks != null && floatingTasks.size() != 0){
+    		grid.add(new TransparentCircle(), 1, currentYPos++);
+    		int totalFloat = 0;
+
+    		currentYPos++;
+    		currentYPos++;
+	    	int currFloatXPos = 1;
+    		DayBox dayBox = new DayBox("Undated Tasks");
+    		int dayTextYPos = currentYPos;
+    		grid.add(dayBox, 1, currentYPos++);
+	    	for (int i=0; i<floatingTasks.size(); i++){
+	    		totalFloat++;
+	    		currentYPos++;
+	    		TaskBox taskBox = new TaskBox(i+1, floatingTasks.get(i), isTruncatedMode);
+	    		currTaskIndex++;
+	    		grid.add(taskBox, currFloatXPos, currentYPos);
+
+	    	}
+
+			GridPane miniTaskIndicators = new GridPane();
+			miniTaskIndicators.setHgap(10);
+			miniTaskIndicators.setVgap(5);
+			IndexBox blankColoredBox = new IndexBox(totalFloat, TaskType.FLOATING);
+			miniTaskIndicators.add(blankColoredBox, 54, dayTextYPos);
+			grid.add(miniTaskIndicators, 1, dayTextYPos);
+	    	currentYPos++;
     	}
+    	
+    	return currentYPos;
     }
 
     void callControllerToAddCommand(){
@@ -438,14 +431,14 @@ public class PrettyDisplay extends Application {
         	setScrollPaneHeight();
         	setStageHeight();
         }
-        else if (ke.getCode().equals(KeyCode.ESCAPE) || ke.getCode().equals(KeyCode.F4)) {
+        else if (ke.getCode().equals(KeyCode.ESCAPE) || ke.getCode().equals(KeyCode.F3)) {
         	//minimize program to tray
             primaryStage.setIconified(true);
         }
         else if (ke.getCode().equals(KeyCode.F1)) {
         	attemptToggleCalendarHiddenMode(stage);
         } 
-        else if (ke.getCode().equals(KeyCode.F3) && currentState == CurrentState.VIEWING_CALENDAR){
+        else if (ke.getCode().equals(KeyCode.F4) && currentState == CurrentState.VIEWING_CALENDAR){
         	isTruncatedMode = !isTruncatedMode;
         	calendarGrid.getChildren().clear();
         	scenetitle.setText(programState.getTitle());
@@ -453,6 +446,20 @@ public class PrettyDisplay extends Application {
         }
         else if (ke.getCode().equals(KeyCode.BACK_SPACE)) {
         	processBackSpace();
+        }
+		
+
+        else if (ke.getCode().equals(KeyCode.F7)) {
+			userTextField.setText("view normal");
+			callControllerToAddCommand();
+        }
+        else if (ke.getCode().equals(KeyCode.F8)) {
+			userTextField.setText("view overdue");
+			callControllerToAddCommand();
+        }
+        else if (ke.getCode().equals(KeyCode.F9)) {
+			userTextField.setText("view all");
+			callControllerToAddCommand();
         }
         
         else if (ke.getCode().isLetterKey() ||  ke.getCode().isDigitKey() || ke.getCode().equals(KeyCode.SPACE)){
@@ -473,14 +480,15 @@ public class PrettyDisplay extends Application {
 	
 	void processBackSpace(){
     	String userText = userTextField.getText();
-    	if (userText.length() == 0) {
+    /*	if (userText.length() == 0) {
     		userText = STRING_DEFAULT_FEEDBACK;
     		if (!programState.getTitle().equals(DEFAULT_SCENE_TITLE)){
     			userTextField.setText("view normal");
     			callControllerToAddCommand();
     		}
     			
-    	} else if (userText.length() == 1) {
+    	} else */
+    	if (userText.length() <= 1) {
     		userText = STRING_DEFAULT_FEEDBACK;
 		} else {
     		userText = userText.substring(0, userText.length()-1);

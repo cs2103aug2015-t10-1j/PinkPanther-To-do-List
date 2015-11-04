@@ -19,7 +19,12 @@ public class DayBox extends StackPane{
 	    if (day.equals("Undated Tasks")){
 	    	dayString = "~";
 	    	monthString = day;
-	    } else {
+	    } 
+	    else if (day.equals("!")){
+	    	dayString = "!";
+	    	monthString = "";
+	    }
+	    else {
 	    	dayString = day.split(" ")[0];
 	    	monthString = day.split(" ")[1];
 	    }

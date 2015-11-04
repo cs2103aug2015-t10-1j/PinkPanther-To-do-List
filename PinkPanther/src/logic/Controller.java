@@ -186,7 +186,7 @@ public class Controller {
 			state.setTodoList(manager.getDated(false));
 			state.setTitle("              ● Viewing: All Tasks ●");
 			Display.setFeedBack("Input 'view normal' to return to main calendar.");
-		} else if(mode.equals("previous") || mode.equals("prev")){
+		} else if(mode.equals("previous") || mode.equals("prev") || mode.equals("overdue")){
 			state.setFLoatingList(null);
 			state.setTodoList(manager.getDatedPrevious());
 			state.setTitle("              ● Viewing: Overdue Tasks ●");

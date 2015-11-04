@@ -1,6 +1,5 @@
 package userinterface;
 
-import common.TaskType;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.ScrollPane;
@@ -51,7 +50,7 @@ public class HelpScreen extends ScrollPane{
 	}
 	
 	private void implementShortcuts(){
-		int currYPos = 25;
+		int currYPos = 15;
 		
         Text hiddenCalendarText = new Text("  :  Hidden-Calendar Mode");
         hiddenCalendarText.setFont(Font.font("Tahoma", FontWeight.BOLD, 20));
@@ -75,27 +74,27 @@ public class HelpScreen extends ScrollPane{
         cheatPane.add(cheatSheetText, 4, 3);
         grid.add(cheatPane, 2, currYPos++);
         
-        Text truncatedText = new Text("  :  Task Name Truncation");
-        truncatedText.setFont(Font.font("Tahoma", FontWeight.BOLD, 20));
-        truncatedText.setFill(Color.DIMGRAY);
-		GridPane truncatedPane = new GridPane();
-		truncatedPane.setHgap(5);
-		truncatedPane.setVgap(3);
-        IndexBox truncatedBox = new IndexBox("F3");
-        truncatedPane.add(truncatedBox, 3, 3);
-        truncatedPane.add(truncatedText, 4, 3);
-        grid.add(truncatedPane, 2, currYPos++);
-        
         Text minimizedText = new Text("  :  Minimize Program");
         minimizedText.setFont(Font.font("Tahoma", FontWeight.BOLD, 20));
         minimizedText.setFill(Color.DIMGRAY);
 		GridPane minimizedPane = new GridPane();
 		minimizedPane.setHgap(5);
 		minimizedPane.setVgap(3);
-        IndexBox minimizedBox = new IndexBox("F4");
+        IndexBox minimizedBox = new IndexBox("F3");
         minimizedPane.add(minimizedBox, 3, 3);
         minimizedPane.add(minimizedText, 4, 3);
         grid.add(minimizedPane, 2, currYPos++);
+        
+        Text truncatedText = new Text("  :  Task Name Truncation");
+        truncatedText.setFont(Font.font("Tahoma", FontWeight.BOLD, 20));
+        truncatedText.setFill(Color.DIMGRAY);
+		GridPane truncatedPane = new GridPane();
+		truncatedPane.setHgap(5);
+		truncatedPane.setVgap(3);
+        IndexBox truncatedBox = new IndexBox("F4");
+        truncatedPane.add(truncatedBox, 3, 3);
+        truncatedPane.add(truncatedText, 4, 3);
+        grid.add(truncatedPane, 2, currYPos++);
         
         Text lengthenText = new Text("  :  Lengthen Window");
         lengthenText.setFont(Font.font("Tahoma", FontWeight.BOLD, 20));
@@ -118,6 +117,39 @@ public class HelpScreen extends ScrollPane{
         shortenPane.add(shortenBox, 3, 3);
         shortenPane.add(shortenText, 4, 3);
         grid.add(shortenPane, 2, currYPos++);
+        
+        Text normalViewText = new Text("  :  View Normal View");
+        normalViewText.setFont(Font.font("Tahoma", FontWeight.BOLD, 20));
+        normalViewText.setFill(Color.DIMGRAY);
+		GridPane normalViewPane = new GridPane();
+		normalViewPane.setHgap(5);
+		normalViewPane.setVgap(3);
+        IndexBox normalViewBox = new IndexBox("F7");
+        normalViewPane.add(normalViewBox, 3, 3);
+        normalViewPane.add(normalViewText, 4, 3);
+        grid.add(normalViewPane, 2, currYPos++);       
+        
+        Text overdueText = new Text("  :  View Overdue Tasks");
+        overdueText.setFont(Font.font("Tahoma", FontWeight.BOLD, 20));
+        overdueText.setFill(Color.DIMGRAY);
+		GridPane overduePane = new GridPane();
+		overduePane.setHgap(5);
+		overduePane.setVgap(3);
+        IndexBox overdueBox = new IndexBox("F8");
+        overduePane.add(overdueBox, 3, 3);
+        overduePane.add(overdueText, 4, 3);
+        grid.add(overduePane, 2, currYPos++);
+        
+        Text allViewText = new Text("  :  View All Tasks");
+        allViewText.setFont(Font.font("Tahoma", FontWeight.BOLD, 20));
+        allViewText.setFill(Color.DIMGRAY);
+		GridPane allViewPane = new GridPane();
+		allViewPane.setHgap(5);
+		allViewPane.setVgap(3);
+        IndexBox allViewBox = new IndexBox("F9");
+        allViewPane.add(allViewBox, 3, 3);
+        allViewPane.add(allViewText, 4, 3);
+        grid.add(allViewPane, 2, currYPos++);
 	}
 	
 	private void implementAddBoxes(){

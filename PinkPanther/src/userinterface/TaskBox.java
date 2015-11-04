@@ -128,6 +128,20 @@ public class TaskBox extends StackPane{
 		return box;
 	}
 	
+	//returns a red box
+	private Rectangle createTaskHolderBox(){
+		Color col = (Color.SALMON);
+		Rectangle box = new Rectangle();
+		box.setWidth(600);
+		box.setHeight(40);
+		box.setArcWidth(4);
+		box.setArcHeight(4);                
+		box.setStroke(Color.DIMGRAY);
+		box.setStrokeWidth(0f);
+		box.setFill(col);
+		return box;
+	}
+	
 	private GridPane createTimeSpanBoxes(Task inputTask){
 		GridPane timeSpanGridPane = new GridPane();
 		timeSpanGridPane.setVgap(10);
@@ -179,7 +193,7 @@ public class TaskBox extends StackPane{
 	
 	private StackPane createIndexBox(int index, TaskType inputTaskType){
 		Color[] col = {(Color.web("D652FF")), Color.web("6495ED"), 
-				(Color.web("51D444")), (Color.web("D4573A")), (Color.POWDERBLUE)};
+				(Color.web("51D444")), (Color.web("D4573A")), (Color.RED)};
 		
 		StackPane stackPane = new StackPane();
 		
@@ -208,7 +222,8 @@ public class TaskBox extends StackPane{
 			break;
 		
 		}
-		Text text = new Text(Integer.toString(index));
+		Text text = new Text ("!");
+		
 		text.setFont(Font.font("Tahoma", FontWeight.BOLD, 13));
 		text.setTextAlignment(TextAlignment.CENTER);
 		text.setFill(Color.WHITE);
@@ -219,6 +234,74 @@ public class TaskBox extends StackPane{
 		stackPane.getChildren().addAll(box, text);
 		
 		return stackPane;
+	}
+	
+	//created a red '!' indexbox
+	private StackPane createIndexBox(){
+		Color col = (Color.RED);
+		
+		StackPane stackPane = new StackPane();
+		
+		Rectangle box = new Rectangle();
+		
+
+		box.setWidth(20);
+		box.setHeight(20);
+		box.setArcWidth(4);
+		box.setArcHeight(4);               
+		box.setStroke(Color.DIMGRAY);
+		box.setStrokeWidth(2.0f);
+		box.setFill(col);
+		
+		Text text = new Text ("!");
+		text.setFont(Font.font("Tahoma", FontWeight.BOLD, 13));
+		text.setTextAlignment(TextAlignment.CENTER);
+		text.setFill(Color.WHITE);
+		
+		stackPane.getChildren().addAll(box, text);
+		
+		return stackPane;
+	}
+	
+	
+	public TaskBox(String inputText){
+		String splitName = inputText;
+	//    System.out.println(splitName);
+		int currRectYPos = 1;
+		
+		GridPane grid = new GridPane();
+
+		Rectangle mainBox = createTaskHolderBox();
+		grid.add(mainBox, 1, currRectYPos++);
+		
+		
+	//	grid.setGridLinesVisible(true);
+	    grid.setPadding(new Insets(5));
+	    grid.setHgap(5);
+	    grid.setVgap(0);
+
+	    ColumnConstraints column1 = new ColumnConstraints(5);
+	    ColumnConstraints column2 = new ColumnConstraints(50, 150, 100);
+	    grid.getColumnConstraints().addAll(column1, column2);
+		
+	    
+		int currYPos = 1;
+		Text text = new Text("     " + splitName);
+		text.setTextAlignment(TextAlignment.LEFT);
+		text.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+		text.setFill(Color.WHITE);
+		grid.add(text, 0, currYPos++);
+			
+		
+		StackPane indexBox = createIndexBox();
+		GridPane.setConstraints(indexBox , 0, 1);
+		grid.add(indexBox, 0, 1);
+		
+		
+		
+//		grid.setGridLinesVisible(true);
+		this.getChildren().addAll(grid);
+		
 	}
 }
 

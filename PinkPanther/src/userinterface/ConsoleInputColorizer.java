@@ -104,7 +104,7 @@ public class ConsoleInputColorizer {
 	        break;
 	        
 	        case "view":
-	        	textChunks.add(customize("Search \u25b6 ", Color.GREEN));
+	        	textChunks.add(customize("    View \u25b6 ", Color.GREEN));
 	        	if (wordList.length > 1){
 		        	String taskInfo = inputString.split(" ", 2)[1];
 		        	textChunks.add(customize(trimWord(taskInfo, 55), Color.BLACK));
