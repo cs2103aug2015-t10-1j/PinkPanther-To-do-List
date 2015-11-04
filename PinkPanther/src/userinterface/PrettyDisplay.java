@@ -219,12 +219,13 @@ public class PrettyDisplay extends Application {
 	    			}
 	    		}
 	    		
-	    		currentYPos++;
-	    		TaskBox overdueTaskReminder = new TaskBox(numOverdueTasks + " OVERDUE TASKS : CLICK F8 TO VIEW ");
-				currTaskIndex++;
-	    		grid.add(overdueTaskReminder, 1, currentYPos);
-	    		
-	    		currentYPos++;
+	    		if (numOverdueTasks > 0){
+		    		currentYPos++;
+		    		TaskBox overdueTaskReminder = new TaskBox(numOverdueTasks + " OVERDUE TASKS : CLICK F8 TO VIEW ");
+					currTaskIndex++;
+		    		grid.add(overdueTaskReminder, 1, currentYPos);
+		    		currentYPos++;
+	    		}
 	    	}
 		}
     	return currentYPos;
