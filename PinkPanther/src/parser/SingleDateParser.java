@@ -1,17 +1,17 @@
+/* @@author CS */
 package parser;
 
 import common.Pair;
 import common.Auxiliary;
 
-import java.time.ZoneId;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.text.SimpleDateFormat;
+import java.time.DateTimeException;
 import java.util.List;
 import java.util.Collections;
 import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class SingleDateParser implements Parser {
 	
@@ -52,9 +52,10 @@ public class SingleDateParser implements Parser {
 		validDayFormats.addAll(DAY_FORMAT);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public LocalDate parse(String date) {
 		
-		// if date contains a certain keyword, refer to list(s) and parse separately
+		// parse dates that contain a certain keyword separately
 		if (isDateIndicator(date)) {
 			return oneWordIndicatorParser(date);
 		}
@@ -63,7 +64,7 @@ public class SingleDateParser implements Parser {
 			return twoWordIndicatorParser(date);
 		}
 		
-		// for dates
+		// parse dates without keywords
 		Pair<String, Boolean>fixDateDetails = fixDate(date);
 		String fixedDate = fixDateDetails.getFirst();
 		for (String dateFormat : validDateFormats) {
@@ -87,8 +88,8 @@ public class SingleDateParser implements Parser {
 			return date;
 			
 		// DateTimeException is caught
-		} catch (Exception e) {
-			// nothing
+		} catch (DateTimeException e) {
+			// do nothing
 		}
 		return null;
 		
@@ -162,6 +163,9 @@ public class SingleDateParser implements Parser {
 	private LocalDate twoWordIndicatorParser (String date) {
 		String precursor = Auxiliary.getFirstWord(date).toUpperCase();
 		String content = Auxiliary.removeFirstWord(date).toUpperCase().trim();
+		if (content.length() > 1) {
+			content = content.substring(0,1) + content.substring(1).toLowerCase();
+		}	
 		LocalDate parsedDay = parseDayOfWeek(content);
 		if (precursor.equals("THIS")) {
 			if (parsedDay != null && parsedDay.isBefore(LocalDate.now())) {
@@ -183,15 +187,16 @@ public class SingleDateParser implements Parser {
 	}
 	
 	private LocalDate parseDayOfWeek(String dayOfWeek) {
-		LocalDate date = null;
+		DayOfWeek day = null;
 		int dayIndicator = 0;
 		for (String dayFormat : DAY_FORMAT) {
-			date = compareDayFormat(dayOfWeek, dayFormat);
-			if (date != null) {
-				dayIndicator = date.getDayOfWeek().getValue();
-			} else {
-				return null;
+			day = compareDayFormat(dayOfWeek, dayFormat);
+			if (day != null) {
+				dayIndicator = day.getValue();
 			}
+		}
+		if (dayIndicator == 0) {
+			return null;
 		}
 		
 		int dayToday = LocalDate.now().getDayOfWeek().getValue();
@@ -204,16 +209,16 @@ public class SingleDateParser implements Parser {
 		return null;
 	}
 	
-	private LocalDate compareDayFormat(String dateString, String pattern) {
-		
-		SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+	private DayOfWeek compareDayFormat(String dateString, String pattern) {
 		
 		try {
-			Date date = sdf.parse(dateString);
-			return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-		// DateTimeException is thrown
-		} catch (Exception e) {
-			// nothing
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+			DayOfWeek day = DayOfWeek.from(formatter.parse(dateString));
+			return day;
+		
+		// DateTimeException is caught
+		} catch (DateTimeException e) {
+			// do nothing
 			return null;
 		}
 	}
