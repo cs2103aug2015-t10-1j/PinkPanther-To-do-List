@@ -60,6 +60,10 @@ public class ProgramState {
 		return todoList;
 	}
 	
+	public SortedMap<LocalDate, ArrayList<Task>>getOverdueList(){
+		return overdue;
+	}
+	
 	public ArrayList<String>getCommandHistory(){
 		return commandHistory;
 	}
