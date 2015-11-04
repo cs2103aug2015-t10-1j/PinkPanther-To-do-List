@@ -436,6 +436,9 @@ public class PrettyDisplay extends Application {
             primaryStage.setIconified(true);
         }
         else if (ke.getCode().equals(KeyCode.F1)) {
+        	if (currentState == CurrentState.VIEWING_HELPSCREEN){
+	        	attemptToggleHelpScreenView();
+			}
         	attemptToggleCalendarHiddenMode(stage);
         } 
         else if (ke.getCode().equals(KeyCode.F4) && currentState == CurrentState.VIEWING_CALENDAR){
@@ -452,14 +455,23 @@ public class PrettyDisplay extends Application {
         else if (ke.getCode().equals(KeyCode.F7)) {
 			userTextField.setText("view normal");
 			callControllerToAddCommand();
+			if (currentState == CurrentState.VIEWING_HELPSCREEN){
+	        	attemptToggleHelpScreenView();
+			}
         }
         else if (ke.getCode().equals(KeyCode.F8)) {
 			userTextField.setText("view overdue");
 			callControllerToAddCommand();
+			if (currentState == CurrentState.VIEWING_HELPSCREEN){
+	        	attemptToggleHelpScreenView();
+			}
         }
         else if (ke.getCode().equals(KeyCode.F9)) {
 			userTextField.setText("view all");
 			callControllerToAddCommand();
+			if (currentState == CurrentState.VIEWING_HELPSCREEN){
+	        	attemptToggleHelpScreenView();
+			}
         }
         
         else if (ke.getCode().isLetterKey() ||  ke.getCode().isDigitKey() || ke.getCode().equals(KeyCode.SPACE)){
