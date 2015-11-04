@@ -52,7 +52,15 @@ public class CommandStack {
 		return true;
 	}
 	
+	// Returns the undo stack for testing purposes. Comment out when not in use.
+	/*public LinkedList<Command> getUndoStack() {
+		return undoStack;
+	}*/
 	
+	// Returns the redo stack for testing purposes. Comment out when not in use.
+	/*public LinkedList<Command> getRedoStack() {
+		return redoStack;
+	}*/
 }
 
 

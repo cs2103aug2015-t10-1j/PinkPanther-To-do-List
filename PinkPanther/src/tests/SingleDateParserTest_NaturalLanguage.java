@@ -1,8 +1,11 @@
-package parser;
+package tests;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import parser.SingleDateParser;
+
 import java.time.LocalDate;
 
 public class SingleDateParserTest_NaturalLanguage {

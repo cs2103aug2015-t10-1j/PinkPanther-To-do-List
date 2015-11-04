@@ -1,14 +1,16 @@
-package parser;
+package tests;
 
 import static org.junit.Assert.*;
 import java.time.LocalDate;
 
 import org.junit.Test;
 
-public class SingleDateParserTest_Dash {
+import parser.SingleDateParser;
+
+public class SingleDateParserTest_Slash {
 
 	@Test
-	public void test_Parse_DashCase1() { // dd-MM-yy
+	public void test_Parse_SlashCase1() { // dd/MM/yy
 		SingleDateParser dateParser = new SingleDateParser();
 		int day, month, year;
 		
@@ -21,16 +23,16 @@ public class SingleDateParserTest_Dash {
 					}
 					
 					else if (day < 10) {
-						assertEquals(dateParser.parse("0" + Integer.toString(day) + "-" + Integer.toString(month) +
-								"-" + Integer.toString(year).substring(2)), LocalDate.of(year, month, day));
+						assertEquals(dateParser.parse("0" + Integer.toString(day) + "/" + Integer.toString(month) +
+								"/" + Integer.toString(year).substring(2)), LocalDate.of(year, month, day));
 					}
 					else if (month < 10){
-						assertEquals(dateParser.parse(Integer.toString(day) + "-" + "0" + Integer.toString(month) +
-								"-" + Integer.toString(year).substring(2)), LocalDate.of(year, month, day));
+						assertEquals(dateParser.parse(Integer.toString(day) + "/" + "0" + Integer.toString(month) +
+								"/" + Integer.toString(year).substring(2)), LocalDate.of(year, month, day));
 					}
 					else {
-						assertEquals(dateParser.parse(Integer.toString(day) + "-" + Integer.toString(month) +
-								"-" + Integer.toString(year).substring(2)), LocalDate.of(year, month, day));
+						assertEquals(dateParser.parse(Integer.toString(day) + "/" + Integer.toString(month) +
+								"/" + Integer.toString(year).substring(2)), LocalDate.of(year, month, day));
 					}	
 				}
 			}
@@ -38,7 +40,7 @@ public class SingleDateParserTest_Dash {
 	}
 	
 	@Test
-	public void test_Parse_DashCase2() { // d-MM-yy
+	public void test_Parse_SlashCase2() { // d/MM/yy
 		SingleDateParser dateParser = new SingleDateParser();
 		int day, month, year;
 		
@@ -51,23 +53,23 @@ public class SingleDateParserTest_Dash {
 					}
 					
 					else if (day < 10) {
-						assertEquals(dateParser.parse(Integer.toString(day) + "-" + Integer.toString(month) +
-								"-" + Integer.toString(year).substring(2)), LocalDate.of(year, month, day));
+						assertEquals(dateParser.parse(Integer.toString(day) + "/" + Integer.toString(month) +
+								"/" + Integer.toString(year).substring(2)), LocalDate.of(year, month, day));
 					}
 					else if (month < 10){
-						assertEquals(dateParser.parse(Integer.toString(day) + "-" + "0" + Integer.toString(month) +
-								"-" + Integer.toString(year).substring(2)), LocalDate.of(year, month, day));
+						assertEquals(dateParser.parse(Integer.toString(day) + "/" + "0" + Integer.toString(month) +
+								"/" + Integer.toString(year).substring(2)), LocalDate.of(year, month, day));
 					}
 					else {
-						assertEquals(dateParser.parse(Integer.toString(day) + "-" + Integer.toString(month) +
-								"-" + Integer.toString(year).substring(2)), LocalDate.of(year, month, day));
+						assertEquals(dateParser.parse(Integer.toString(day) + "/" + Integer.toString(month) +
+								"/" + Integer.toString(year).substring(2)), LocalDate.of(year, month, day));
 					}	
 				}
 			}
 		}
 	}
 	@Test
-	public void test_Parse_DashCase3() { // dd-M-yy
+	public void test_Parse_SlashCase3() { // dd/M/yy
 		SingleDateParser dateParser = new SingleDateParser();
 		int day, month, year;
 		
@@ -80,12 +82,12 @@ public class SingleDateParserTest_Dash {
 					}
 					
 					else if (day < 10) {
-						assertEquals(dateParser.parse(Integer.toString(day) + "-" + Integer.toString(month) +
-								"-" + Integer.toString(year).substring(2)), LocalDate.of(year, month, day));
+						assertEquals(dateParser.parse(Integer.toString(day) + "/" + Integer.toString(month) +
+								"/" + Integer.toString(year).substring(2)), LocalDate.of(year, month, day));
 					}
 					else {
-						assertEquals(dateParser.parse(Integer.toString(day) + "-" + Integer.toString(month) +
-								"-" + Integer.toString(year).substring(2)), LocalDate.of(year, month, day));
+						assertEquals(dateParser.parse(Integer.toString(day) + "/" + Integer.toString(month) +
+								"/" + Integer.toString(year).substring(2)), LocalDate.of(year, month, day));
 					}	
 				}
 			}
@@ -93,22 +95,22 @@ public class SingleDateParserTest_Dash {
 	}
 	
 	@Test
-	public void test_Parse_DashCase4() { // d-M-yy
+	public void test_Parse_SlashCase4() { // d/M/yy
 		SingleDateParser dateParser = new SingleDateParser();
 		int day, month, year;
 		
 		for (year = 2016; year <= 2099; year++) {
 			for (month = 1; month <= 9; month++) {
 				for (day = 1; day <= 9; day++) {
-					assertEquals(dateParser.parse(Integer.toString(day) + "-" + Integer.toString(month) +
-								"-" + Integer.toString(year).substring(2)), LocalDate.of(year, month, day));
+					assertEquals(dateParser.parse(Integer.toString(day) + "/" + Integer.toString(month) +
+								"/" + Integer.toString(year).substring(2)), LocalDate.of(year, month, day));
 				}
 			}
 		}
 	}
 	
 	@Test
-	public void test_Parse_DashCase5() { // dd-MMM-yy
+	public void test_Parse_SlashCase5() { // dd/MMM/yy
 		SingleDateParser dateParser = new SingleDateParser();
 		int day, year;
 		String[] month = {"Jan", "feb", "MAR", "ApR", "mAy", "juN", "JUl", "auG", "Sep", "OcT", "nOv", "DEC"};
@@ -122,12 +124,12 @@ public class SingleDateParserTest_Dash {
 					}
 					
 					else if (day < 10) {
-						assertEquals(dateParser.parse("0" + Integer.toString(day) + "-" + month[j - 1] +
-								"-" + Integer.toString(year).substring(2)), LocalDate.of(year, j, day));
+						assertEquals(dateParser.parse("0" + Integer.toString(day) + "/" + month[j - 1] +
+								"/" + Integer.toString(year).substring(2)), LocalDate.of(year, j, day));
 					}
 					else {
-						assertEquals(dateParser.parse(Integer.toString(day) + "-" + month[j - 1] +
-								"-" + Integer.toString(year).substring(2)), LocalDate.of(year, j, day));
+						assertEquals(dateParser.parse(Integer.toString(day) + "/" + month[j - 1] +
+								"/" + Integer.toString(year).substring(2)), LocalDate.of(year, j, day));
 					}	
 				}
 			}
@@ -135,7 +137,7 @@ public class SingleDateParserTest_Dash {
 	}
 	
 	@Test
-	public void test_Parse_DashCase6() { // d-MMM-yy
+	public void test_Parse_SlashCase6() { // d/MMM/yy
 		SingleDateParser dateParser = new SingleDateParser();
 		int day, year;
 		String[] month = {"Jan", "feb", "MAR", "ApR", "mAy", "juN", "JUl", "auG", "Sep", "OcT", "nOv", "DEC"};
@@ -143,15 +145,15 @@ public class SingleDateParserTest_Dash {
 		for (year = 2016; year <= 2099; year++) {
 			for (int j = 1; j <= month.length; j++) {
 				for (day = 1; day <= 9; day++) {
-					assertEquals(dateParser.parse(Integer.toString(day) + "-" + month[j - 1] +
-								"-" + Integer.toString(year).substring(2)), LocalDate.of(year, j, day));	
+					assertEquals(dateParser.parse(Integer.toString(day) + "/" + month[j - 1] +
+								"/" + Integer.toString(year).substring(2)), LocalDate.of(year, j, day));	
 				}
 			}
 		}
 	}
 	
 	@Test
-	public void test_Parse_DashCase7() { // dd-MM-yyyy
+	public void test_Parse_SlashCase7() { // dd/MM/yyyy
 		SingleDateParser dateParser = new SingleDateParser();
 		int day, month, year;
 		
@@ -164,16 +166,16 @@ public class SingleDateParserTest_Dash {
 					}
 					
 					else if (day < 10) {
-						assertEquals(dateParser.parse("0" + Integer.toString(day) + "-" + Integer.toString(month) +
-								"-" + Integer.toString(year)), LocalDate.of(year, month, day));
+						assertEquals(dateParser.parse("0" + Integer.toString(day) + "/" + Integer.toString(month) +
+								"/" + Integer.toString(year)), LocalDate.of(year, month, day));
 					}
 					else if (month < 10){
-						assertEquals(dateParser.parse(Integer.toString(day) + "-" + "0" + Integer.toString(month) +
-								"-" + Integer.toString(year)), LocalDate.of(year, month, day));
+						assertEquals(dateParser.parse(Integer.toString(day) + "/" + "0" + Integer.toString(month) +
+								"/" + Integer.toString(year)), LocalDate.of(year, month, day));
 					}
 					else {
-						assertEquals(dateParser.parse(Integer.toString(day) + "-" + Integer.toString(month) +
-								"-" + Integer.toString(year)), LocalDate.of(year, month, day));
+						assertEquals(dateParser.parse(Integer.toString(day) + "/" + Integer.toString(month) +
+								"/" + Integer.toString(year)), LocalDate.of(year, month, day));
 					}	
 				}
 			}
@@ -181,7 +183,7 @@ public class SingleDateParserTest_Dash {
 	}
 	
 	@Test
-	public void test_Parse_DashCase8() { // d-MM-yyyy
+	public void test_Parse_SlashCase8() { // d/MM/yyyy
 		SingleDateParser dateParser = new SingleDateParser();
 		int day, month, year;
 		
@@ -189,12 +191,12 @@ public class SingleDateParserTest_Dash {
 			for (month = 1; month <= 12; month++) {
 				for (day = 1; day <= 9; day++) {			
 					if (month < 10){
-						assertEquals(dateParser.parse(Integer.toString(day) + "-" + "0" + Integer.toString(month) +
-								"-" + Integer.toString(year)), LocalDate.of(year, month, day));
+						assertEquals(dateParser.parse(Integer.toString(day) + "/" + "0" + Integer.toString(month) +
+								"/" + Integer.toString(year)), LocalDate.of(year, month, day));
 					}
 					else {
-						assertEquals(dateParser.parse(Integer.toString(day) + "-" + Integer.toString(month) +
-								"-" + Integer.toString(year)), LocalDate.of(year, month, day));
+						assertEquals(dateParser.parse(Integer.toString(day) + "/" + Integer.toString(month) +
+								"/" + Integer.toString(year)), LocalDate.of(year, month, day));
 					}	
 				}
 			}
@@ -202,7 +204,7 @@ public class SingleDateParserTest_Dash {
 	}
 	
 	@Test
-	public void test_Parse_DashCase9() { // dd-M-yyyy
+	public void test_Parse_SlashCase9() { // dd/M/yyyy
 		SingleDateParser dateParser = new SingleDateParser();
 		int day, month, year;
 
@@ -214,12 +216,12 @@ public class SingleDateParserTest_Dash {
 						continue;
 					}
 					else if (day < 10) {
-						assertEquals(dateParser.parse("0" + Integer.toString(day) + "-" + Integer.toString(month) +
-								"-" + Integer.toString(year)), LocalDate.of(year, month, day));
+						assertEquals(dateParser.parse("0" + Integer.toString(day) + "/" + Integer.toString(month) +
+								"/" + Integer.toString(year)), LocalDate.of(year, month, day));
 					}
 					else {
-						assertEquals(dateParser.parse(Integer.toString(day) + "-" + Integer.toString(month) +
-								"-" + Integer.toString(year)), LocalDate.of(year, month, day));
+						assertEquals(dateParser.parse(Integer.toString(day) + "/" + Integer.toString(month) +
+								"/" + Integer.toString(year)), LocalDate.of(year, month, day));
 					}	
 				}
 			}
@@ -227,22 +229,22 @@ public class SingleDateParserTest_Dash {
 	}
 	
 	@Test
-	public void test_Parse_DashCase10() { // d-M-yyyy
+	public void test_Parse_SlashCase10() { // d/M/yyyy
 		SingleDateParser dateParser = new SingleDateParser();
 		int day, month, year;
 
 		for (year = 2016; year <= 2099; year++) {
 			for (month = 1; month <= 9; month++) {
 				for (day = 1; day <= 9; day++) {
-					assertEquals(dateParser.parse(Integer.toString(day) + "-" + Integer.toString(month) +
-								"-" + Integer.toString(year)), LocalDate.of(year, month, day));
+					assertEquals(dateParser.parse(Integer.toString(day) + "/" + Integer.toString(month) +
+								"/" + Integer.toString(year)), LocalDate.of(year, month, day));
 				}
 			}
 		}
 	}
 	
 	@Test
-	public void test_Parse_DashCase11() { // dd-MMM-yyyy
+	public void test_Parse_SlashCase11() { // dd/MMM/yyyy
 		SingleDateParser dateParser = new SingleDateParser();
 		int day, year;
 		String[] month = {"Jan", "feb", "MAR", "ApR", "mAy", "juN", "JUl", "auG", "Sep", "OcT", "nOv", "DEC"};
@@ -255,12 +257,12 @@ public class SingleDateParserTest_Dash {
 						continue;
 					}
 					else if (day < 10) {
-						assertEquals(dateParser.parse("0" + Integer.toString(day) + "-" + month[j - 1] +
-								"-" + Integer.toString(year)), LocalDate.of(year, j, day));
+						assertEquals(dateParser.parse("0" + Integer.toString(day) + "/" + month[j - 1] +
+								"/" + Integer.toString(year)), LocalDate.of(year, j, day));
 					}
 					else {
-						assertEquals(dateParser.parse(Integer.toString(day) + "-" + month[j - 1] +
-								"-" + Integer.toString(year)), LocalDate.of(year, j, day));
+						assertEquals(dateParser.parse(Integer.toString(day) + "/" + month[j - 1] +
+								"/" + Integer.toString(year)), LocalDate.of(year, j, day));
 					}	
 				}
 			}
@@ -268,7 +270,7 @@ public class SingleDateParserTest_Dash {
 	}
 	
 	@Test
-	public void test_Parse_DashCase12() { // d-MMM-yyyy
+	public void test_Parse_SlashCase12() { // d/MMM/yyyy
 		SingleDateParser dateParser = new SingleDateParser();
 		int day, year;
 		String[] month = {"Jan", "feb", "MAR", "ApR", "mAy", "juN", "JUl", "auG", "Sep", "OcT", "nOv", "DEC"};
@@ -276,31 +278,31 @@ public class SingleDateParserTest_Dash {
 		for (year = 2016; year <= 2099; year++) {
 			for (int j = 1; j <= month.length; j++) {
 				for (day = 1; day <= 9; day++) {
-					assertEquals(dateParser.parse(Integer.toString(day) + "-" + month[j - 1] +
-								"-" + Integer.toString(year)), LocalDate.of(year, j, day));	
+					assertEquals(dateParser.parse(Integer.toString(day) + "/" + month[j - 1] +
+								"/" + Integer.toString(year)), LocalDate.of(year, j, day));	
 				}
 			}
 		}
 	}
-	
+
 	@Test
-	public void test_Parse_DashCase13() { // d-MMMM-yyyy
+	public void test_Parse_SlashCase13() { // d/MMMM/yyyy
 		SingleDateParser dateParser = new SingleDateParser();
 		int day, year;
 		String[] month = {"January", "february", "MARCH", "ApRiL", "mAy", "juNe", "JUly", "auGUST", "SepTemBER", "OcTobeR", "nOvEMBEr", "DECembeR"};
-		
+
 		for (year = 2016; year <= 2099; year++) {
 			for (int j = 1; j <= month.length; j++) {
 				for (day = 1; day <= 9; day++) {
 					assertEquals(dateParser.parse(Integer.toString(day) + "-" + month[j - 1] +
-								"-" + Integer.toString(year)), LocalDate.of(year, j, day));
+							"-" + Integer.toString(year)), LocalDate.of(year, j, day));
 				}
 			}
 		}
 	}
-	
+
 	@Test
-	public void test_Parse_DashCase14() { // dd-MMMM-yyyy
+	public void test_Parse_SlashCase14() { // dd/MMMM/yyyy
 		SingleDateParser dateParser = new SingleDateParser();
 		int day, year;
 		String[] month = {"January", "february", "MARCH", "ApRiL", "mAy", "juNe", "JUly", "auGUST", "SepTemBER", "OcTobeR", "nOvEMBEr", "DECembeR"};
@@ -324,13 +326,13 @@ public class SingleDateParserTest_Dash {
 			}
 		}
 	}
-	
+
 	@Test
-	public void test_Parse_DashCase15() { // dd-MMMM-yy
+	public void test_Parse_SlashCase15() { // dd/MMMM/yy
 		SingleDateParser dateParser = new SingleDateParser();
 		int day, year;
 		String[] month = {"January", "february", "MARCH", "ApRiL", "mAy", "juNe", "JUly", "auGUST", "SepTemBER", "OcTobeR", "nOvEMBEr", "DECembeR"};
-		
+
 		for (year = 2016; year <= 2099; year++) {
 			for (int j = 1; j <= month.length; j++) {
 				for (day = 1; day <= 31; day++) {
@@ -338,7 +340,7 @@ public class SingleDateParserTest_Dash {
 							|| (day > 28 && j == 2)) {
 						continue;
 					}
-					
+
 					else if (day < 10) {
 						assertEquals(dateParser.parse("0" + Integer.toString(day) + "-" + month[j - 1] +
 								"-" + Integer.toString(year).substring(2)), LocalDate.of(year, j, day));
@@ -351,18 +353,18 @@ public class SingleDateParserTest_Dash {
 			}
 		}
 	}
-	
+
 	@Test
-	public void test_Parse_DashCase16() { // d-MMMM-yy
+	public void test_Parse_SlashCase16() { // d/MMMM/yy
 		SingleDateParser dateParser = new SingleDateParser();
 		int day, year;
 		String[] month = {"January", "february", "MARCH", "ApRiL", "mAy", "juNe", "JUly", "auGUST", "SepTemBER", "OcTobeR", "nOvEMBEr", "DECembeR"};
-		
+
 		for (year = 2016; year <= 2099; year++) {
 			for (int j = 1; j <= month.length; j++) {
 				for (day = 1; day <= 9; day++) {
 					assertEquals(dateParser.parse(Integer.toString(day) + "-" + month[j - 1] +
-								"-" + Integer.toString(year).substring(2)), LocalDate.of(year, j, day));	
+							"-" + Integer.toString(year).substring(2)), LocalDate.of(year, j, day));	
 				}
 			}
 		}

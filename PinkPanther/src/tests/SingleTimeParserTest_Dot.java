@@ -1,7 +1,10 @@
-package parser;
+package tests;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
+
+import parser.SingleTimeParser;
+
 import java.time.LocalTime;
 
 public class SingleTimeParserTest_Dot {
