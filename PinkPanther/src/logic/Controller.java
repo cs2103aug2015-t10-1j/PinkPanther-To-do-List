@@ -1,5 +1,5 @@
+/* @@author GB */
 package logic;
-
 
 import common.Pair;
 import common.ProgramState;

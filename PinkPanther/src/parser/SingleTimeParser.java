@@ -1,5 +1,7 @@
+/* @@author CS */
 package parser;
 
+import java.time.DateTimeException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -24,6 +26,7 @@ public class SingleTimeParser implements Parser{
 		validTimeFormats.addAll(TIME_FORMATS);
 	}
 
+	@SuppressWarnings("unchecked")
 	public LocalTime parse(String time) {
 		
 		time = time.toUpperCase();
@@ -54,7 +57,7 @@ public class SingleTimeParser implements Parser{
 			return time;
 			
 		//If DateTimeException is caught
-		} catch (Exception e) {
+		} catch (DateTimeException e) {
 			return null;
 		}
 

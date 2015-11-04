@@ -1,3 +1,4 @@
+/* @@author GB */
 package logic;
 
 import java.time.LocalDate;

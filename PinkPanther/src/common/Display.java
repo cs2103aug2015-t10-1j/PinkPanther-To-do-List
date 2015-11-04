@@ -1,3 +1,4 @@
+/* @@author GB */
 package common;
 
 public class Display {
@@ -11,7 +12,4 @@ public class Display {
 	public static String showFeedBack(){
 		return message;
 	}
-	
-
-
 }

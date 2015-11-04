@@ -1,3 +1,4 @@
+/* @@author CS */
 package parser;
 
 import common.Pair;
@@ -12,6 +13,7 @@ public class QueryParser implements Parser {
 	private static final int INDEX_KEYWORD = 0;
 	private static final int INDEX_INDEX = 1;
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Pair parse(String commandContent) {
 		String[] userInfo = commandContent.split(",");
 		userInfo = Auxiliary.trimStringArray(userInfo);
@@ -28,7 +30,7 @@ public class QueryParser implements Parser {
 		
 		indexList = generateIndexList(indexInfo);
 		
-		// retrieving multiple floating tasks
+		// retrieve multiple floating tasks
 		if (userInfo[INDEX_KEYWORD].equalsIgnoreCase("undated")) {
 			
 			if (indexInfo.length == 1 && indexInfo[INDEX_KEYWORD].equalsIgnoreCase("all")) {
@@ -43,7 +45,7 @@ public class QueryParser implements Parser {
 			return new Pair<LocalDate, ArrayList<Integer>>(null, indexList);
 		} 
 		
-		// retrieving multiple dated tasks
+		// retrieve multiple dated tasks
 		LocalDate date = sdp.parse(userInfo[INDEX_KEYWORD]);
 		if (date != null) {
 			
@@ -60,7 +62,7 @@ public class QueryParser implements Parser {
 			return new Pair<LocalDate, ArrayList<Integer>>(date, indexList);
 		}
 		
-		// no keywords found!
+		// no keywords found
 		Display.setFeedBack("No valid keyword or date entered");
 		return null;
 	}

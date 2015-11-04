@@ -1,3 +1,4 @@
+/* @@author GB */
 package common;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -240,13 +241,5 @@ public class Task {
 				return false;
 			}
 		}
-
-		
-		
-		
-		
-		
-	}
-	
-	
+	}	
 }

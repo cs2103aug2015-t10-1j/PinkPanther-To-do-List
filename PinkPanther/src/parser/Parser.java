@@ -1,3 +1,4 @@
+/* @@author CS */
 package parser;
 
 public interface Parser {

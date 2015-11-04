@@ -1,5 +1,5 @@
+/* @@author GB */
 package common;
-
 
 public class Pair<A,B> {
 	private A first;

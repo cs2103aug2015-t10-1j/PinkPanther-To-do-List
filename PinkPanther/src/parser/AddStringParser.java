@@ -1,3 +1,4 @@
+/* @@author CS */
 package parser;
 
 import common.Task;
@@ -7,7 +8,6 @@ import common.Display;
 import common.Pair;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class AddStringParser implements Parser {
@@ -20,7 +20,6 @@ public class AddStringParser implements Parser {
 	private TaskType taskTypeStore;
 	
 	// indexes of various arrays
-//	private static final int INDEX_TASKNAME = 0;
 	private static final int INDEX_TASK_DETAIL = 1;
 	
 	// word list
@@ -34,7 +33,7 @@ public class AddStringParser implements Parser {
 	private static SingleTimeParser stp = new SingleTimeParser();
 
 	
-	// main functionality
+	@SuppressWarnings("unchecked")
 	public Task parse(String commandContent){
 		
 		clearStores();
@@ -72,7 +71,6 @@ public class AddStringParser implements Parser {
 	
 	
 	// input processing logic methods
-	// beware of exceptions!
 	private int findValidDateTime(String [] possiblyDateTime) {
 		int dateCounter = 0;
 		int timeCounter = 0;
@@ -103,6 +101,7 @@ public class AddStringParser implements Parser {
 		
 		// itself is a date
 		if (isSingleDate(dateTimeInfo, sdp)) {
+			
 			// parse it as start date if start date is not already defined
 			if (startDateStore == null) {
 				setStartDate(sdp.parse(dateTimeInfo));
@@ -193,7 +192,7 @@ public class AddStringParser implements Parser {
 				earlierDate = earlierDate.withYear(laterDate.getYear());
 			}
 			
-			// check chronological
+			// check if chronological
 			if (!earlierDate.isAfter(laterDate)) {
 				setStartDate(earlierDate);
 				setEndDate(laterDate);
@@ -209,6 +208,7 @@ public class AddStringParser implements Parser {
 		
 		// itself is a time
 		if (isSingleTime(dateTimeInfo, stp)) {
+			
 			// parse it as start time if start time is not already defined
 			if (startTimeStore == null) {
 				setStartTime(stp.parse(dateTimeInfo));
@@ -292,7 +292,8 @@ public class AddStringParser implements Parser {
 		
 		// case: both times are valid times
 		if (earlierTime != null && laterTime != null) {
-			// check chronological
+			
+			// check if chronological
 			if (!earlierTime.isAfter(laterTime)) {
 				setStartTime(earlierTime);
 				setEndTime(laterTime);
@@ -312,7 +313,7 @@ public class AddStringParser implements Parser {
 	private Task addEvent(String[] details)  {		
 		String taskFullDetails = Auxiliary.concatArray(details);
 		
-		// case: 1 T 2 D (append time to contents? and add dated(i.e. no time) event)
+		// case: 1 T 2 D (drop time and add dated(i.e. no time) event)
 		// case: 0 T 2 D (add dated event)
 		if (startTimeStore == null || endTimeStore == null) {
 			if (startDateStore.equals(endDateStore)) {
@@ -337,7 +338,7 @@ public class AddStringParser implements Parser {
 					setStartDate(endDateStore);
 				}
 			}
-			// case: 2 T 2 D (ok)	
+			// case: 2 T 2 D
 			if (endTimeStore.isBefore(startTimeStore)) {
 				return addFloating(taskFullDetails);
 			}
@@ -362,7 +363,6 @@ public class AddStringParser implements Parser {
 		return event;
 	}
 	
-	// throw exception when more than one date or time found?
 	private Task addSingleDated() {
 		
 		// case: 1 T 0 D (add todo/deadline today)
@@ -370,6 +370,7 @@ public class AddStringParser implements Parser {
 			setStartDate(LocalDate.now());
 			setEndDate(LocalDate.now());
 		}
+		
 		// case: 1 T 1 D (add todo or deadline)
 		// case: 0 T 1 D (add dated event on 1D)
 		if (taskTypeStore == TaskType.DEADLINE) {
