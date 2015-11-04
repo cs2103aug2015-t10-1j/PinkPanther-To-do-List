@@ -11,6 +11,7 @@ import common.Task;
 public class DoneCommand implements Command{
 	private TaskManager manager;
 	private Task taskRef;
+	private ArrayList<Task> taskListRef;
 	
 	public DoneCommand(TaskManager manager){
 		this.manager=manager;
@@ -22,28 +23,58 @@ public class DoneCommand implements Command{
 			return false;
 		}
 		
-		taskRef=taskList.get(0);
-		if(taskRef!=null){
-			//move the task to doneList
+		LocalDate date=taskList.get(0).getDate();
+		String dateString = (date == null) ? "floating tasks" : date.toString();
+		
+		if(taskList.size()==1){
+			taskRef=taskList.get(0);
 			manager.deleteTask(taskRef);
 			taskRef.setDoneStatus(true);
 			manager.addTask(taskRef);
-			Display.setFeedBack("\"" + taskRef.getName()+"\""+" has been marked as 'done'");
+			Display.setFeedBack("\"" + taskRef.getName()+"\" from "+dateString+" has been marked as 'done'");
 			return true;
 		}
-		return false;
+		else{
+			taskListRef=taskList;
+			manager.deleteMultipleTasks(taskListRef);
+			for(Task task:taskListRef){
+				task.setDoneStatus(true);
+			}
+			manager.addMultipleTasks(taskListRef);
+			Display.setFeedBack("Tasks from "+dateString+" have been marked as 'done'");
+			return true;
+		}
 		
 	}
 	
 	public void undo(){
-		manager.deleteTask(taskRef);
-		taskRef.setDoneStatus(false);
-		manager.addTask(taskRef);
+		if(taskRef!=null){
+			manager.deleteTask(taskRef);
+			taskRef.setDoneStatus(false);
+			manager.addTask(taskRef);
+		} else{
+			manager.deleteMultipleTasks(taskListRef);
+			for(Task task:taskListRef){
+				task.setDoneStatus(false);
+			}
+			manager.addMultipleTasks(taskListRef);
+			
+		}
+		
 	}
 	
 	public void redo(){
-		manager.deleteTask(taskRef);
-		taskRef.setDoneStatus(true);
-		manager.addTask(taskRef);
+		if(taskRef!=null){
+			manager.deleteTask(taskRef);
+			taskRef.setDoneStatus(true);
+			manager.addTask(taskRef);
+		} else{
+			manager.deleteMultipleTasks(taskListRef);
+			for(Task task:taskListRef){
+				task.setDoneStatus(true);
+			}
+			manager.addMultipleTasks(taskListRef);
+		}
+		
 	}
 }

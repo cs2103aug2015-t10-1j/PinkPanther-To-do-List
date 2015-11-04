@@ -26,19 +26,17 @@ public class DeleteCommand implements Command{
 			return false;
 		}
 		
+		LocalDate date=taskList.get(0).getDate();
+		String dateString = (date == null) ? "floating tasks" : date.toString();
+		
 		if(taskList.size()==1){
 			taskRef=taskList.get(0);
 			manager.deleteTask(taskRef);
-			LocalDate date=taskRef.getDate();
-			String dateString = (date == null) ? "floating tasks" : date.toString();
 			Display.setFeedBack("\""+taskRef.getName()+"\""+" has been deleted from "+dateString);
 			return true;
-		}
-		else{
+		} else{
 			taskListRef=taskList;
 			manager.deleteMultipleTasks(taskListRef);
-			LocalDate date=taskList.get(0).getDate();
-			String dateString = (date == null) ? "floating tasks" : date.toString();
 			Display.setFeedBack("Tasks have been deleted from "+dateString);
 			return true;
 		}
@@ -48,8 +46,7 @@ public class DeleteCommand implements Command{
 	public void undo(){
 		if(taskRef!=null){
 			manager.addTask(taskRef);
-		}
-		else{
+		} else{
 			manager.addMultipleTasks(taskListRef);
 		}
 		
@@ -58,8 +55,7 @@ public class DeleteCommand implements Command{
 	public void redo(){
 		if(taskRef!=null){
 			manager.deleteTask(taskRef);
-		}
-		else{
+		} else{
 			manager.deleteMultipleTasks(taskListRef);
 		}
 	}
