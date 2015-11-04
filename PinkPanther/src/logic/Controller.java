@@ -37,6 +37,7 @@ public class Controller {
 	public void initializeProgramState(){
 		state.setFLoatingList(manager.getFloating(false));
 		state.setTodoList(manager.getTwoWeek());
+		state.setOverDueList(manager.getDatedPrevious());
 	}
 	
 	public ProgramState getProgramState(){
@@ -125,7 +126,7 @@ public class Controller {
 					if(!changeDisplayMode(parameterString)){
 						state.setInputBoxText(command);
 					}
-					canSave=false;
+					canSave = false;
 					break;
 				case "save":
 					storage.changeDirectory(parameterString);
