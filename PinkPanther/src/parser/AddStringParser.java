@@ -156,8 +156,8 @@ public class AddStringParser implements Parser {
 		if (delimOccurrence == delimiter.length()) {
 			String[] dateTokens = dates.split(delimiter);
 			dateTokens = Auxiliary.trimStringArray(dateTokens);
-			
-			if (isValidDateRange(dateTokens[0], dateTokens[1])) {
+			if (dateTokens.length > 1 
+					&& isValidDateRange(dateTokens[0], dateTokens[1])) {
 				return 2;
 			}
 		}
@@ -264,7 +264,8 @@ public class AddStringParser implements Parser {
 			String[] timeTokens = times.split(delimiter);
 			timeTokens = Auxiliary.trimStringArray(timeTokens);
 			
-			if (isValidTimeRange(timeTokens[0], timeTokens[1])) {
+			if (timeTokens.length > 1 
+					&& isValidTimeRange(timeTokens[0], timeTokens[1])) {
 				return 2;
 			}
 		}
