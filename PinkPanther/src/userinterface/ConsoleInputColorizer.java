@@ -77,6 +77,21 @@ public class ConsoleInputColorizer {
 	        	}
 	        break;
 	        
+	        case "done":
+	        	textChunks.add(customize("  Done  \u25b6", Color.GREEN));
+	        	if (wordList.length > 1){
+		        	String taskInfo = inputString.split(" ", 2)[1];	
+		        	if (taskInfo != null){
+		        		Task task = controller.findTask(taskInfo);
+		        		if (task != null) {
+		        			textChunks.addAll(breakTaskIntoFlowPane(task));
+		        		} else {
+				        	textChunks.add(customize(" [Valid task date and index not detected yet]", Color.RED));
+			        	}
+		        	}
+	        	}
+	        break;
+	        
 	        case "edit":
 	        	textChunks.add(customize("Editing \u25b6", Color.GREEN));
 	        	if (wordList.length > 1){

@@ -151,7 +151,7 @@ public class Controller {
 					Display.setFeedBack("All tasks have been cleared");
 					break;
 				default:
-					Display.setFeedBack("Unrecognized command. Press PAGE_UP for Help Screen.");
+					Display.setFeedBack("Unrecognized command. Press F2 for Help Screen.");
 					state.setInputBoxText(command);
 			}
 			state.addCommandToHistory(command);
