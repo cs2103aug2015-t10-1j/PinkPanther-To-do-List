@@ -223,7 +223,7 @@ public class TaskBox extends StackPane{
 			break;
 		
 		}
-		Text text = new Text ("!");
+		Text text = new Text (String.valueOf(index));
 		
 		text.setFont(Font.font("Tahoma", FontWeight.BOLD, 13));
 		text.setTextAlignment(TextAlignment.CENTER);
