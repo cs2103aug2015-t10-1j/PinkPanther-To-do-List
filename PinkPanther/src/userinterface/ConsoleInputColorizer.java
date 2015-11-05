@@ -134,7 +134,7 @@ public class ConsoleInputColorizer {
 	        
 	        default :
 	        	textChunks.add(customize("             \u25b6  ", Color.BROWN));
-	        	textChunks.add(customize(trimWord(inputString, 50)+ "\"", Color.BLACK));
+	        	textChunks.add(customize(trimWord(inputString, 50), Color.BLACK));
 	        break;
 	        	
 	        }

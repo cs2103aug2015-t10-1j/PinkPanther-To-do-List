@@ -1,15 +1,20 @@
 /* @@author Baron */
 package userinterface;
 
+import java.awt.image.BufferedImage;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.SortedMap;
+
+import javax.imageio.ImageIO;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -64,31 +69,37 @@ public class PrettyDisplay extends Application {
     
     @Override
     public void start(Stage primaryStage) {
+    	setScreenHeight();
     	objPrimaryStage = primaryStage;
     	mainController = new Controller();
 //    	primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("PPLogo.png")));
     	primaryStage.setTitle("PinkPanther: The best to-do list");
+    	Image logoImage = new Image("PPLogo.png");
+    	primaryStage.getIcons().add(logoImage);
+        //Holds all calendar items
+        implementCalendarGrid();
+        //Holds content of Grid together with grid1
+        implementScrollPane();
+        //Holds calendar grid and textboxes/buttons below
+        implementMainGrid();
+        //Holds the user input box
+        implementUserTextField();
+        //Text that displays after-action (e.g added x event)
+        implementUserFeedback("Input command in the field above"); // to remove
+        //Set feedback to default string
+        setUserFeedback(parseAndColorize(STRING_DEFAULT_FEEDBACK));
+        //Allows keyboard inputs to be read as commands
+        implementKeystrokeEvents(primaryStage);
+        //Implements the scene
+        implementScene();
+        
+        setStage(primaryStage);
          
-
-         //Holds all calendar items
-         implementCalendarGrid();
-         //Holds content of Grid together with grid1
-         implementScrollPane();
-         //Holds calendar grid and textboxes/buttons below
-         implementMainGrid();
-         //Holds the user input box
-         implementUserTextField();
-         //Text that displays after-action (e.g added x event)
-         implementUserFeedback("Input command in the field above"); // to remove
-         //Set feedback to default string
-         setUserFeedback(parseAndColorize(STRING_DEFAULT_FEEDBACK));
-         //Allows keyboard inputs to be read as commands
-         implementKeystrokeEvents(primaryStage);
-         //Implements the scene
-         implementScene();
-         
-         setStage(primaryStage);
-         
+    }
+    
+    void setScreenHeight(){
+    	Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+        currentStageHeight = (int) (primScreenBounds.getHeight() - 10);
     }
     
     void fillPage(String newInput, Stage primaryStage){

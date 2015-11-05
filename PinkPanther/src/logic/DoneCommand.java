@@ -33,6 +33,7 @@ public class DoneCommand implements Command{
 			taskRef.setDoneStatus(true);
 			manager.addTask(taskRef);
 			Display.setFeedBack("\"" + taskRef.getName()+"\" from "+dateString+" has been marked as 'done'");
+			Display.setFeedBack("Marked as done: [" + dateString + "] " + "\"" + taskRef.getName() + "\"");
 			return true;
 		}
 		else{
