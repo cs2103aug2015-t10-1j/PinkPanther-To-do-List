@@ -53,7 +53,7 @@ public class PrettyDisplay extends Application {
     private enum CurrentState {VIEWING_CALENDAR, VIEWING_HELPSCREEN, VIEWING_HIDDEN}
     private CurrentState currentState = CurrentState.VIEWING_CALENDAR;
     
-    public static void main(String [ ] args){
+    public static void main(String [] args){
     	PrettyDisplay prettyDisplay = new PrettyDisplay();
     	prettyDisplay.runApp();
     }
