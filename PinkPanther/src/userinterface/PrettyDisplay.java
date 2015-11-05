@@ -66,9 +66,8 @@ public class PrettyDisplay extends Application {
     public void start(Stage primaryStage) {
     	objPrimaryStage = primaryStage;
     	mainController = new Controller();
-    	primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream( "PPLogo.png" ))); 
-    	
-    	 primaryStage.setTitle("PinkPanther: The best to-do list");
+//    	primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("PPLogo.png")));
+    	primaryStage.setTitle("PinkPanther: The best to-do list");
          
 
          //Holds all calendar items
