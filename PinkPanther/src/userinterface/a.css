@@ -1,5 +1,9 @@
 //.root {
-   //  -fx-background-image: url("background.jpg");
+//     -fx-background-image: url("PPLogoTransparent.png");
+//	-fx-background-repeat: no-repeat;
+//	-fx-background-attachment: fixed;
+//	-fx-background-position: center;
+//	-fx-background-opacity: 0.1;	
 //}
 
 .scroll-pane {

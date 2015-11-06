@@ -27,7 +27,7 @@ public class DayBox extends StackPane{
 	    }
 	    else {
 	    	dayString = day.split(" ")[0];
-	    	monthString = day.split(" ")[1];
+	    	monthString = day.split(" ")[1] + " " + day.split(" ")[2];
 	    }
 
 		Rectangle box = createDayHolderBox(day);
