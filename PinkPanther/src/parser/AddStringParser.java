@@ -184,12 +184,15 @@ public class AddStringParser implements Parser {
 			// first date has no year but second has
 			if (date1Details.getSecond() && !date2Details.getSecond()) {
 				earlierDate = earlierDate.withYear(laterDate.getYear());
+				if (earlierDate.isAfter(laterDate)) {
+					earlierDate = earlierDate.minusYears(1);
+				}
 			
 			// both dates have no years	
-			// if second date is after today but first day isn't
 			} else if (date1Details.getSecond() && date2Details.getSecond()) {
-				if (laterDate.getYear() < earlierDate.getYear())
-				earlierDate = earlierDate.withYear(laterDate.getYear());
+				if (laterDate.isBefore(earlierDate)) {
+					laterDate = laterDate.plusYears(1);
+				}
 			}
 			
 			// check if chronological

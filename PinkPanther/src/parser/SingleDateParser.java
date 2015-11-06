@@ -70,9 +70,9 @@ public class SingleDateParser implements Parser {
 		for (String dateFormat : validDateFormats) {
 			LocalDate parsedDate = compareDateFormat(fixedDate, dateFormat);
 			if (parsedDate != null) {
-				if (parsedDate.isBefore(LocalDate.now()) && fixDateDetails.getSecond() ) {
-					parsedDate = parsedDate.plusYears(1);
-				}
+//				if (parsedDate.isBefore(LocalDate.now()) && fixDateDetails.getSecond() ) {
+//					parsedDate = parsedDate.plusYears(1);
+//				}
 				return parsedDate;
 			}
 		}
@@ -95,7 +95,7 @@ public class SingleDateParser implements Parser {
 		
 	}
 	
-	public Pair<String, Boolean> fixDate(String date) {
+	protected Pair<String, Boolean> fixDate(String date) {
 		String fixedDate;
 		boolean hasAppendedYear = false;
 		
