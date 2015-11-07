@@ -43,4 +43,8 @@ public class Auxiliary {
 		}
 		return arrContents;
 	}
+	
+	public static void displayErrorMessage(String errorMessage) {
+		System.out.println(errorMessage);
+	}
 }

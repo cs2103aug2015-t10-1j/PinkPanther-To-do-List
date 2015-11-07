@@ -1,4 +1,4 @@
-/* @@author CS */
+/* @@author A0126473E */
 package parser;
 
 import common.Pair;
@@ -13,6 +13,15 @@ public class QueryParser implements Parser {
 	private static final int INDEX_KEYWORD = 0;
 	private static final int INDEX_INDEX = 1;
 	
+	private static final SingleDateParser sdp = new SingleDateParser();
+	
+	/**
+	 * Return a Pair of a date and an arraylist of indices.
+	 * null is returned when no valid date or index is found.
+	 * 
+	 * @param commandContent	What the user enters.
+	 * @return	List of indices for a certain date and the date itself.
+	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Pair parse(String commandContent) {
 		String[] userInfo = commandContent.split(",");
@@ -20,63 +29,49 @@ public class QueryParser implements Parser {
 		
 		// there should only be 1 comma
 		if (userInfo.length != 2) {
-			Display.setFeedBack("Invalid Input Format");
+			Display.setFeedBack("Invalid input format. Please enter only 1 comma.");
 			return null;
 		}
 		
-		String[] indexInfo = userInfo[INDEX_INDEX].split(" ");
-		ArrayList<Integer> indexList = new ArrayList<Integer>();
-		SingleDateParser sdp = new SingleDateParser();
+		LocalDate keyword = generateKeyword(userInfo[INDEX_KEYWORD]);
+		ArrayList<Integer> indexList = generateIndexList(userInfo[INDEX_INDEX]);
 		
-		indexList = generateIndexList(indexInfo);
-		
-		// retrieve multiple floating tasks
-		if (userInfo[INDEX_KEYWORD].equalsIgnoreCase("undated")) {
-			
-			if (indexInfo.length == 1 && indexInfo[INDEX_KEYWORD].equalsIgnoreCase("all")) {
-				return new Pair<LocalDate, ArrayList<Integer>>(null, indexList);
-			}
-			
-			if (indexList == null) {
-				Display.setFeedBack("Invalid index entered");
-				return null;
-			}
-			
-			return new Pair<LocalDate, ArrayList<Integer>>(null, indexList);
-		} 
-		
-		// retrieve multiple dated tasks
-		LocalDate date = sdp.parse(userInfo[INDEX_KEYWORD]);
-		if (date != null) {
-			
-			// retrieve all tasks
-			if (indexInfo.length == 1 && indexInfo[INDEX_KEYWORD].equalsIgnoreCase("all")) {
-				return new Pair<LocalDate, ArrayList<Integer>>(date, indexList);
-			}
-			// retrieve multiple tasks
-			if (indexList == null) {
-				Display.setFeedBack("Invalid index entered");
-				return null;
-			}
-			
-			return new Pair<LocalDate, ArrayList<Integer>>(date, indexList);
+		if (isValidKeyword(userInfo[INDEX_KEYWORD]) 
+				&& isValidIndex(userInfo[INDEX_INDEX], indexList)) {
+			return new Pair<LocalDate, ArrayList<Integer>>(keyword, indexList);
+		} else if (!isValidKeyword(userInfo[INDEX_KEYWORD])) {
+			Display.setFeedBack("Invalid keyword or date entered.");
+			return null;
+		} else if (!isValidIndex(userInfo[INDEX_INDEX], indexList)) {
+			Display.setFeedBack("Invalid index entered.");
+			return null;
 		}
-		
-		// no keywords found
-		Display.setFeedBack("No valid keyword or date entered");
 		return null;
 	}
 	
-	private ArrayList<Integer> generateIndexList(String[] listOfIndices) {
+	private LocalDate generateKeyword (String keyword) {
+		return sdp.parse(keyword);
+	}
+	
+	private ArrayList<Integer> generateIndexList(String userInfo) {
+		String[] listOfIndices = userInfo.split(" ");
 		ArrayList<Integer> list = new ArrayList<Integer>();
 		for (int i = INDEX_KEYWORD; i < listOfIndices.length; i++) {
 			try {
 				list.add(Integer.valueOf(listOfIndices[i]));
-			} catch (Exception e) {
+			} catch (NumberFormatException e) {
 				return null;
 			}
 		}	
 		return list;
+	}
+	
+	private boolean isValidKeyword (String keyword) {
+		return keyword.equalsIgnoreCase("undated") || sdp.parse(keyword) != null;
+	}
+	
+	private boolean isValidIndex (String indices, ArrayList<Integer> indexList) {
+		return indices.equalsIgnoreCase("all") || indexList != null;
 	}
 }
 
