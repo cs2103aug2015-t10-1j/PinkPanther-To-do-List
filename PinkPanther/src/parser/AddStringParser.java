@@ -248,14 +248,16 @@ public class AddStringParser implements Parser {
 			Boolean secondDateHasAppendedYear = sdp.fixDate(secondDate).getSecond();
 			
 			// if earlier date's year was appended
-			if (secondDateHasAppendedYear && !firstDateHasAppendedYear) {
+			if (firstDateHasAppendedYear && !secondDateHasAppendedYear) {
 				earlierDate = earlierDate.withYear(laterDate.getYear());
 				if (earlierDate.isAfter(laterDate)) {
 					earlierDate = earlierDate.minusYears(1);
 				}
-			
-			// if both dates' years were appended
-			} else if (firstDateHasAppendedYear && secondDateHasAppendedYear) {
+				
+			// if later date's year or both dates' years were appended
+			} else if (secondDateHasAppendedYear) {
+				if (!firstDateHasAppendedYear)
+					laterDate = laterDate.withYear(earlierDate.getYear());
 				if (laterDate.isBefore(earlierDate)) {
 					laterDate = laterDate.plusYears(1);
 				}

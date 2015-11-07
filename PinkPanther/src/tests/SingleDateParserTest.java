@@ -97,7 +97,7 @@ public class SingleDateParserTest {
 	public void testParseTwoWordsNormal() {
 		// Should work for both valid and invalid dates
 		String[] testInput = {"next week", "next month", "next year",
-				"this saturday", "next sat"};
+				"this sunday", "next sun"};
 		LocalDate[] expectedOutput = {LocalDate.now().plusWeeks(1), 
 				LocalDate.now().plusMonths(1), LocalDate.now().plusYears(1), 
 				LocalDate.now(), LocalDate.now().plusWeeks(1)};
