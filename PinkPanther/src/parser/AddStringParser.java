@@ -52,6 +52,13 @@ public class AddStringParser implements Parser {
 
 	
 	@SuppressWarnings("unchecked")
+	/**
+	 * Return a Task based on commandContent.
+	 * null is returned when commandContent is empty.
+	 * 
+	 * @param commandContent	What the user enters.
+	 * @return	Task containing info from commandContent.
+	 */
 	public Task parse(String commandContent){
 		
 		clearStores();
@@ -104,7 +111,13 @@ public class AddStringParser implements Parser {
 		return Math.max(dateCounter, timeCounter);
 	}
 	
-	// counts number of dates
+	/**
+	 * Return the number of valid dates found in a string.
+	 * If valid dates are found, date and time stores are updated.
+	 * 
+	 * @param dateTimeInfo	An input token from the user.
+	 * @return	The number of valid dates found in input token.
+	 */
 	protected int countValidDates(String dateTimeInfo) {
 		
 		// case: itself is a date
@@ -401,6 +414,9 @@ public class AddStringParser implements Parser {
 				|| task.getEndDate().isBefore(THE_MYTH_DAY)); 
 	}
 	
+	/**
+	 * Resets all attributes of parser to null
+	 */
 	protected void clearStores() {
 		setTaskName(null);
 		setStartDate(null);

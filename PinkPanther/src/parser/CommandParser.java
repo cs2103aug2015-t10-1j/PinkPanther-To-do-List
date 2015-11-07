@@ -7,7 +7,8 @@ import common.Pair;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-/** Facade class for GUI and Logic*/
+/** 
+ * Facade class for GUI and Logic*/
 public class CommandParser {
 	
 	private AddStringParser asp = new AddStringParser();

@@ -1,7 +1,8 @@
-/* @@author CS */
+/* @@author A0126473E */
 package common;
 
 public class Auxiliary {
+	
 	public static String getFirstWord(String userInput) {
 		String commandTypeString = userInput.trim().split("\\s+")[0];
 		return commandTypeString;

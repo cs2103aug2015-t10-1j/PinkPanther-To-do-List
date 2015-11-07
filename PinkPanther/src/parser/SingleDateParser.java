@@ -1,4 +1,4 @@
-/* @@author CS */
+/* @@author A0126473E */
 package parser;
 
 import common.Pair;
@@ -53,9 +53,16 @@ public class SingleDateParser implements Parser {
 	}
 	
 	@SuppressWarnings("unchecked")
+	/**
+	 * Return a date based on user input.
+	 * null is returned when user input is not a date.
+	 * 
+	 * @param date	What the user enters.
+	 * @return	LocalDate object of the date that was entered.
+	 */
 	public LocalDate parse(String date) {
 		
-		// parse dates that contain a certain keyword separately
+		// case: dates that contain a certain keyword
 		if (isDateIndicator(date)) {
 			return oneWordIndicatorParser(date);
 		}
@@ -64,37 +71,41 @@ public class SingleDateParser implements Parser {
 			return twoWordIndicatorParser(date);
 		}
 		
-		// parse dates without keywords
+		// case: dates without keywords
 		Pair<String, Boolean>fixDateDetails = fixDate(date);
 		String fixedDate = fixDateDetails.getFirst();
 		for (String dateFormat : validDateFormats) {
 			LocalDate parsedDate = compareDateFormat(fixedDate, dateFormat);
 			if (parsedDate != null) {
-//				if (parsedDate.isBefore(LocalDate.now()) && fixDateDetails.getSecond() ) {
-//					parsedDate = parsedDate.plusYears(1);
-//				}
 				return parsedDate;
 			}
 		}
 		
+		// case: not a date
 		return null;
 	}
 	
 	private LocalDate compareDateFormat(String dateString, String pattern) {
-		
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
 			LocalDate date = LocalDate.parse(dateString, formatter);
 			return date;
-			
-		// DateTimeException is caught
 		} catch (DateTimeException e) {
-			// do nothing
+			// do logging
 		}
 		return null;
 		
 	}
 	
+	/**
+	 * Return a Pair of a date ready for parsing and
+	 * a boolean value of whether its year was appended.
+	 * 
+	 * @param date	A date String that the user enters.
+	 * @return	A Pair with the first object as a fixed date String formatted
+	 * 			in a way that the DateTimeFormatter accepts, and a boolean
+	 * 			reflecting whether the year was appended.
+	 */
 	protected Pair<String, Boolean> fixDate(String date) {
 		String fixedDate;
 		boolean hasAppendedYear = false;
@@ -132,7 +143,6 @@ public class SingleDateParser implements Parser {
 	}
 	
 	private boolean isDateIndicator(String date) {
-		
 		for (int i = 0; i < DATE_INDICATORS_ONE.length; i++) {
 			if (date.equalsIgnoreCase(DATE_INDICATORS_ONE[i])) {
 				return true;
@@ -210,15 +220,12 @@ public class SingleDateParser implements Parser {
 	}
 	
 	private DayOfWeek compareDayFormat(String dateString, String pattern) {
-		
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
 			DayOfWeek day = DayOfWeek.from(formatter.parse(dateString));
 			return day;
-		
-		// DateTimeException is caught
 		} catch (DateTimeException e) {
-			// do nothing
+			// do logging
 			return null;
 		}
 	}

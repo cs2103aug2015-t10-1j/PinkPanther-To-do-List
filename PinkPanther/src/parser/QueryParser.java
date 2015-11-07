@@ -16,11 +16,11 @@ public class QueryParser implements Parser {
 	private static final SingleDateParser sdp = new SingleDateParser();
 	
 	/**
-	 * Return a Pair of a date and an arraylist of indices.
+	 * Return a Pair of a date and an ArrayList of indices.
 	 * null is returned when no valid date or index is found.
 	 * 
 	 * @param commandContent	What the user enters.
-	 * @return	List of indices for a certain date and the date itself.
+	 * @return	A certain date and the list of indices for that date.
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Pair parse(String commandContent) {

@@ -1,4 +1,4 @@
-/* @@author CS */
+/* @@author A0126473E */
 package parser;
 
 import java.time.DateTimeException;
@@ -27,18 +27,24 @@ public class SingleTimeParser implements Parser{
 	}
 
 	@SuppressWarnings("unchecked")
+	/**
+	 * Return a time based on user input.
+	 * null is returned when user input is not a time.
+	 * 
+	 * @param time	What the user enters.
+	 * @return	LocalTime object of the time that was entered.
+	 */
 	public LocalTime parse(String time) {
-		
 		time = time.toUpperCase();
 		
-		// if time contains a certain keyword, refer to a list and parse separately
+		// case: times that contain a certain keyword
 		for (int i = 0; i < TIME_INDICATORS.length; i++) {
 			if (time.equals(TIME_INDICATORS[i])) {
 				return parseTimeWord(time);
 			}
 		}
 		
-		// otherwise parse it as a numerical time
+		// case: times without keywords
 		for (String timeFormat : validTimeFormats) {
 			LocalTime parsedTime = compareTimeFormat(time, timeFormat);
 			if (parsedTime != null) {
@@ -46,18 +52,17 @@ public class SingleTimeParser implements Parser{
 			}
 		}
 		
+		// case: not a time
 		return null;
 	}
 	
 	private LocalTime compareTimeFormat(String timeString, String pattern) {
-		
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
 			LocalTime time = LocalTime.parse(timeString, formatter);
 			return time;
-			
-		//If DateTimeException is caught
 		} catch (DateTimeException e) {
+			// do logging
 			return null;
 		}
 

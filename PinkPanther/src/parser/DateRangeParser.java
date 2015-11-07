@@ -16,6 +16,13 @@ public class DateRangeParser implements Parser {
 	}
 	
 	@SuppressWarnings("unchecked")
+	/**
+	 * Return a Pair of a dates that specify a range.
+	 * null is returned when no valid date is found.
+	 * 
+	 * @param commandContent	What the user enters.
+	 * @return	A range of dates.
+	 */
 	public Pair<LocalDate, LocalDate> parse(String commandContent) {
 		asp.clearStores();
 		int validDates = asp.countValidDates(commandContent);
