@@ -12,10 +12,10 @@ public class SingleDateParserTest {
 
 	SingleDateParser sdp = new SingleDateParser();
 	
-	//Testing fixDate
+	// Testing fixDate
+	// Should work for both valid and invalid dates
 	@Test
 	public void testFixDatesWithoutYears() {
-		// Should work for both valid and invalid dates
 		String[] testInput = {"21 nov", "4/5", "39 sePTTmber ", 
 				"7/fEB", "twenty two", "6-7", "dogs-cats"};
 		String[] expectedOutput = {"21 Nov 2015", "4/5/2015",
@@ -34,7 +34,6 @@ public class SingleDateParserTest {
 	
 	@Test
 	public void testFixDatesWithYears() {
-		// Should work for both valid and invalid dates
 		String[] testInput = {"10 mAY 2015", "2/8/17", "39 cats 15",
 				"7-fEB-1998", "I/like/cats"};
 		String[] expectedOutput = {"10 May 2015", "2/8/17",
@@ -51,7 +50,6 @@ public class SingleDateParserTest {
 	
 	@Test
 	public void testFixGibberishFormats() {
-		// Should work for both valid and invalid dates
 		String[] testInput = {"twenty", "good.night", "30July", 
 				"", "i love cats forever"};
 		String[] expectedOutput = {"twenty", "good.night", "30July", 
@@ -66,10 +64,9 @@ public class SingleDateParserTest {
 		}	
 	}
 	
-	//Testing parse
+	// Testing parse
 	@Test
 	public void testParseOneWordNormal() {
-		// Should work for both valid and invalid dates
 		String[] testInput = {"toDAy", "nOw", "Tonight", "tomorrOW"};
 		LocalDate[] expectedOutput = {LocalDate.now(), LocalDate.now(),
 				LocalDate.now(), LocalDate.now().plusDays(1)};
@@ -82,7 +79,6 @@ public class SingleDateParserTest {
 	
 	@Test
 	public void testParseOneWordGibberish() {
-		// Should work for both valid and invalid dates
 		String[] testInput = {"Wednesday", "goodnight", "30July", ""};
 		LocalDate[] expectedOutput = {null, null, null, null};
 		LocalDate[] testOutput = new LocalDate[testInput.length];
@@ -93,9 +89,9 @@ public class SingleDateParserTest {
 	}
 	
 	@Test
-	// done on Saturday
+	// done on Sunday
+	// please change the sundays in this test to your current day
 	public void testParseTwoWordsNormal() {
-		// Should work for both valid and invalid dates
 		String[] testInput = {"next week", "next month", "next year",
 				"this sunday", "next sun"};
 		LocalDate[] expectedOutput = {LocalDate.now().plusWeeks(1), 
@@ -110,7 +106,6 @@ public class SingleDateParserTest {
 	
 	@Test
 	public void testParseTwoWordsGibberish() {
-		// Should work for both valid and invalid dates
 		String[] testInput = {"this week", "this month", "this year",
 				"never saturday", "cat sat", "hopping rabbits"};
 		LocalDate[] testOutput = new LocalDate[testInput.length];
@@ -151,8 +146,8 @@ public class SingleDateParserTest {
 		}	
 	}
 	
-	// Leap years and date range correction
 	@Test
+	// Leap years and date range correction
 	public void testParseDatesBoundaryPositive() {
 		String[] testInput = {"31 Feb 2016", "31 April", 
 				"31/June/2016", "31/09/2015", "31-noV-14", 
@@ -170,9 +165,9 @@ public class SingleDateParserTest {
 			assertEquals(expectedOutput[i], testOutput[i]);
 		}	
 	}
-	
-	// Dates that are really out of range
+
 	@Test
+	// Dates that are really out of range
 	public void testParseDatesBoundaryNegative() {
 		String[] testInput = {"32 07 2015", "00 01", "32/jun", 
 				"34/09", "32-November", "32-08-2018",

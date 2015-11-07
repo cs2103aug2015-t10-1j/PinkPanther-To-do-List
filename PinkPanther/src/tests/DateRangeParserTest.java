@@ -69,8 +69,9 @@ public class DateRangeParserTest {
 		}
 	}
 	
-	// done on a Sunday
 	@Test
+	// done on a Sunday
+	// please change the sundays in this test to your current day
 	public void testDateRangeSingleDateParsingPositive() {
 		String[] testInput = {"toDAy", "nOw", "Tonight", "tomorrOW",
 				"next week", "next month", "next year",
@@ -108,9 +109,8 @@ public class DateRangeParserTest {
 		}
 	}
 	
-	
-	// leap years and range correction
 	@Test
+	// leap years and range correction
 	public void testDateRangeSingleDateParsingBoundaryPositive() {
 		String[] testInput = {"31 Feb 2016", "31 April", 
 				"31/June/2016", "31/09/2015", "31-noV-14", 
@@ -148,6 +148,7 @@ public class DateRangeParserTest {
 		}
 	}
 	
+	@Test
 	public void testDateRangeSingleDateParsingNegative() {
 		String[] testInput = {"Wednesday", "goodnight", "30July", "-", "",
 				"this week", "this month", "this year",
