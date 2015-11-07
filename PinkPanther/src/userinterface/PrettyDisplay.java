@@ -24,6 +24,7 @@ import javafx.scene.text.Text;
 import javafx.stage.*;
 import logic.Controller;
 import common.*;
+import java.util.logging.*;
  
 public class PrettyDisplay extends Application {
 	
@@ -58,6 +59,7 @@ public class PrettyDisplay extends Application {
     //Enumerator and state to note which state the program is in
     private enum CurrentState {VIEWING_CALENDAR, VIEWING_HELPSCREEN, VIEWING_HIDDEN}
     private CurrentState currentState = CurrentState.VIEWING_CALENDAR;
+    private static Logger logger = Logger.getLogger("PrettyDisplay");
     
     public static void main(String [] args) {
     	launch();
@@ -94,6 +96,7 @@ public class PrettyDisplay extends Application {
         implementScene();
         
         setStage(primaryStage);
+        logger.log(Level.INFO, "GUI successfully instantiated");
     }
     
     private void setProgramHeightToUserScreen() {
@@ -210,6 +213,8 @@ public class PrettyDisplay extends Application {
         	currentYPos = unpackFloatingTasks(grid, currTaskIndex, currentYPos);
         	currentYPos = unpackDatedTasks(grid, currTaskIndex, currentYPos);
     	}
+
+        logger.log(Level.INFO, "All tasks unpacked from ProgramState");
     }
     
     //Function requests for the list of Overdue tasks from ProgramState and adds them to calendar grid
@@ -352,6 +357,7 @@ public class PrettyDisplay extends Application {
     //Function calls Logic to process a command by user or this class itself
     void callControllerToAddCommand() {
     	String command = userTextField.getText();
+        logger.log(Level.INFO, "Attempting to get Controller to execute command: " + command);
     	mainController.addCommand(command);
     	setUserFeedback();
     	calendarGrid.getChildren().clear();
@@ -603,6 +609,7 @@ public class PrettyDisplay extends Application {
 	}
 
 	public void closeWindow() {
+        logger.log(Level.INFO, "Exit command called");
 		Platform.exit();
 	}
 
