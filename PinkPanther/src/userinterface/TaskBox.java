@@ -24,12 +24,11 @@ public class TaskBox extends StackPane{
 		} else {
 			splitName = inputTask.getDisplayName(45);
 		}
-	//    System.out.println(splitName);
+		
 		int numOfColumnsName = splitName.length;
 		int currRectYPos = 1;
 		
 		GridPane grid = new GridPane();
-
 		Rectangle mainBox = createTaskHolderBox(inputTaskType);
 		grid.add(mainBox, 1, currRectYPos++);
 		if (!isTruncatedMode){
@@ -39,7 +38,6 @@ public class TaskBox extends StackPane{
 			}
 		}
 		
-	//	grid.setGridLinesVisible(true);
 	    grid.setPadding(new Insets(5));
 	    grid.setHgap(5);
 	    grid.setVgap(0);
@@ -68,12 +66,7 @@ public class TaskBox extends StackPane{
 				grid.add(text, 0, currYPos++);
 			}
 		}
-//		Text text = new Text("     " + inputTask.getName());
-//		text.setTextAlignment(TextAlignment.LEFT);
-//		text.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-//		text.setFill(Color.BLACK);
-//		grid.add(text, 0, 1);
-
+		
 		GridPane timeSpanBoxes = createTimeSpanBoxes(inputTask);
 		
 		if (numOfColumnsName > 1 && inputTask.getTaskType() != TaskType.FLOATING){
@@ -88,14 +81,11 @@ public class TaskBox extends StackPane{
 		
 		
 		if (index != 0){
-		//	IndexBox indexBox = new IndexBox(index);
 			StackPane indexBox = createIndexBox(index, inputTaskType);
 			GridPane.setConstraints(indexBox , 0, 1);
 			grid.add(indexBox, 0, 1);
 		}
 		
-		
-//		grid.setGridLinesVisible(true);
 		this.getChildren().addAll(grid);
 		
 	}
@@ -129,7 +119,7 @@ public class TaskBox extends StackPane{
 		return box;
 	}
 	
-	//returns a red box
+	//returns a red box for misc uses
 	private Rectangle createTaskHolderBox(){
 		Color col = (Color.SALMON);
 		Rectangle box = new Rectangle();
@@ -188,7 +178,6 @@ public class TaskBox extends StackPane{
 			timeSpanGridPane.add(dash, 1, 1);
 			
 		}
-//		timeSpanGridPane.setGridLinesVisible(true);
 		return timeSpanGridPane;
 	}
 	
@@ -237,7 +226,7 @@ public class TaskBox extends StackPane{
 		return stackPane;
 	}
 	
-	//created a red '!' indexbox
+	//created a red '!' indexbox for misc uses
 	private StackPane createIndexBox(){
 		Color col = (Color.RED);
 		
@@ -264,7 +253,7 @@ public class TaskBox extends StackPane{
 		return stackPane;
 	}
 	
-	
+	//Constructor for TaskBox for misc uses
 	public TaskBox(String inputText){
 		String splitName = inputText;
 	//    System.out.println(splitName);

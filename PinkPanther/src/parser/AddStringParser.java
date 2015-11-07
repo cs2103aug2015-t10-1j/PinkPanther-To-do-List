@@ -12,6 +12,7 @@ import java.time.LocalTime;
 
 public class AddStringParser implements Parser {
 	
+	// attributes
 	private String taskNameStore;
 	private LocalDate startDateStore;
 	private LocalDate endDateStore;
@@ -19,15 +20,33 @@ public class AddStringParser implements Parser {
 	private LocalTime endTimeStore;
 	private TaskType taskTypeStore;
 	
-	// indexes of various arrays
+	// indexes and indicators
+	private static final int INDEX_TASK_NAME = 0;
 	private static final int INDEX_TASK_DETAIL = 1;
+	private static final int INDEX_DATE = 0;
+	private static final int INDEX_TIME = 1;
 	
 	// word list
 	private static final String[] LIST_TWO_DATE_MARKERS = {" to ", "-"};
 	private static final String[] LIST_DEADLINE_MARKERS = {"by", "due", "before"}; 
 	private static final String[] LIST_START_MARKERS = {"at", "after"};
 	
+	// mythical stuff
 	private static final LocalDate THE_MYTH_DAY = LocalDate.of(1979, 7, 11);
+	
+	// limits/min/max
+	private static final int MAX_ALLOWED_DATES_TIMES = 2;
+	private static final int NO_VALID_DATES_TIMES_FOUND = 0;
+	private static final int SINGLE_DATE_TIME_FOUND = 1;
+	private static final int DATE_TIME_RANGE_FOUND = 2;
+	
+	// messages
+	private static final String MESSAGE_EMPTY_TASK = 
+			"You have not entered any task details.";
+	private static final String MESSAGE_PARSER_ERROR = 
+				"You have entered invalid input that broke the program.";
+	private static final String MESSAGE_EASTER_EGG = 
+			"This day is too mythical for you to perform any tasks!";
 	
 	private static SingleDateParser sdp = new SingleDateParser();
 	private static SingleTimeParser stp = new SingleTimeParser();
@@ -40,37 +59,26 @@ public class AddStringParser implements Parser {
 		String[] userInfo = commandContent.split(",");
 		userInfo = Auxiliary.trimStringArray(userInfo);
 		
-		// does not accept empty input
 		if (Auxiliary.isEmptyArray(userInfo)) {
-			Display.setFeedBack("You have not entered a task name.");
+			Display.setFeedBack(MESSAGE_EMPTY_TASK);
 			return null;
 		}
 		
-		taskNameStore = userInfo[0];
+		setTaskName(userInfo[INDEX_TASK_NAME]);
 		int validDateTimes = findValidDateTime(userInfo);
 		
-		// create a floating task
-		if (userInfo.length == 1 || validDateTimes == 0) {
+		if (userInfo.length == 1 || validDateTimes == NO_VALID_DATES_TIMES_FOUND) {
 			return addFloating(commandContent);
-		}
-		
-		// create an event
-		if (validDateTimes == 2)  {
+		} else if (validDateTimes == DATE_TIME_RANGE_FOUND)  {
 			return addEvent(userInfo);
-		
-		// create a deadline or to-do
-		} else if (validDateTimes == 1)  {
+		} else if (validDateTimes == SINGLE_DATE_TIME_FOUND)  {
 			return addSingleDated();
-		
-		// should not be invoked
 		} else {
-			Display.setFeedBack("Hurrah! You have broken the program!");
+			Display.setFeedBack(MESSAGE_PARSER_ERROR);
 			return null;
 		}
 	}
 	
-	
-	// input processing logic methods
 	private int findValidDateTime(String [] possiblyDateTime) {
 		int dateCounter = 0;
 		int timeCounter = 0;
@@ -80,18 +88,19 @@ public class AddStringParser implements Parser {
 			dateCounter += dateCount;
 			timeCounter += timeCount;
 			
-			if (dateCount == 0 && timeCount == 0) {
-				if (dateCounter == 0 && timeCounter == 0) {
-					String appendedTaskName = taskNameStore + ", " + possiblyDateTime[i];
-							setTaskName(appendedTaskName);
+			if (dateCount == NO_VALID_DATES_TIMES_FOUND 
+					&& timeCount == NO_VALID_DATES_TIMES_FOUND) {
+				if (dateCounter == NO_VALID_DATES_TIMES_FOUND 
+						&& timeCounter == NO_VALID_DATES_TIMES_FOUND) {
+					appendTaskName(possiblyDateTime[i]);
 				} else {
-					return 0;
+					return NO_VALID_DATES_TIMES_FOUND;
 				}
-			} 
+			}
 			
 		}
-		if (Math.max(dateCounter, timeCounter) > 2) {
-			return 0;
+		if (Math.max(dateCounter, timeCounter) > MAX_ALLOWED_DATES_TIMES) {
+			return NO_VALID_DATES_TIMES_FOUND;
 		}
 		return Math.max(dateCounter, timeCounter);
 	}
@@ -99,27 +108,25 @@ public class AddStringParser implements Parser {
 	// counts number of dates
 	protected int countValidDates(String dateTimeInfo) {
 		
-		// itself is a date
-		if (isSingleDate(dateTimeInfo, sdp)) {
-			
-			// parse it as start date if start date is not already defined
+		// case: itself is a date
+		if (isSingleDateTime(dateTimeInfo, sdp)) {
 			if (startDateStore == null) {
 				setStartDate(sdp.parse(dateTimeInfo));
 			} else {
 				setEndDate(sdp.parse(dateTimeInfo));
 			}
-			return 1;
+			return SINGLE_DATE_TIME_FOUND;
 		}
 		
-		// starts with a date indicator
-		if (isSingleDate(Auxiliary.removeFirstWord(dateTimeInfo), sdp)) {
+		// case: starts with a date indicator and is a date
+		if (isSingleDateTime(Auxiliary.removeFirstWord(dateTimeInfo), sdp)) {
 			String dateIndicator = Auxiliary.getFirstWord(dateTimeInfo);
 			
 			for (int i = 0; i < LIST_DEADLINE_MARKERS.length; i++) {
 				if (dateIndicator.equalsIgnoreCase(LIST_DEADLINE_MARKERS[i])) {
 					setEndDate(sdp.parse(Auxiliary.removeFirstWord(dateTimeInfo)));
 					setTaskType(TaskType.DEADLINE);
-					return 1;
+					return SINGLE_DATE_TIME_FOUND;
 				}
 			}
 			for (int i = 0; i < LIST_START_MARKERS.length; i++) {
@@ -128,68 +135,113 @@ public class AddStringParser implements Parser {
 						setTaskType(TaskType.TODO);
 					}
 					setStartDate(sdp.parse(Auxiliary.removeFirstWord(dateTimeInfo)));
-					return 1;
+					return SINGLE_DATE_TIME_FOUND;
 				}
 			}
-			return 0;
+			return NO_VALID_DATES_TIMES_FOUND;
 		}
 		
-		// trying to find 2 dates
+		// case: is a range of dates
 		for (int i= 0; i < LIST_TWO_DATE_MARKERS.length; i++) {
 			if (dateTimeInfo.contains(LIST_TWO_DATE_MARKERS[i])) {
-				return findTwoDates(LIST_TWO_DATE_MARKERS[i], dateTimeInfo);
+				return findDuration(LIST_TWO_DATE_MARKERS[i], 
+						dateTimeInfo, INDEX_DATE);
 			}
 		}
-		return 0;
+		// case: neither of the above
+		return NO_VALID_DATES_TIMES_FOUND;
 	}
 	
-	private boolean isSingleDate (String date, SingleDateParser parser) {
+	private int countValidTimes (String dateTimeInfo) {
 		
-		if (parser.parse(date) != null) {
-			return true;
+		// case: itself is a time
+		if (isSingleDateTime(dateTimeInfo, stp)) {
+			if (startTimeStore == null) {
+				setStartTime(stp.parse(dateTimeInfo));
+			} else {
+				setEndTime (stp.parse(dateTimeInfo));
+			}
+			return SINGLE_DATE_TIME_FOUND;
 		}
-		return false;
-	}
-	
-	private int findTwoDates(String delimiter, String dates) {
-		int delimOccurrence = dates.length() - dates.replaceAll(delimiter, "").length();
-		if (delimOccurrence == delimiter.length()) {
-			String[] dateTokens = dates.split(delimiter);
-			dateTokens = Auxiliary.trimStringArray(dateTokens);
-			if (dateTokens.length > 1 
-					&& isValidDateRange(dateTokens[0], dateTokens[1])) {
-				return 2;
+		
+		// case: starts with a time indicator and is a time
+		if (isSingleDateTime(Auxiliary.removeFirstWord(dateTimeInfo), stp)) {
+			String timeIndicator = Auxiliary.getFirstWord(dateTimeInfo);
+			
+			for (int i = 0; i < LIST_DEADLINE_MARKERS.length; i++) {
+				if (timeIndicator.equalsIgnoreCase(LIST_DEADLINE_MARKERS[i])) {
+					setEndTime(stp.parse(Auxiliary.removeFirstWord(dateTimeInfo)));
+					setTaskType(TaskType.DEADLINE);
+					return SINGLE_DATE_TIME_FOUND;
+				}
+			}
+			for (int i = 0; i < LIST_START_MARKERS.length; i++) {
+				if (timeIndicator.equalsIgnoreCase(LIST_START_MARKERS[i])) {
+					if (taskTypeStore != TaskType.DEADLINE) {
+						setTaskType(TaskType.TODO);
+					}
+					setStartTime(stp.parse(Auxiliary.removeFirstWord(dateTimeInfo)));
+					return SINGLE_DATE_TIME_FOUND;
+				}
+			}
+			return NO_VALID_DATES_TIMES_FOUND;
+		}
+		
+		// case: is a range of times
+		for (int i= 0; i < LIST_TWO_DATE_MARKERS.length; i++) {
+			if (dateTimeInfo.contains(LIST_TWO_DATE_MARKERS[i])) {
+				return findDuration(LIST_TWO_DATE_MARKERS[i], dateTimeInfo, INDEX_TIME);
 			}
 		}
-		return 0;
+		// case: neither of the above
+		return NO_VALID_DATES_TIMES_FOUND;
 	}
 	
-	private boolean isValidDateRange(String date1, String date2) {
-		LocalDate earlierDate = sdp.parse(date1);
-		LocalDate laterDate = sdp.parse(date2);
+	private int findDuration(String delimiter, String dateTimes, int dateTimeIndicatorIndex) {
+		int delimOccurrence = dateTimes.length() - dateTimes.replaceAll(delimiter, "").length();
+		if (delimOccurrence == delimiter.length()) {
+			String[] dateTimeTokens = dateTimes.split(delimiter);
+			dateTimeTokens = Auxiliary.trimStringArray(dateTimeTokens);
+			
+			if (dateTimeTokens.length > 1) {
+				if (dateTimeIndicatorIndex == INDEX_TIME 
+						&& isValidTimeRange(dateTimeTokens[0], dateTimeTokens[1])) {
+					return DATE_TIME_RANGE_FOUND;
+				} else if (dateTimeIndicatorIndex == INDEX_DATE
+						&& isValidDateRange(dateTimeTokens[0], dateTimeTokens[1])) {
+					return DATE_TIME_RANGE_FOUND;
+				}
+			}
+		}
+		return NO_VALID_DATES_TIMES_FOUND;
+	}
+	
+	private boolean isValidDateRange(String firstDate, String secondDate) {
+		LocalDate earlierDate = sdp.parse(firstDate);
+		LocalDate laterDate = sdp.parse(secondDate);
 		
 		// case: need to convert first date to a valid date
 		if (laterDate != null) {
-			if (Auxiliary.isNumber(date1)) {
-				int dayOfDate1 = Integer.parseInt(date1);
-				earlierDate = laterDate.withDayOfMonth(dayOfDate1);
+			if (Auxiliary.isNumber(firstDate)) {
+				int dayOfFirstDate = Integer.parseInt(firstDate);
+				earlierDate = laterDate.withDayOfMonth(dayOfFirstDate);
 			}
 		}
 		
 		// case: both dates are valid dates
 		if (earlierDate != null && laterDate != null) {
-			Pair<String, Boolean> date1Details = sdp.fixDate(date1);
-			Pair<String, Boolean> date2Details = sdp.fixDate(date2);
+			Pair<String, Boolean> firstDateDetails = sdp.fixDate(firstDate);
+			Pair<String, Boolean> secondDateDetails = sdp.fixDate(secondDate);
 			
-			// first date has no year but second has
-			if (date1Details.getSecond() && !date2Details.getSecond()) {
+			// if earlier date's year was appended
+			if (secondDateDetails.getSecond() && !firstDateDetails.getSecond()) {
 				earlierDate = earlierDate.withYear(laterDate.getYear());
 				if (earlierDate.isAfter(laterDate)) {
 					earlierDate = earlierDate.minusYears(1);
 				}
 			
-			// both dates have no years	
-			} else if (date1Details.getSecond() && date2Details.getSecond()) {
+			// if both dates' years were appended
+			} else if (firstDateDetails.getSecond() && secondDateDetails.getSecond()) {
 				if (laterDate.isBefore(earlierDate)) {
 					laterDate = laterDate.plusYears(1);
 				}
@@ -201,95 +253,25 @@ public class AddStringParser implements Parser {
 				setEndDate(laterDate);
 				return true;
 			}
-			return false;
-		}
-		return false;
-	}
-
-	
-	private int countValidTimes (String dateTimeInfo) {
-		
-		// itself is a time
-		if (isSingleTime(dateTimeInfo, stp)) {
-			
-			// parse it as start time if start time is not already defined
-			if (startTimeStore == null) {
-				setStartTime(stp.parse(dateTimeInfo));
-			} else {
-				setEndTime (stp.parse(dateTimeInfo));
-			}
-			return 1;
-		}
-		
-		// starts with a time indicator
-		if (isSingleTime(Auxiliary.removeFirstWord(dateTimeInfo), stp)) {
-			String timeIndicator = Auxiliary.getFirstWord(dateTimeInfo);
-			
-			for (int i = 0; i < LIST_DEADLINE_MARKERS.length; i++) {
-				if (timeIndicator.equalsIgnoreCase(LIST_DEADLINE_MARKERS[i])) {
-					setEndTime(stp.parse(Auxiliary.removeFirstWord(dateTimeInfo)));
-					setTaskType(TaskType.DEADLINE);
-					return 1;
-				}
-			}
-			for (int i = 0; i < LIST_START_MARKERS.length; i++) {
-				if (timeIndicator.equalsIgnoreCase(LIST_START_MARKERS[i])) {
-					if (taskTypeStore != TaskType.DEADLINE) {
-						setTaskType(TaskType.TODO);
-					}
-					setStartTime(stp.parse(Auxiliary.removeFirstWord(dateTimeInfo)));
-					return 1;
-				}
-			}
-			return 0;
-		}
-		
-		// trying to find 2 times
-		for (int i= 0; i < LIST_TWO_DATE_MARKERS.length; i++) {
-			if (dateTimeInfo.contains(LIST_TWO_DATE_MARKERS[i])) {
-				return findTwoTimes(LIST_TWO_DATE_MARKERS[i], dateTimeInfo);
-			}
-		}
-		return 0;
-	}
-	
-	private boolean isSingleTime (String time, SingleTimeParser parser) {
-		
-		if (parser.parse(time) != null) {
-			return true;
 		}
 		return false;
 	}
 	
-	private int findTwoTimes(String delimiter, String times) {
-		int delimOccurrence = times.length() - times.replaceAll(delimiter, "").length();
-		if (delimOccurrence == delimiter.length()) {
-			String[] timeTokens = times.split(delimiter);
-			timeTokens = Auxiliary.trimStringArray(timeTokens);
-			
-			if (timeTokens.length > 1 
-					&& isValidTimeRange(timeTokens[0], timeTokens[1])) {
-				return 2;
-			}
-		}
-		return 0;
-	}
-	
-	private boolean isValidTimeRange(String time1, String time2) {
-		LocalTime earlierTime = stp.parse(time1);
-		LocalTime laterTime = stp.parse(time2);
+	private boolean isValidTimeRange(String firstTime, String secondTime) {
+		LocalTime earlierTime = stp.parse(firstTime);
+		LocalTime laterTime = stp.parse(secondTime);
 		
 		// case: need to append "am/pm" to first time
 		if (laterTime != null) {
-			if (time2.contains("pm") && !time1.contains("pm")) {
-				time1 += "pm";
-				if (stp.parse(time1) != null) {
-					earlierTime = stp.parse(time1);
+			if (secondTime.contains("pm") && !firstTime.contains("pm")) {
+				firstTime += "pm";
+				if (stp.parse(firstTime) != null) {
+					earlierTime = stp.parse(firstTime);
 				}
-			} else if (time2.contains("am") && !time1.contains("am")) {
-				time1 += "am";
-				if (stp.parse(time1) != null) {
-					earlierTime = stp.parse(time1);
+			} else if (secondTime.contains("am") && !firstTime.contains("am")) {
+				firstTime += "am";
+				if (stp.parse(firstTime) != null) {
+					earlierTime = stp.parse(firstTime);
 				}
 			}
 		}
@@ -303,12 +285,10 @@ public class AddStringParser implements Parser {
 				setEndTime(laterTime);
 				return true;
 			}
-			return false;
 		}
 		return false;
 	}
 	
-	// task adding methods
 	private Task addFloating(String details) {
 		Task floating = new Task(details);
 		return floating;
@@ -317,9 +297,17 @@ public class AddStringParser implements Parser {
 	private Task addEvent(String[] details)  {		
 		String taskFullDetails = Auxiliary.concatArray(details);
 		
-		// case: 1 T 2 D (drop time and add dated(i.e. no time) event)
+		// case: 0-1 T 0-1 D (2 deadlines/todo indicators entered)
+		// case: 1 T 2 D (drop time and add untimed dated event)
 		// case: 0 T 2 D (add dated event)
 		if (startTimeStore == null || endTimeStore == null) {
+			if (startDateStore == null || endDateStore == null) {
+				return addFloating(taskFullDetails);
+			}
+			
+//			assert startDateStore != null;
+//			assert endDateStore != null;
+			
 			if (startDateStore.equals(endDateStore)) {
 				return addSingleDated();
 			}
@@ -329,11 +317,13 @@ public class AddStringParser implements Parser {
 				return addFloating(taskFullDetails);
 			}
 		} else {
+			
 			// case: 2 T 0 D (from time T1-T2 today)
 			if (startDateStore == null && endDateStore == null) {
 				setStartDate(LocalDate.now());
 				setEndDate(LocalDate.now());
 			}
+			
 			// case: 2 T 1 D (from time T1-T2 on 1D)
 			if (startDateStore == null || endDateStore == null) {
 				if (startDateStore != null) {
@@ -342,11 +332,11 @@ public class AddStringParser implements Parser {
 					setStartDate(endDateStore);
 				}
 			}
+			
 			// case: 2 T 2 D
 			if (endTimeStore.isBefore(startTimeStore)) {
 				return addFloating(taskFullDetails);
 			}
-			
 			if (endDateStore.isEqual(startDateStore)) {
 				if  (!endTimeStore.isAfter(startTimeStore)){
 					return addSingleDated();
@@ -360,10 +350,9 @@ public class AddStringParser implements Parser {
 				 startTimeStore, endDateStore, endTimeStore);			
 		
 		if (isDuringRestrictedDate(event)) {
-			Display.setFeedBack("This day is too mythical for you to perform any tasks!");
+			Display.setFeedBack(MESSAGE_EASTER_EGG);
 			return null;
-		}
-			
+		}	
 		return event;
 	}
 	
@@ -375,7 +364,7 @@ public class AddStringParser implements Parser {
 			setEndDate(LocalDate.now());
 		}
 		
-		// case: 1 T 1 D (add todo or deadline)
+		// case: 1 T 1 D (add todo or deadline on 1D)
 		// case: 0 T 1 D (add dated event on 1D)
 		if (taskTypeStore == TaskType.DEADLINE) {
 			if (endDateStore == null && startDateStore != null) {
@@ -388,31 +377,31 @@ public class AddStringParser implements Parser {
 					TaskType.DEADLINE);
 			
 			if (deadline.getDate().isEqual(THE_MYTH_DAY)) {
-				Display.setFeedBack("This day is too mythical for you to perform any tasks!");
+				Display.setFeedBack(MESSAGE_EASTER_EGG);
 				return null;
 			}
 			return deadline;
-			
+
 		} else if (taskTypeStore == TaskType.TODO 
 				|| (startDateStore != null)) {
 			Task toDoAt = new Task(taskNameStore, startDateStore, startTimeStore,
 					TaskType.TODO);
 			if (toDoAt.getDate().isEqual(THE_MYTH_DAY)) {
-				Display.setFeedBack("This day is too mythical for you to perform any tasks."
-						+ " Task will not be added!");
+				Display.setFeedBack(MESSAGE_EASTER_EGG);
 				return null;
 			}			
 			return toDoAt;
+			
 		} else {
 			return null;
 		}
 	}
 	
 	private boolean isDuringRestrictedDate(Task task) {
-		return !(task.getStartDate().isAfter(THE_MYTH_DAY) || task.getEndDate().isBefore(THE_MYTH_DAY)); 
+		return !(task.getStartDate().isAfter(THE_MYTH_DAY) 
+				|| task.getEndDate().isBefore(THE_MYTH_DAY)); 
 	}
 	
-	// auxiliary methods
 	protected void clearStores() {
 		setTaskName(null);
 		setStartDate(null);
@@ -420,6 +409,14 @@ public class AddStringParser implements Parser {
 		setStartTime(null);
 		setEndTime(null);
 		setTaskType(null);
+	}
+	
+	private boolean isSingleDateTime (String dateTime, Parser parser) {
+		
+		if (parser.parse(dateTime) != null) {
+			return true;
+		}
+		return false;
 	}
 	
 	// accessors for testing
@@ -450,6 +447,10 @@ public class AddStringParser implements Parser {
 	// mutators
 	public void setTaskName(String newName) {
 		taskNameStore = newName;
+	}
+	
+	public void appendTaskName(String additionalDetails) {
+		taskNameStore = taskNameStore + ", " + additionalDetails;
 	}
 	
 	public void setStartDate(LocalDate date) {

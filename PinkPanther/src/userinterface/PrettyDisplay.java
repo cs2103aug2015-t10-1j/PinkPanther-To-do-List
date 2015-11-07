@@ -50,10 +50,13 @@ public class PrettyDisplay extends Application {
     private boolean isTruncatedMode = false;
     
     
-    private static String DEFAULT_SCENE_TITLE = "                      Your Calendar";
+    private static String DEFAULT_SCENE_TITLE = "                         To-Do List";
     private static String STRING_INVALID_COMMAND = "Unrecognized command. Press PAGE_UP for Help Screen.";
-    private static String STRING_DEFAULT_FEEDBACK = "Input command into the field above";
+    private static String STRING_DEFAULT_FEEDBACK = "Input command into the field below";
     private static int DEFAULT_STAGE_HEIGHT = 1060;
+
+    private static int DEFAULT_USER_INPUT_YPOS = 5;
+    private static int DEFAULT_USER_FEEDBACK_YPOS = 2;
     
     private enum CurrentState {VIEWING_CALENDAR, VIEWING_HELPSCREEN, VIEWING_HIDDEN}
     private CurrentState currentState = CurrentState.VIEWING_CALENDAR;
@@ -159,11 +162,11 @@ public class PrettyDisplay extends Application {
         + "-fx-border-width: 6px;"
         + "-fx-border-color: DIMGRAY;"
         + "-fx-background-color: WHITE");
-        grid2.add(userTextField, 0, 1);
+        grid2.add(userTextField, 0, DEFAULT_USER_INPUT_YPOS);
     }
     void implementUserFeedback(String newInput){
         programFeedback = new FlowPane();
-        grid2.add(programFeedback, 0, 2);
+        grid2.add(programFeedback, 0, DEFAULT_USER_FEEDBACK_YPOS);
     }
 
     void implementKeystrokeEvents(Stage primaryStage){
@@ -181,7 +184,6 @@ public class PrettyDisplay extends Application {
         scene = new Scene(grid2, 720, DEFAULT_STAGE_HEIGHT);
         scene.getStylesheets().clear();
         scene.getStylesheets().add(this.getClass().getResource("a.css").toExternalForm());
-
     }
     void setStage(Stage primaryStage){
         primaryStage.setResizable(false);
@@ -252,9 +254,10 @@ public class PrettyDisplay extends Application {
 	    		grid.add(new TransparentCircle(), 1, currentYPos++);
 	    		String month = date.getMonth().toString();
 	    		month = month.substring(0, 1)+ month.substring(1, month.length()).toLowerCase();
+	    		String year = String.valueOf(date.getYear() %100);
 	    		String currDayNum = Integer.toString(date.getDayOfMonth());
 	    		int currDayXPos = 1;
-	    		DayBox dayBox = new DayBox(currDayNum + " " + month);
+	    		DayBox dayBox = new DayBox(currDayNum + " " + month + " " +year);
 	    		int dayBoxYPos = currentYPos;
 	    		grid.add(dayBox, currDayXPos++, dayBoxYPos);
 	    		currentYPos ++;
@@ -381,7 +384,7 @@ public class PrettyDisplay extends Application {
     		}
     	}
     	programFeedback = feedback;
-    	grid2.add(programFeedback , 0, 2);
+    	grid2.add(programFeedback , 0, DEFAULT_USER_FEEDBACK_YPOS);
     }
     
     void setUserFeedback(){
@@ -575,7 +578,7 @@ public class PrettyDisplay extends Application {
 	void hideHelpScreen(){
 		grid2.getChildren().clear();
 		grid2.add(s1,0,0);
-        grid2.add(userTextField, 0, 1);
+        grid2.add(userTextField, 0, DEFAULT_USER_INPUT_YPOS);
         setUserFeedback();
    //     setUserFeedback(parseAndColorize("Input command into the field above"));
 		isViewingHelpScreen = false;
