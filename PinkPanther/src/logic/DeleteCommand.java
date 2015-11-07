@@ -32,12 +32,12 @@ public class DeleteCommand implements Command{
 		if(taskList.size()==1){
 			taskRef=taskList.get(0);
 			manager.deleteTask(taskRef);
-			Display.setFeedBack("\""+taskRef.getName()+"\""+" has been deleted from "+dateString);
+			Display.setFeedBack("Task deleted: ["+dateString+"] "+"\"" + taskRef.getName() + "\"");
 			return true;
 		} else{
 			taskListRef=taskList;
 			manager.deleteMultipleTasks(taskListRef);
-			Display.setFeedBack("Tasks have been deleted from "+dateString);
+			Display.setFeedBack("Tasks deleted: ["+dateString+"] "+"\"" + taskListRef.get(0).getName() + "\""+"...");
 			return true;
 		}
 		

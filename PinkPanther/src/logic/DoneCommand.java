@@ -42,7 +42,7 @@ public class DoneCommand implements Command{
 				task.setDoneStatus(true);
 			}
 			manager.addMultipleTasks(taskListRef);
-			Display.setFeedBack("Tasks from "+dateString+" have been marked as 'done'");
+			Display.setFeedBack("Marked as done: [" + dateString + "] " + "\"" + taskListRef.get(0).getName() + "\""+"...");
 			return true;
 		}
 		

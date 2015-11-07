@@ -20,7 +20,7 @@ public class EditCommand implements Command{
 		modified=pair.getSecond();
 		manager.deleteTask(unmodified);
 		manager.addTask(modified);
-		Display.setFeedBack("\""+unmodified.getName()+"\""+" has been modified");
+		Display.setFeedBack("Task modified: "+"\""+unmodified.getName()+"\"");
 		return true;
 	}
 	
