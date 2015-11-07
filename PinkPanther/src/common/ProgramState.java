@@ -22,7 +22,7 @@ public class ProgramState {
 		this.commandHistory=new ArrayList<String>();
 		this.inputBoxText = "";
 		this.isExit = false;
-		this.title = "                      Your Calendar";
+		this.title = "                         To-Do List";
 	}
 	
 	public void setFLoatingList(ArrayList<Task>floatingList){
