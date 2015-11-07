@@ -1,4 +1,4 @@
-/* @@author GB */
+/* @@author A0121585H */
 
 package tests;
 import logic.Controller;
