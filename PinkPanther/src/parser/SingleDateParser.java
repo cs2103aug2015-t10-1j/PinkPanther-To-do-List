@@ -52,6 +52,12 @@ public class SingleDateParser implements Parser {
 		validDayFormats.addAll(DAY_FORMAT);
 	}
 	
+	public static void main (String[] args) {
+		SingleDateParser sdp = new SingleDateParser();
+		System.out.println(sdp.parse("next week"));
+	}
+	
+	
 	@SuppressWarnings("unchecked")
 	/**
 	 * Return a date based on user input.
@@ -106,7 +112,7 @@ public class SingleDateParser implements Parser {
 	 * 			in a way that the DateTimeFormatter accepts, and a boolean
 	 * 			reflecting whether the year was appended.
 	 */
-	protected Pair<String, Boolean> fixDate(String date) {
+	public Pair<String, Boolean> fixDate(String date) {
 		String fixedDate;
 		boolean hasAppendedYear = false;
 		
@@ -183,11 +189,11 @@ public class SingleDateParser implements Parser {
 			}
 			return parseDayOfWeek(content);
 		} else if (precursor.equals("NEXT")) {
-			if (content.equals("WEEK")) {
+			if (content.equals("Week")) {	
 				return LocalDate.now().plusWeeks(1);
-			} else if (content.equals("MONTH")) {
+			} else if (content.equals("Month")) {
 				return LocalDate.now().plusMonths(1);
-			} else if (content.equals("YEAR")) {
+			} else if (content.equals("Year")) {
 				return LocalDate.now().plusYears(1);
 			} else if (parsedDay != null) {
 				return parsedDay.plusWeeks(1);
