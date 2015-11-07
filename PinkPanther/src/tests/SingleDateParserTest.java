@@ -126,13 +126,13 @@ public class SingleDateParserTest {
 				"01 01", "14/Jul/2016", "5/September", "15/02/2015",
 				"09/04", "20-May-14", "19-November", "13-08-2018",
 				"9-3"};
-		LocalDate[] expectedOutput = {LocalDate.of(2016,2,28), 
-				LocalDate.of(2015,3,4), LocalDate.of(2015,7,3), 
-				LocalDate.of(2015,1,1), LocalDate.of(2016,7,14), 
-				LocalDate.of(2015,9,5), LocalDate.of(2015,2,15), 
-				LocalDate.of(2015,4,9), LocalDate.of(2014,5,20), 
-				LocalDate.of(2015,11,19), LocalDate.of(2018,8,13), 
-				LocalDate.of(2015,3,9)};
+		LocalDate[] expectedOutput = {LocalDate.of(2016, 2, 28), 
+				LocalDate.of(2015, 3, 4), LocalDate.of(2015, 7, 3), 
+				LocalDate.of(2015, 1, 1), LocalDate.of(2016, 7, 14), 
+				LocalDate.of(2015, 9, 5), LocalDate.of(2015, 2, 15), 
+				LocalDate.of(2015, 4, 9), LocalDate.of(2014, 5, 20), 
+				LocalDate.of(2015, 11, 19), LocalDate.of(2018, 8, 13), 
+				LocalDate.of(2015, 3, 9)};
 		LocalDate[] testOutput = new LocalDate[testInput.length];
 		for (int i = 0; i < testInput.length; i++) {
 			testOutput[i] = sdp.parse(testInput[i]);
@@ -158,12 +158,12 @@ public class SingleDateParserTest {
 				"31/June/2016", "31/09/2015", "31-noV-14", 
 				"29/2/2015", "29/2/2016", "29/2/2017", "29/2/2018",
 				"20/7/3999", "20/7/00"};
-		LocalDate[] expectedOutput = {LocalDate.of(2016,2,29), 
-				LocalDate.of(2015,4,30), LocalDate.of(2016,6,30), 
-				LocalDate.of(2015,9,30), LocalDate.of(2014,11,30), 
-				LocalDate.of(2015,2,28), LocalDate.of(2016,2,29), 
-				LocalDate.of(2017,2,28), LocalDate.of(2018,2,28), 
-				LocalDate.of(3999,7,20), LocalDate.of(2000, 7, 20)};
+		LocalDate[] expectedOutput = {LocalDate.of(2016, 2, 29), 
+				LocalDate.of(2015, 4, 30), LocalDate.of(2016, 6, 30), 
+				LocalDate.of(2015, 9, 30), LocalDate.of(2014, 11, 30), 
+				LocalDate.of(2015, 2, 28), LocalDate.of(2016, 2, 29), 
+				LocalDate.of(2017, 2, 28), LocalDate.of(2018, 2, 28), 
+				LocalDate.of(3999, 7, 20), LocalDate.of(2000, 7, 20)};
 		LocalDate[] testOutput = new LocalDate[testInput.length];
 		for (int i = 0; i < testInput.length; i++) {
 			testOutput[i] = sdp.parse(testInput[i]);

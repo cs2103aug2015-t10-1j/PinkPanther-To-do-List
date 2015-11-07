@@ -18,9 +18,9 @@ public class SingleTimeParserTest {
 	public void testParseOneWordTimes() {
 		String[] testInput = {"tonight", "now", "morning",
 				"afternoon", "night"};
-		LocalTime[] expectedOutput = {LocalTime.of(19,0), 
+		LocalTime[] expectedOutput = {LocalTime.of(19, 0), 
 				LocalTime.now().truncatedTo(ChronoUnit.MINUTES),
-				LocalTime.of(9,0), LocalTime.of(12,0), LocalTime.of(19,0)};
+				LocalTime.of(9, 0), LocalTime.of(12, 0), LocalTime.of(19, 0)};
 		LocalTime[] testOutput = new LocalTime[testInput.length];
 		for (int i = 0; i < testInput.length; i++) {
 			testOutput[i] = stp.parse(testInput[i]);
@@ -44,13 +44,13 @@ public class SingleTimeParserTest {
 		String[] testInput = {"12.20pm", "02.04Am", "7:19pm",
 				"4:25PM", "3am", "1105pM", "105am", "2.45", "18.30",
 				"23:11", "00:00", "2400", "0156"};
-		LocalTime[] expectedOutput = {LocalTime.of(12,20), 
-				LocalTime.of(2,4), LocalTime.of(19,19), 
-				LocalTime.of(16,25), LocalTime.of(3,0),
-				LocalTime.of(23,5), LocalTime.of(1,5),
-				LocalTime.of(2,45), LocalTime.of(18,30),
-				LocalTime.of(23,11), LocalTime.of(0,0),
-				LocalTime.of(0,0), LocalTime.of(1, 56)};
+		LocalTime[] expectedOutput = {LocalTime.of(12, 20), 
+				LocalTime.of(2, 4), LocalTime.of(19, 19), 
+				LocalTime.of(16, 25), LocalTime.of(3, 0),
+				LocalTime.of(23, 5), LocalTime.of(1, 5),
+				LocalTime.of(2, 45), LocalTime.of(18, 30),
+				LocalTime.of(23, 11), LocalTime.of(0, 0),
+				LocalTime.of(0, 0), LocalTime.of(1, 56)};
 		LocalTime[] testOutput = new LocalTime[testInput.length];
 		for (int i = 0; i < testInput.length; i++) {
 			testOutput[i] = stp.parse(testInput[i]);

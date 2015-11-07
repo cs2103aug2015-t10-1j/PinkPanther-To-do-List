@@ -10,6 +10,7 @@ import parser.DateRangeParser;
 import common.Pair;
 import java.time.LocalDate;
 
+@SuppressWarnings("unchecked")
 public class DateRangeParserTest {
 
 	AddStringParser asp = new AddStringParser();
@@ -21,18 +22,18 @@ public class DateRangeParserTest {
 				"11/jun/2015 - 12/Jul/2015", "2 to 5-2", " 7 - 21 Jun 2015",
 				"20 nov to 2 dec 2017", " 4 Apr 2013-6 May", " 30 nov - 16 Jan",
 				"17 october - 8 May 2018", "6/3/2012-22/2"};
-		LocalDate[] expectedOutputFirst = {LocalDate.of(2017,8,2), 
-				LocalDate.of(2005,5,7), LocalDate.of(2016,2,11), 
-				LocalDate.of(2015,6,11),LocalDate.of(2015,2,2),
-				LocalDate.of(2015,6,7),LocalDate.of(2017,11,20),
-				LocalDate.of(2013,4,4),LocalDate.of(2015,11,30),
-				LocalDate.of(2017,10,17),LocalDate.of(2012,3,6)};
-		LocalDate[] expectedOutputSecond = {LocalDate.of(2017,8,4), 
-				LocalDate.of(2005,5,12), LocalDate.of(2016,2,13), 
-				LocalDate.of(2015,7,12),LocalDate.of(2015,2,5),
-				LocalDate.of(2015,6,21),LocalDate.of(2017,12,2),
-				LocalDate.of(2013,5,6),LocalDate.of(2016,1,16),
-				LocalDate.of(2018,5,8),LocalDate.of(2013,2,22)};
+		LocalDate[] expectedOutputFirst = {LocalDate.of(2017, 8, 2), 
+				LocalDate.of(2005, 5, 7), LocalDate.of(2016, 2, 11), 
+				LocalDate.of(2015, 6, 11), LocalDate.of(2015, 2, 2),
+				LocalDate.of(2015, 6, 7), LocalDate.of(2017, 11, 20),
+				LocalDate.of(2013, 4, 4), LocalDate.of(2015, 11, 30),
+				LocalDate.of(2017, 10, 17), LocalDate.of(2012, 3, 6)};
+		LocalDate[] expectedOutputSecond = {LocalDate.of(2017, 8, 4), 
+				LocalDate.of(2005, 5, 12), LocalDate.of(2016, 2, 13), 
+				LocalDate.of(2015, 7, 12), LocalDate.of(2015, 2, 5),
+				LocalDate.of(2015, 6, 21), LocalDate.of(2017, 12, 2),
+				LocalDate.of(2013, 5, 6), LocalDate.of(2016, 1, 16),
+				LocalDate.of(2018, 5, 8), LocalDate.of(2013, 2, 22)};
 		Pair <LocalDate, LocalDate>[] testOutput = new Pair [testInput.length];
 		for (int i = 0; i < testInput.length; i++) {
 			testOutput[i] = drp.parse(testInput[i]);
@@ -44,12 +45,12 @@ public class DateRangeParserTest {
 	@Test
 	public void testDateRangeParsingBoundaryPositive() {
 		String[] testInput = {"7-31/9", "1/1/00-2/2/00", "2/2-7 nov 2015", "4-6"};
-		LocalDate[] expectedOutputFirst = {LocalDate.of(2015,9,7), 
-				LocalDate.of(2000,1,1), LocalDate.of(2015,2,2),
-				LocalDate.of(2015,6,4)};
-		LocalDate[] expectedOutputSecond = {LocalDate.of(2015,9,30), 
-				LocalDate.of(2000,2,2), LocalDate.of(2015,11,7),
-				LocalDate.of(2015,6,4)};
+		LocalDate[] expectedOutputFirst = {LocalDate.of(2015, 9, 7), 
+				LocalDate.of(2000, 1, 1), LocalDate.of(2015, 2, 2),
+				LocalDate.of(2015, 6, 4)};
+		LocalDate[] expectedOutputSecond = {LocalDate.of(2015, 9, 30), 
+				LocalDate.of(2000, 2, 2), LocalDate.of(2015, 11, 7),
+				LocalDate.of(2015, 6, 4)};
 		Pair <LocalDate, LocalDate>[] testOutput = new Pair [testInput.length];
 		for (int i = 0; i < testInput.length; i++) {
 			testOutput[i] = drp.parse(testInput[i]);
@@ -81,24 +82,24 @@ public class DateRangeParserTest {
 				LocalDate.now(), LocalDate.now().plusDays(1),
 				LocalDate.now().plusWeeks(1), LocalDate.now().plusMonths(1), 
 				LocalDate.now().plusYears(1), LocalDate.now(), 
-				LocalDate.now().plusWeeks(1), LocalDate.of(2016,2,28), 
-				LocalDate.of(2015,3,4), LocalDate.of(2015,7,3), 
-				LocalDate.of(2015,1,1), LocalDate.of(2016,7,14), 
-				LocalDate.of(2015,9,5), LocalDate.of(2015,2,15), 
-				LocalDate.of(2015,4,9), LocalDate.of(2014,5,20), 
-				LocalDate.of(2015,11,19), LocalDate.of(2018,8,13), 
-				LocalDate.of(2015,3,9)};
+				LocalDate.now().plusWeeks(1), LocalDate.of(2016, 2, 28), 
+				LocalDate.of(2015, 3, 4), LocalDate.of(2015, 7, 3), 
+				LocalDate.of(2015, 1, 1), LocalDate.of(2016, 7, 14), 
+				LocalDate.of(2015, 9, 5), LocalDate.of(2015, 2, 15), 
+				LocalDate.of(2015, 4, 9), LocalDate.of(2014, 5, 20), 
+				LocalDate.of(2015, 11, 19), LocalDate.of(2018, 8, 13), 
+				LocalDate.of(2015, 3, 9)};
 		LocalDate[] expectedOutputSecond = {LocalDate.now(), LocalDate.now(),
 				LocalDate.now(), LocalDate.now().plusDays(1),
 				LocalDate.now().plusWeeks(1), LocalDate.now().plusMonths(1), 
 				LocalDate.now().plusYears(1), LocalDate.now(), 
 				LocalDate.now().plusWeeks(1), LocalDate.of(2016,2,28), 
-				LocalDate.of(2015,3,4), LocalDate.of(2015,7,3), 
-				LocalDate.of(2015,1,1), LocalDate.of(2016,7,14), 
-				LocalDate.of(2015,9,5), LocalDate.of(2015,2,15), 
-				LocalDate.of(2015,4,9), LocalDate.of(2014,5,20), 
-				LocalDate.of(2015,11,19), LocalDate.of(2018,8,13), 
-				LocalDate.of(2015,3,9)};
+				LocalDate.of(2015, 3, 4), LocalDate.of(2015, 7, 3), 
+				LocalDate.of(2015, 1, 1), LocalDate.of(2016, 7, 14), 
+				LocalDate.of(2015, 9, 5), LocalDate.of(2015, 2, 15), 
+				LocalDate.of(2015, 4, 9), LocalDate.of(2014, 5, 20), 
+				LocalDate.of(2015, 11, 19), LocalDate.of(2018, 8, 13), 
+				LocalDate.of(2015, 3, 9)};
 		Pair <LocalDate, LocalDate>[] testOutput = new Pair [testInput.length];
 		for (int i = 0; i < testInput.length; i++) {
 			testOutput[i] = drp.parse(testInput[i]);
@@ -115,18 +116,18 @@ public class DateRangeParserTest {
 				"31/June/2016", "31/09/2015", "31-noV-14", 
 				"29/2/2015", "29/2/2016", "29/2/2017", "29/2/2018",
 				"20/7/3999", "20/7/00"};
-		LocalDate[] expectedOutputFirst = {LocalDate.of(2016,2,29), 
-				LocalDate.of(2015,4,30), LocalDate.of(2016,6,30), 
-				LocalDate.of(2015,9,30), LocalDate.of(2014,11,30), 
-				LocalDate.of(2015,2,28), LocalDate.of(2016,2,29), 
-				LocalDate.of(2017,2,28), LocalDate.of(2018,2,28), 
-				LocalDate.of(3999,7,20), LocalDate.of(2000, 7, 20)};
-		LocalDate[] expectedOutputSecond = {LocalDate.of(2016,2,29), 
-				LocalDate.of(2015,4,30), LocalDate.of(2016,6,30), 
-				LocalDate.of(2015,9,30), LocalDate.of(2014,11,30), 
-				LocalDate.of(2015,2,28), LocalDate.of(2016,2,29), 
-				LocalDate.of(2017,2,28), LocalDate.of(2018,2,28), 
-				LocalDate.of(3999,7,20), LocalDate.of(2000, 7, 20)};
+		LocalDate[] expectedOutputFirst = {LocalDate.of(2016, 2, 29), 
+				LocalDate.of(2015, 4, 30), LocalDate.of(2016, 6, 30), 
+				LocalDate.of(2015, 9, 30), LocalDate.of(2014, 11, 30), 
+				LocalDate.of(2015, 2, 28), LocalDate.of(2016, 2, 29), 
+				LocalDate.of(2017, 2, 28), LocalDate.of(2018, 2, 28), 
+				LocalDate.of(3999, 7, 20), LocalDate.of(2000, 7, 20)};
+		LocalDate[] expectedOutputSecond = {LocalDate.of(2016, 2, 29), 
+				LocalDate.of(2015, 4, 30), LocalDate.of(2016, 6, 30), 
+				LocalDate.of(2015, 9, 30), LocalDate.of(2014, 11, 30), 
+				LocalDate.of(2015, 2, 28), LocalDate.of(2016, 2, 29), 
+				LocalDate.of(2017, 2, 28), LocalDate.of(2018, 2, 28), 
+				LocalDate.of(3999, 7, 20), LocalDate.of(2000, 7, 20)};
 		Pair <LocalDate, LocalDate>[] testOutput = new Pair [testInput.length];
 		for (int i = 0; i < testInput.length; i++) {
 			testOutput[i] = drp.parse(testInput[i]);
