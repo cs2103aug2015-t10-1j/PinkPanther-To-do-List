@@ -13,7 +13,7 @@ import org.junit.Test;
 import common.Display;
 import common.ProgramState;
 
-public class Controller_Test {
+public class ControllerTest {
 	Controller controller = new Controller();
 	ProgramState state = controller.getProgramState();
 	LocalDate date = LocalDate.of(2015, 11, 7);

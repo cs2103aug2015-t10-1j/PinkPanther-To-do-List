@@ -20,7 +20,7 @@ import common.Pair;
 import common.Task;
 import common.TaskType;
 
-public class TaskManager_Test {
+public class TaskManagerTest {
 	private StorageControl storage = new StorageControl();
 	private TaskManager manager = new TaskManager(storage);
 	LocalDate date = LocalDate.of(2015, 11, 13);
