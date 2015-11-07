@@ -1,11 +1,10 @@
-/* @@author CS */
+/* @@author A0126473E */
 package parser;
 
 import common.Task;
 import common.TaskType;
 import common.Auxiliary;
 import common.Display;
-import common.Pair;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -230,18 +229,18 @@ public class AddStringParser implements Parser {
 		
 		// case: both dates are valid dates
 		if (earlierDate != null && laterDate != null) {
-			Pair<String, Boolean> firstDateDetails = sdp.fixDate(firstDate);
-			Pair<String, Boolean> secondDateDetails = sdp.fixDate(secondDate);
+			Boolean firstDateHasAppendedYear = sdp.fixDate(firstDate).getSecond();
+			Boolean secondDateHasAppendedYear = sdp.fixDate(secondDate).getSecond();
 			
 			// if earlier date's year was appended
-			if (secondDateDetails.getSecond() && !firstDateDetails.getSecond()) {
+			if (secondDateHasAppendedYear && !firstDateHasAppendedYear) {
 				earlierDate = earlierDate.withYear(laterDate.getYear());
 				if (earlierDate.isAfter(laterDate)) {
 					earlierDate = earlierDate.minusYears(1);
 				}
 			
 			// if both dates' years were appended
-			} else if (firstDateDetails.getSecond() && secondDateDetails.getSecond()) {
+			} else if (firstDateHasAppendedYear && secondDateHasAppendedYear) {
 				if (laterDate.isBefore(earlierDate)) {
 					laterDate = laterDate.plusYears(1);
 				}
