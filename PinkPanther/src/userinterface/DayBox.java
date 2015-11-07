@@ -14,14 +14,15 @@ public class DayBox extends StackPane{
 	String dayString, monthString;
 	GridPane grid;
 	
-	public DayBox(String day){
+	//Constructor
+	public DayBox(String date) {
 		instantiateGrid();
-		extractDayAndMonth (day);
+		extractDayAndMonth (date);
 		
-		Rectangle box = createDayHolderBox(day);
+		Rectangle box = createDayHolderBox(date);
 		grid.add(box, 1, 1);	
 
-		StackPane indexBox = createIndexBox(dayString);
+		StackPane indexBox = createDayBox(dayString);
 		grid.add(indexBox, 0, 1);
 		
 		Text text = instantiateText();
@@ -30,7 +31,8 @@ public class DayBox extends StackPane{
 		this.getChildren().addAll(grid);
 	}
 	
-	private Text instantiateText(){
+	//Forms a string representation of the date in appropriately sized Text
+	private Text instantiateText() {
 		Text text = new Text(" " + monthString);
 		text.setFont(Font.font("Tahoma", FontWeight.BOLD, 25));
 		text.setTextAlignment(TextAlignment.LEFT);
@@ -38,28 +40,31 @@ public class DayBox extends StackPane{
 		return text;
 	}
 	
-	private void instantiateGrid(){
+	//Creates a grid to place items into
+	private void instantiateGrid() {
 		grid = new GridPane();
 	    grid.setHgap(5);
 	    grid.setVgap(5);
 	}
 	
-	private void extractDayAndMonth (String day) {
-		if (day.equals("Undated Tasks")){
+	//Breaks date string into dayString and monthString
+	private void extractDayAndMonth (String date) {
+		if (date.equals("Undated Tasks")) {
 	    	dayString = "~";
-	    	monthString = day;
+	    	monthString = date;
 	    } 
-	    else if (day.equals("!")){
+	    else if (date.equals("!")) {
 	    	dayString = "!";
 	    	monthString = "";
 	    }
 	    else {
-	    	dayString = day.split(" ")[0];
-	    	monthString = day.split(" ")[1] + " " + day.split(" ")[2];
+	    	dayString = date.split(" ")[0];
+	    	monthString = date.split(" ")[1] + " " + date.split(" ")[2];
 	    }
 	}
 	
-	private Rectangle createDayHolderBox(String day){
+	//Returns a Rectangle that will serve as the background for whole date row
+	private Rectangle createDayHolderBox(String day) {
 		Rectangle box = new Rectangle();
 		box.setWidth(230);
 		box.setHeight(40);
@@ -71,8 +76,8 @@ public class DayBox extends StackPane{
 		return box;
 	}
 	
-	private StackPane createIndexBox(String num){
-		
+	//Returns a gray colored box that displays current day of month
+	private StackPane createDayBox(String num) {
 		//Configure box dimensions and colors
 		Rectangle box = new Rectangle();
 		box.setWidth(35);

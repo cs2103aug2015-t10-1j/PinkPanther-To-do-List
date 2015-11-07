@@ -15,11 +15,13 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 public class TaskBox extends StackPane{
-	public TaskBox(int index, Task inputTask, boolean isTruncatedMode){
+	
+	//Constructor
+	public TaskBox(int index, Task inputTask, boolean isTruncatedMode) {
 		TaskType inputTaskType = inputTask.getTaskType();
 		
 		String[] splitName;
-		if (inputTaskType == TaskType.EVENT){
+		if (inputTaskType == TaskType.EVENT) {
 			splitName = inputTask.getDisplayName(45);
 		} else {
 			splitName = inputTask.getDisplayName(45);
@@ -31,8 +33,8 @@ public class TaskBox extends StackPane{
 		GridPane grid = new GridPane();
 		Rectangle mainBox = createTaskHolderBox(inputTaskType);
 		grid.add(mainBox, 1, currRectYPos++);
-		if (!isTruncatedMode){
-			for (int i=1; i<numOfColumnsName; i++){
+		if (!isTruncatedMode) {
+			for (int i=1; i<numOfColumnsName; i++) {
 				Rectangle box = createTaskHolderBox(inputTaskType);
 				grid.add(box, 1, currRectYPos++);
 			}
@@ -48,9 +50,9 @@ public class TaskBox extends StackPane{
 		
 	    
 		int currYPos = 1;
-		if (isTruncatedMode){
+		if (isTruncatedMode) {
 			Text text = new Text("     " + splitName[0]);
-			if (numOfColumnsName > 1){
+			if (numOfColumnsName > 1) {
 				text.setText(text.getText() + "...");
 			}
 			text.setTextAlignment(TextAlignment.LEFT);
@@ -58,7 +60,7 @@ public class TaskBox extends StackPane{
 			text.setFill(Color.web("212121"));
 			grid.add(text, 0, currYPos++);
 		} else {
-			for (int i=0; i<numOfColumnsName; i++){
+			for (int i=0; i<numOfColumnsName; i++) {
 				Text text = new Text("     " + splitName[i]);
 				text.setTextAlignment(TextAlignment.LEFT);
 				text.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
@@ -69,7 +71,7 @@ public class TaskBox extends StackPane{
 		
 		GridPane timeSpanBoxes = createTimeSpanBoxes(inputTask);
 		
-		if (numOfColumnsName > 1 && inputTask.getTaskType() != TaskType.FLOATING){
+		if (numOfColumnsName > 1 && inputTask.getTaskType() != TaskType.FLOATING) {
 			Rectangle box = createTaskHolderBox(inputTaskType);
 			grid.add(box, 1, currRectYPos++);
 			grid.add(timeSpanBoxes, 65, currRectYPos -1);
@@ -80,7 +82,7 @@ public class TaskBox extends StackPane{
 		
 		
 		
-		if (index != 0){
+		if (index != 0) {
 			StackPane indexBox = createIndexBox(index, inputTaskType);
 			GridPane.setConstraints(indexBox , 0, 1);
 			grid.add(indexBox, 0, 1);
@@ -90,7 +92,10 @@ public class TaskBox extends StackPane{
 		
 	}
 	
-	private Rectangle createTaskHolderBox(TaskType inputTaskType){
+	/* Gets a task type and creates an appropriately colored rectangle
+	 * @return appropriately colored Rectangle
+	 */
+	private Rectangle createTaskHolderBox(TaskType inputTaskType) {
 		Color[] col = {(Color.web("EFBAFF")), (Color.web("C1D5F8")), 
 				(Color.web("B9EEB4")), (Color.web("EEBCB0")), (Color.POWDERBLUE)};
 		Rectangle box = new Rectangle();
@@ -100,7 +105,7 @@ public class TaskBox extends StackPane{
 		box.setArcHeight(4);                
 		box.setStroke(Color.DIMGRAY);
 		box.setStrokeWidth(0f);
-		switch (inputTaskType){
+		switch (inputTaskType) {
 		case FLOATING:
 			box.setFill(col[0]);
 			break;
@@ -119,8 +124,8 @@ public class TaskBox extends StackPane{
 		return box;
 	}
 	
-	//returns a red box for misc uses
-	private Rectangle createTaskHolderBox(){
+	//@return a red box for misc uses
+	private Rectangle createTaskHolderBox() {
 		Color col = (Color.SALMON);
 		Rectangle box = new Rectangle();
 		box.setWidth(600);
@@ -133,14 +138,18 @@ public class TaskBox extends StackPane{
 		return box;
 	}
 	
-	private GridPane createTimeSpanBoxes(Task inputTask){
+	/* Detects date ranges of a Task and creates a GridPane that
+	 * holds Rectangles that display the time constraints of the task
+	 * @return GridPane with colored boxes that display time constraints of task
+	 */
+	private GridPane createTimeSpanBoxes(Task inputTask) {
 		GridPane timeSpanGridPane = new GridPane();
 		timeSpanGridPane.setVgap(10);
 		
 		
-		if (inputTask.getStartTime()!= null){
+		if (inputTask.getStartTime()!= null) {
 			TextedTimeBox startTimeBox = new TextedTimeBox(inputTask.getStartTime().toString());
-			if (inputTask.getEndTime()!= null){
+			if (inputTask.getEndTime()!= null) {
 				timeSpanGridPane.add(startTimeBox, 0, 1);
 			} else {
 				timeSpanGridPane.add(startTimeBox, 2, 1);
@@ -153,9 +162,9 @@ public class TaskBox extends StackPane{
 		
 		
 		
-		if (inputTask.getEndTime()!= null){
+		if (inputTask.getEndTime()!= null) {
 			TextedTimeBox timeBox;
-			switch (inputTask.getTaskType()){
+			switch (inputTask.getTaskType()) {
 			case DEADLINE:
 				timeBox = new TextedTimeBox("by " + inputTask.getEndTime().toString());
 				break;
@@ -169,7 +178,7 @@ public class TaskBox extends StackPane{
 			timeSpanGridPane.add(startTimeBox, 0, 1);			
 		}
 		
-		if (inputTask.getStartTime()!=null && inputTask.getEndTime()!=null){
+		if (inputTask.getStartTime()!=null && inputTask.getEndTime()!=null) {
 			Text dash = new Text("-");
 			dash.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
 			dash.setTextAlignment(TextAlignment.LEFT);
@@ -181,7 +190,11 @@ public class TaskBox extends StackPane{
 		return timeSpanGridPane;
 	}
 	
-	private StackPane createIndexBox(int index, TaskType inputTaskType){
+	/* Gets the task index and its type, and creates an appropriately colored
+	 * square with the index displayed in the middle.
+	 * @return appropriately colored square with index displayed
+	 */
+	private StackPane createIndexBox(int index, TaskType inputTaskType) {
 		Color[] col = {(Color.web("D652FF")), Color.web("6495ED"), 
 				(Color.web("51D444")), (Color.web("D4573A")), (Color.RED)};
 		
@@ -197,7 +210,7 @@ public class TaskBox extends StackPane{
 		box.setStroke(Color.DIMGRAY);
 		box.setStrokeWidth(2.0f);
 
-		switch (inputTaskType){
+		switch (inputTaskType) {
 		case FLOATING:
 			box.setFill(col[0]);
 			break;
@@ -218,7 +231,7 @@ public class TaskBox extends StackPane{
 		text.setTextAlignment(TextAlignment.CENTER);
 		text.setFill(Color.WHITE);
 		
-		if (index==0){
+		if (index==0) {
 			text.setText("");
 		}
 		stackPane.getChildren().addAll(box, text);
@@ -227,7 +240,7 @@ public class TaskBox extends StackPane{
 	}
 	
 	//created a red '!' indexbox for misc uses
-	private StackPane createIndexBox(){
+	private StackPane createIndexBox() {
 		Color col = (Color.RED);
 		
 		StackPane stackPane = new StackPane();
@@ -254,27 +267,22 @@ public class TaskBox extends StackPane{
 	}
 	
 	//Constructor for TaskBox for misc uses
-	public TaskBox(String inputText){
+	public TaskBox(String inputText) {
 		String splitName = inputText;
-	//    System.out.println(splitName);
 		int currRectYPos = 1;
 		
 		GridPane grid = new GridPane();
+		grid.setPadding(new Insets(5));
+	    grid.setHgap(5);
+	    grid.setVgap(0);
 
 		Rectangle mainBox = createTaskHolderBox();
 		grid.add(mainBox, 1, currRectYPos++);
 		
-		
-	//	grid.setGridLinesVisible(true);
-	    grid.setPadding(new Insets(5));
-	    grid.setHgap(5);
-	    grid.setVgap(0);
-
 	    ColumnConstraints column1 = new ColumnConstraints(5);
 	    ColumnConstraints column2 = new ColumnConstraints(50, 150, 100);
 	    grid.getColumnConstraints().addAll(column1, column2);
 		
-	    
 		int currYPos = 1;
 		Text text = new Text("     " + splitName);
 		text.setTextAlignment(TextAlignment.LEFT);
@@ -282,16 +290,11 @@ public class TaskBox extends StackPane{
 		text.setFill(Color.WHITE);
 		grid.add(text, 0, currYPos++);
 			
-		
 		StackPane indexBox = createIndexBox();
 		GridPane.setConstraints(indexBox , 0, 1);
 		grid.add(indexBox, 0, 1);
 		
-		
-		
-//		grid.setGridLinesVisible(true);
 		this.getChildren().addAll(grid);
-		
 	}
 }
 

@@ -12,13 +12,12 @@ import javafx.scene.text.TextAlignment;
 
 public class IndexBox extends StackPane{
 	
-	public IndexBox(int index, TaskType inputTaskType){
+	//Constructor for colored box according to task type
+	public IndexBox(int index, TaskType inputTaskType) {
 		Color[] col = {(Color.web("D652FF")), Color.web("6495ED"), 
 				(Color.web("51D444")), (Color.web("D4573A")), (Color.POWDERBLUE)};
 		
 		Rectangle box = new Rectangle();
-		
-
 		box.setWidth(20);
 		box.setHeight(20);
 		box.setArcWidth(4);
@@ -26,7 +25,7 @@ public class IndexBox extends StackPane{
 		box.setStroke(Color.DIMGRAY);
 		box.setStrokeWidth(2.0f);
 
-		switch (inputTaskType){
+		switch (inputTaskType) {
 		case FLOATING:
 			box.setFill(col[0]);
 			break;
@@ -39,28 +38,23 @@ public class IndexBox extends StackPane{
 		default:
 			box.setFill(col[3]);
 			break;
-		
 		}
+		
 		Text text = new Text(Integer.toString(index));
 		text.setFont(Font.font("Tahoma", FontWeight.BOLD, 13));
 		text.setTextAlignment(TextAlignment.CENTER);
 		text.setFill(Color.WHITE);
 		
-		if (index==0){
+		if (index==0) {
 			text.setText("");
 		}
 		this.getChildren().addAll(box, text);
 		
 	}
-		
 	
-	public IndexBox (int index) {
-		Color[] col = {(Color.web("D652FF")), Color.web("6495ED"), 
-				(Color.web("D4573A")), (Color.web("51D444")), (Color.POWDERBLUE)};
-		
+	//Constructor for RED index box
+	public IndexBox (int index) {		
 		Rectangle box = new Rectangle();
-		
-
 		box.setWidth(20);
 		box.setHeight(20);
 		box.setArcWidth(4);
@@ -73,15 +67,15 @@ public class IndexBox extends StackPane{
 		text.setTextAlignment(TextAlignment.CENTER);
 		text.setFill(Color.WHITE);
 		
-		if (index==0){
+		if (index==0) {
 			text.setText("!");
 			box.setFill(Color.RED);
 		}
 		this.getChildren().addAll(box, text);
-		
 	}
 	
-	public IndexBox (String textInput){
+	//Constructor for non-digit IndexBox
+	public IndexBox (String textInput) {
 		Rectangle box = new Rectangle();
 		box.setWidth(20);
 		box.setHeight(20);
