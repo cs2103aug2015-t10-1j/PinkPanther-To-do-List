@@ -16,22 +16,18 @@ import javafx.scene.text.TextAlignment;
 public class HelpScreen extends ScrollPane{
 	GridPane grid;
 	
-	public HelpScreen(){
-		
-		
+	//Constructor
+	public HelpScreen() {
 		grid = new GridPane();
         grid.setAlignment(Pos.TOP_LEFT);
         grid.setHgap(5);
         grid.setVgap(7);
         grid.setPadding(new Insets(10, 10, 10, 10));
-			
-
+        
 		this.setPrefSize(1080, 1060);
 		this.setContent(grid);
 		this.setStyle("-fx-background-color: transparent;");
-        
-        
-
+		
         Text scenetitle = new Text("Cheatsheet");
         scenetitle.setFont(Font.font("Tahoma", FontWeight.BOLD, 32));
         scenetitle.setFill(Color.DIMGRAY);
@@ -50,7 +46,7 @@ public class HelpScreen extends ScrollPane{
 
 	}
 	
-	private void implementShortcuts(){
+	private void implementShortcuts() {
 		int currYPos = 15;
 		
         Text hiddenCalendarText = new Text("  :  Hidden-Calendar Mode");
@@ -153,7 +149,7 @@ public class HelpScreen extends ScrollPane{
         grid.add(allViewPane, 2, currYPos++);
 	}
 	
-	private void implementAddBoxes(){
+	private void implementAddBoxes() {
 		GridPane labelPane = new GridPane();
 		labelPane.setHgap(5);
 		labelPane.setVgap(3);
@@ -181,7 +177,7 @@ public class HelpScreen extends ScrollPane{
         grid.add(addPane, 2, 3);
 	}
 	
-	private void implementDeleteBoxes(){
+	private void implementDeleteBoxes() {
 		GridPane labelPane = new GridPane();
 		labelPane.setHgap(5);
 		labelPane.setVgap(3);
@@ -207,7 +203,7 @@ public class HelpScreen extends ScrollPane{
         grid.add(addPane, 2, 4);
 	}
 	
-	private void implementEditBoxes(){
+	private void implementEditBoxes() {
 		GridPane labelPane = new GridPane();
 		labelPane.setHgap(5);
 		labelPane.setVgap(3);
@@ -233,7 +229,7 @@ public class HelpScreen extends ScrollPane{
         grid.add(addPane, 2, 5);
 	}
 	
-	private void implementDoneBoxes(){
+	private void implementDoneBoxes() {
 		GridPane labelPane = new GridPane();
 		labelPane.setHgap(5);
 		labelPane.setVgap(3);
@@ -259,7 +255,7 @@ public class HelpScreen extends ScrollPane{
         grid.add(addPane, 2, 6);
 	}
 	
-	private void implementSearchBoxes(){
+	private void implementSearchBoxes() {
 		GridPane labelPane = new GridPane();
 		labelPane.setHgap(5);
 		labelPane.setVgap(3);
@@ -283,7 +279,7 @@ public class HelpScreen extends ScrollPane{
         grid.add(addPane, 2, 7);
 	}
 	
-	private void implementViewBoxes(){
+	private void implementViewBoxes() {
 		GridPane labelPane = new GridPane();
 		labelPane.setHgap(5);
 		labelPane.setVgap(3);
@@ -308,7 +304,7 @@ public class HelpScreen extends ScrollPane{
 	}
 	
 
-	private void implementUndoBoxes(){
+	private void implementUndoBoxes() {
 		GridPane labelPane = new GridPane();
 		labelPane.setHgap(5);
 		labelPane.setVgap(3);
@@ -331,7 +327,7 @@ public class HelpScreen extends ScrollPane{
 	}
 	
 
-	private void implementRedoBoxes(){
+	private void implementRedoBoxes() {
 		GridPane labelPane = new GridPane();
 		labelPane.setHgap(5);
 		labelPane.setVgap(3);
@@ -354,7 +350,7 @@ public class HelpScreen extends ScrollPane{
 	}
 	
 
-	private void implementExitBoxes(){
+	private void implementExitBoxes() {
 		GridPane labelPane = new GridPane();
 		labelPane.setHgap(5);
 		labelPane.setVgap(3);
@@ -376,7 +372,7 @@ public class HelpScreen extends ScrollPane{
         grid.add(addPane, 2, 11);
 	}
 	
-	private StackPane createColoredBox(String boxText, int colorIndex){
+	private StackPane createColoredBox(String boxText, int colorIndex) {
 		Color[] col = {(Color.RED), Color.web("D1D2D4"), 
 				(Color.web("D1D2D4")), (Color.web("D4573A")), (Color.POWDERBLUE)};
 		
