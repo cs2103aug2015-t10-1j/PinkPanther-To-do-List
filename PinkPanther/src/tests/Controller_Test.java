@@ -23,7 +23,6 @@ public class Controller_Test {
 		controller.addCommand("clear");
 		controller.addCommand("add do homework, 2 to 5pm, 7 nov");
 		controller.addCommand("add feed the dog,6pm,7 nov");
-
 	}
 	
 	@Test
@@ -63,6 +62,21 @@ public class Controller_Test {
 	}
 	
 	@Test
+	public void deleteMultipleTask_positive(){
+		controller.addCommand("del 7 nov,1 2");
+		assertEquals(state.getTodoList().containsKey(date),false);
+		assertEquals(Display.showFeedBack(),"Tasks have been deleted from 2015-11-07");
+	}
+	
+	@Test
+	public void deleteMultipleTask_negative(){
+		controller.addCommand("del 7 nov,4 5");
+		assertEquals(state.getTodoList().containsKey(date),true);
+		assertEquals(state.getTodoList().get(date).size(),2);
+		assertEquals(Display.showFeedBack(),"Task or tasks do not exist");
+	}
+	
+	@Test
 	public void editTask_positive(){
 		controller.addCommand("edit 7 nov,1");
 		assertEquals(state.getInputBoxText(),"do homework, 2.00PM to 5.00PM, 7/11/15");
@@ -91,7 +105,7 @@ public class Controller_Test {
 		String editedString = "       ";
 		controller.addCommand(editedString);
 		assertEquals(state.getTodoList().get(date).get(1).getName(),"feed the dog");
-		assertEquals(Display.showFeedBack(),"You have not entered a task name");
+		assertEquals(Display.showFeedBack(),"You have not entered any task details.");
 	}
 	
 	@Test
