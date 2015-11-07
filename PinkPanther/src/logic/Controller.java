@@ -154,7 +154,6 @@ public class Controller {
 					Display.setFeedBack("Unrecognized command. Press F2 for Help Screen.");
 					state.setInputBoxText(command);
 			}
-			state.addCommandToHistory(command);
 		}
 		
 		

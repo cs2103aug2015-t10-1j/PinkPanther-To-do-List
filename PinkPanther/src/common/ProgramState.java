@@ -10,7 +10,6 @@ public class ProgramState {
 	private ArrayList<Task>floatingList;
 	private SortedMap<LocalDate,ArrayList<Task>>todoList;
 	private SortedMap<LocalDate,ArrayList<Task>>overdue;
-	private ArrayList<String>commandHistory;
 	private String title;
 	private String inputBoxText;
 	private boolean isExit;
@@ -19,7 +18,6 @@ public class ProgramState {
 		this.floatingList = new ArrayList<Task>();
 		this.todoList = new TreeMap<LocalDate,ArrayList<Task>>();
 		this.overdue = new TreeMap<LocalDate,ArrayList<Task>>();
-		this.commandHistory=new ArrayList<String>();
 		this.inputBoxText = "";
 		this.isExit = false;
 		this.title = "                         To-Do List";
@@ -49,10 +47,6 @@ public class ProgramState {
 		this.title=title;
 	}
 	
-	public void addCommandToHistory(String commandString){
-		this.commandHistory.add(commandString);
-	}
-	
 	public ArrayList<Task>getFloatingList(){
 		return floatingList;
 	}
@@ -63,10 +57,6 @@ public class ProgramState {
 	
 	public SortedMap<LocalDate, ArrayList<Task>>getOverdueList(){
 		return overdue;
-	}
-	
-	public ArrayList<String>getCommandHistory(){
-		return commandHistory;
 	}
 	
 	public String getInputBoxText(){
