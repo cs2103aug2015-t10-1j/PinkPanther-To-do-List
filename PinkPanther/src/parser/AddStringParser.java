@@ -236,7 +236,9 @@ public class AddStringParser implements Parser {
 		if (laterDate != null) {
 			if (Auxiliary.isNumber(firstDate)) {
 				int dayOfFirstDate = Integer.parseInt(firstDate);
-				earlierDate = laterDate.withDayOfMonth(dayOfFirstDate);
+				if (dayOfFirstDate <= laterDate.getDayOfMonth()) {
+					earlierDate = laterDate.withDayOfMonth(dayOfFirstDate);
+				}
 			}
 		}
 		
