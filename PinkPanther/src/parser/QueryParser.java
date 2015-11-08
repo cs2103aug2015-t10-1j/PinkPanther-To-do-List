@@ -7,6 +7,8 @@ import common.Display;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 public class QueryParser implements Parser {
 	
@@ -25,6 +27,7 @@ public class QueryParser implements Parser {
 			"Unaccounted case where #commas detected is not 1.";
 	
 	private static final SingleDateParser sdp = new SingleDateParser();
+	private static final Logger log = Logger.getLogger("QueryParser");
 	
 	/**
 	 * Return a Pair of a date and an ArrayList of indices.
@@ -33,8 +36,7 @@ public class QueryParser implements Parser {
 	 * @param commandContent	What the user enters.
 	 * @return	A certain date and the list of indices for that date.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Pair parse(String commandContent) {
+	public Pair<LocalDate,ArrayList<Integer>> parse(String commandContent) {
 		assert commandContent != null : MESSAGE_ASSERTION_NULL;
 		String[] userInfo = commandContent.split(",");
 		userInfo = Auxiliary.trimStringArray(userInfo);
@@ -42,6 +44,7 @@ public class QueryParser implements Parser {
 		// there should only be 1 comma
 		if (userInfo.length != 2) {
 			Display.setFeedBack(MESSAGE_INVALID_COMMA);
+			log.log(Level.INFO, "Invalid input format. Returning null to logic.");
 			return null;
 		}
 		assert userInfo.length == 2 : MESSAGE_ASSERTION_COMMA;
@@ -51,12 +54,15 @@ public class QueryParser implements Parser {
 		
 		if (isValidKeyword(userInfo[INDEX_KEYWORD]) 
 				&& isValidIndex(userInfo[INDEX_INDEX], indexList)) {
+			log.log(Level.INFO, "Returning Pair to logic.");
 			return new Pair<LocalDate, ArrayList<Integer>>(keyword, indexList);
 		} else if (!isValidKeyword(userInfo[INDEX_KEYWORD])) {
 			Display.setFeedBack(MESSAGE_INVALID_KEYWORD);
+			log.log(Level.INFO, "No keyword detected. Returning null to logic.");
 			return null;
 		} else if (!isValidIndex(userInfo[INDEX_INDEX], indexList)) {
 			Display.setFeedBack(MESSAGE_INVALID_INDEX);
+			log.log(Level.INFO, "Invalid index detected. Returning null to logic.");
 			return null;
 		}
 		return null;
@@ -74,6 +80,7 @@ public class QueryParser implements Parser {
 			try {
 				list.add(Integer.valueOf(listOfIndices[i]));
 			} catch (NumberFormatException e) {
+				log.log(Level.FINE, "Non numerical index detected in list of indices.");
 				return null;
 			}
 		}	

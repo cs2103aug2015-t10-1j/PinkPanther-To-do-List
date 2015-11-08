@@ -20,7 +20,6 @@ public class CommandParser {
 		return task;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public Pair<LocalDate,ArrayList<Integer>> query(String userInput){
 		return qp.parse(userInput);
 	}
