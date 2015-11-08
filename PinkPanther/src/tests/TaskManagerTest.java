@@ -128,6 +128,7 @@ public class TaskManagerTest {
 		
 		ArrayList<Task> output1 = manager.searchTasks(pair1);
 		assertEquals(output1.size(),3);
+		
 	}
 	
 	@Test
@@ -137,6 +138,7 @@ public class TaskManagerTest {
 		
 		ArrayList<Task> output1 = manager.searchTasks(pair1);
 		assertEquals(output1,null);
+		assertEquals(Display.showFeedBack(),"Error : You do not have any task on this date.");
 	}
 	
 	
