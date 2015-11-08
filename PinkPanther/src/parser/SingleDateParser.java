@@ -17,12 +17,31 @@ import java.util.logging.Logger;
 
 public class SingleDateParser implements Parser {
 	
+	// Class attributes
+	private static ArrayList<String> validDateFormats;
+	private static ArrayList<String> validDayFormats;
+	
+	// indices and indicators
 	private static final int INDEX_DAY = 0;
 	private static final int INDEX_MONTH = 1;
 	
+	// messages
 	private static final String MESSAGE_ASSERTION_NULL = 
 			 "Logic error. Null input is passed in as parameter!";
+	private static final String MESSAGE_LOG_PARSE_SUCCESS = 
+			"Successful parsing. Returning a LocalDate.";
+	private static final String MESSAGE_LOG_PARSE_FAIL = 
+			"Not a date. Returning null.";
+	private static final String MESSAGE_LOG_INVALID_FORMAT = 
+			"Not an accepted format of date. Returning null.";
+	private static final String MESSAGE_LOG_YEAR_APPENDED =
+			"Year of the date is appended.";
+	private static final String MESSAGE_LOG_DATE_FIXED =
+			"Date has been fixed.";
+	private static final String MESSAGE_LOG_DATE_NOT_FIXED =
+			"Date has not been fixed.";
 	
+	// word/format lists
 	private static final String[] DATE_DELIMITERS = {"/", "-", " "};
 	private static final List<String> DATE_FORMAT_SLASH = 
 			Collections.unmodifiableList(Arrays.asList("d/M/yy", "dd/M/yy",
@@ -41,14 +60,11 @@ public class SingleDateParser implements Parser {
 		    		"d MMM yyyy", "dd MMM yyyy", "d MMMM yyyy", "dd MMMM yyyy"));
 	private static final List<String> DAY_FORMAT = 
 			Collections.unmodifiableList(Arrays.asList("EEE", "EEEE"));
-	
 	private static final String[] DATE_INDICATORS_ONE = {"TONIGHT", "NOW", "TODAY",
 			"TOMORROW",};
 	
+	// other constants
 	private static final Logger log = Logger.getLogger("SingleDateParser");
-	
-	private static ArrayList<String> validDateFormats;
-	private static ArrayList<String> validDayFormats;
 	
 	public SingleDateParser() {
 		validDateFormats = new ArrayList<String>();
@@ -71,12 +87,12 @@ public class SingleDateParser implements Parser {
 		
 		// case: dates that contain a certain keyword
 		if (isDateIndicator(date)) {
-			log.log(Level.INFO, "Successful parsing. Returning a LocalDate.");
+			log.log(Level.FINE, MESSAGE_LOG_PARSE_SUCCESS);
 			return oneWordIndicatorParser(date);
 		}
 
 		if (hasDateIndicator(date)) {
-			log.log(Level.INFO, "Successful parsing. Returning a LocalDate.");
+			log.log(Level.FINE, MESSAGE_LOG_PARSE_SUCCESS);
 			return twoWordIndicatorParser(date);
 		}
 		
@@ -86,13 +102,13 @@ public class SingleDateParser implements Parser {
 		for (String dateFormat : validDateFormats) {
 			LocalDate parsedDate = compareDateFormat(fixedDate, dateFormat);
 			if (parsedDate != null) {
-				log.log(Level.INFO, "Successful parsing. Returning a LocalDate.");
+				log.log(Level.FINE, MESSAGE_LOG_PARSE_SUCCESS);
 				return parsedDate;
 			}
 		}
 		
 		// case: not a date
-		log.log(Level.INFO, "Not a date. Returning null.");
+		log.log(Level.FINE, MESSAGE_LOG_PARSE_FAIL);
 		return null;
 	}
 	
@@ -102,10 +118,9 @@ public class SingleDateParser implements Parser {
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
 			LocalDate date = LocalDate.parse(dateString, formatter);
-			log.log(Level.FINE, "Succesful parsing. String converted to a LocalDate.");
 			return date;
 		} catch (DateTimeException e) {
-			log.log(Level.FINE, "Not a date. Returning null.");
+			log.log(Level.FINER, MESSAGE_LOG_INVALID_FORMAT);
 			return null;
 		}
 	}
@@ -147,13 +162,13 @@ public class SingleDateParser implements Parser {
 							+ String.valueOf(LocalDate.now().getYear());
 					fixedDate += appendedYear;
 					hasAppendedYear = true;
-					log.log(Level.FINER, "Year of the date is appended.");
+					log.log(Level.FINEST, MESSAGE_LOG_YEAR_APPENDED);
 				}
-				log.log(Level.FINE, "Date has been fixed.");
+				log.log(Level.FINER, MESSAGE_LOG_DATE_FIXED);
 				return new Pair<String, Boolean>(fixedDate, hasAppendedYear);
 			}
 		}
-		log.log(Level.FINE, "Date has not been fixed.");
+		log.log(Level.FINER, MESSAGE_LOG_DATE_NOT_FIXED);
 		return new Pair<String, Boolean>(date, hasAppendedYear);
 	}
 	
@@ -243,7 +258,7 @@ public class SingleDateParser implements Parser {
 			DayOfWeek day = DayOfWeek.from(formatter.parse(dateString));
 			return day;
 		} catch (DateTimeException e) {
-			log.log(Level.FINE, "Not a day of week. Returning null.");
+			log.log(Level.FINER, MESSAGE_LOG_INVALID_FORMAT);
 			return null;
 		}
 	}

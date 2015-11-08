@@ -8,16 +8,31 @@ import java.util.logging.Level;
 
 public class DateRangeParser implements Parser {
 	
+	// attributes
 	private AddStringParser asp;
 	
+	// indices and indicators
 	private static final int SINGLE_DATE_TIME_FOUND = 1;
 	private static final int DATE_TIME_RANGE_FOUND = 2;
 	
+	// messages
 	private static final String MESSAGE_ASSERTION_NULL = 
 			 "Logic error. Null input is passed in as parameter!";
+	private static final String MESSAGE_LOG_LEGIT_DATE = 
+			"A single date detected. Returning Pair to logic.";
+	private static final String MESSAGE_LOG_DATE = 
+			"A deadline detected. Returning Pair to logic anyways.";
+	private static final String MESSAGE_LOG_DATE_RANGE = 
+			"Range of dates detected. Returning Pair to logic.";
+	private static final String MESSAGE_LOG_PARSE_FAIL = 
+			"No dates detected. Returning null to logic.";
 	
+	// other constants
 	private static final Logger log = Logger.getLogger("DateRangeParser");
 	
+	/**
+	 * Constructor
+	 */
 	public DateRangeParser(AddStringParser asp) {
 		this.asp = asp;
 	}
@@ -36,16 +51,16 @@ public class DateRangeParser implements Parser {
 		int validDates = asp.countValidDates(commandContent);
 		if (validDates == SINGLE_DATE_TIME_FOUND) {
 			if (asp.getStartDate() != null) {
-				log.log(Level.INFO, "A single date detected. Returning Pair to logic.");
+				log.log(Level.INFO, MESSAGE_LOG_LEGIT_DATE);
 				return new Pair<LocalDate, LocalDate>(asp.getStartDate(), asp.getStartDate());
 			}
-			log.log(Level.INFO, "A deadline detected. Returning Pair to logic.");
+			log.log(Level.INFO, MESSAGE_LOG_DATE);
 			return new Pair<LocalDate, LocalDate>(asp.getEndDate(), asp.getEndDate()); 
 		} else if (validDates == DATE_TIME_RANGE_FOUND) {
-			log.log(Level.INFO, "Range of dates detected. Returning Pair to logic.");
+			log.log(Level.INFO, MESSAGE_LOG_DATE_RANGE);
 			return new Pair<LocalDate, LocalDate>(asp.getStartDate(), asp.getEndDate());
 		}
-		log.log(Level.INFO, "No dates detected. Returning null to logic.");
+		log.log(Level.INFO, MESSAGE_LOG_PARSE_FAIL);
 		return null;
 	}
 }

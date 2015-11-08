@@ -20,8 +20,10 @@ public class AddStringParser implements Parser {
 	private LocalTime startTimeStore;
 	private LocalTime endTimeStore;
 	private TaskType taskTypeStore;
+	private SingleDateParser sdp;
+	private SingleTimeParser stp;
 	
-	// indexes and indicators
+	// indices and indicators
 	private static final int INDEX_TASK_NAME = 0;
 	private static final int INDEX_TASK_DETAIL = 1;
 	private static final int INDEX_DATE = 0;
@@ -56,10 +58,41 @@ public class AddStringParser implements Parser {
 			"Invalid index entered! Pls refer to limits/max/min list of valid indices.";
 	private static final String MESSAGE_ASSERTION_NOT_CHRONOLOGICAL =
 			"Date or time range not fixed properly to ensure chronology.";
+	private static final String MESSAGE_LOG_NO_DETAILS = 
+			"Detected no task details. Returning null to Logic.";
+	private static final String MESSAGE_LOG_PARSER_ERROR = 
+			"Parser logic is broken.";
+	private static final String MESSAGE_LOG_START_DATE_CHANGE = 
+			"Start date detected and updated.";
+	private static final String MESSAGE_LOG_END_DATE_CHANGE = 
+			"End date detected and updated.";
+	private static final String MESSAGE_LOG_START_TIME_CHANGE = 
+			"Start time detected and updated.";
+	private static final String MESSAGE_LOG_END_TIME_CHANGE = 
+			"End time detected and updated.";
+	private static final String MESSAGE_LOG_EASTER_EGG = 
+			"Task falls on restricted date. Returning null to logic.";
+	private static final String MESSAGE_LOG_FLOATING = 
+			"Returning floating Task to logic.";
+	private static final String MESSAGE_LOG_DEADLINE = 
+			"Returning deadline Task to logic.";
+	private static final String MESSAGE_LOG_TODO = 
+			"Returning to-do Task to logic.";
+	private static final String MESSAGE_LOG_EVENT = 
+			"Returning event Task to logic.";
+	private static final String MESSAGE_LOG_RESET = 
+			"All stores in parser cleared.";
 	
-	private static SingleDateParser sdp = new SingleDateParser();
-	private static SingleTimeParser stp = new SingleTimeParser();
+	// other constants
 	private static final Logger log = Logger.getLogger("AddStringParser");
+	
+	/**
+	 * Constructor
+	 */
+	public AddStringParser() {
+		sdp = new SingleDateParser();
+		stp = new SingleTimeParser();
+	}
 	
 	/**
 	 * Return a Task based on commandContent.
@@ -76,7 +109,7 @@ public class AddStringParser implements Parser {
 		userInfo = Auxiliary.trimStringArray(userInfo);
 		
 		if (Auxiliary.isEmptyArray(userInfo)) {
-			log.log(Level.INFO, "Detected no task details. Returning null to Logic.");
+			log.log(Level.INFO, MESSAGE_LOG_NO_DETAILS);
 			Display.setFeedBack(MESSAGE_EMPTY_TASK);
 			return null;
 		}
@@ -93,7 +126,7 @@ public class AddStringParser implements Parser {
 		} else if (validDateTimes == SINGLE_DATE_TIME_FOUND)  {
 			return addSingleDated();
 		} else {
-			log.log(Level.WARNING, "Parser logic is broken.");
+			log.log(Level.WARNING, MESSAGE_LOG_PARSER_ERROR);
 			Display.setFeedBack(MESSAGE_PARSER_ERROR);
 			return null;
 		}
@@ -141,10 +174,10 @@ public class AddStringParser implements Parser {
 		if (isSingleDateTime(dateTimeInfo, sdp)) {
 			if (startDateStore == null) {
 				setStartDate(sdp.parse(dateTimeInfo));
-				log.log(Level.FINE, "Start date detected and updated.");
+				log.log(Level.FINE, MESSAGE_LOG_START_DATE_CHANGE);
 			} else {
 				setEndDate(sdp.parse(dateTimeInfo));
-				log.log(Level.FINE, "End date detected and updated.");
+				log.log(Level.FINE, MESSAGE_LOG_END_DATE_CHANGE);
 			}
 			return SINGLE_DATE_TIME_FOUND;
 		}
@@ -157,7 +190,7 @@ public class AddStringParser implements Parser {
 				if (dateIndicator.equalsIgnoreCase(LIST_DEADLINE_MARKERS[i])) {
 					setEndDate(sdp.parse(Auxiliary.removeFirstWord(dateTimeInfo)));
 					setTaskType(TaskType.DEADLINE);
-					log.log(Level.FINE, "End date detected and updated.");
+					log.log(Level.FINE, MESSAGE_LOG_END_DATE_CHANGE);
 					return SINGLE_DATE_TIME_FOUND;
 				}
 			}
@@ -167,7 +200,7 @@ public class AddStringParser implements Parser {
 						setTaskType(TaskType.TODO);
 					}
 					setStartDate(sdp.parse(Auxiliary.removeFirstWord(dateTimeInfo)));
-					log.log(Level.FINE, "Start date detected and updated.");
+					log.log(Level.FINE, MESSAGE_LOG_START_DATE_CHANGE);
 					return SINGLE_DATE_TIME_FOUND;
 				}
 			}
@@ -192,10 +225,10 @@ public class AddStringParser implements Parser {
 		if (isSingleDateTime(dateTimeInfo, stp)) {
 			if (startTimeStore == null) {
 				setStartTime(stp.parse(dateTimeInfo));
-				log.log(Level.FINE, "Start time detected and updated.");
+				log.log(Level.FINE, MESSAGE_LOG_START_TIME_CHANGE);
 			} else {
 				setEndTime (stp.parse(dateTimeInfo));
-				log.log(Level.FINE, "End time detected and updated.");
+				log.log(Level.FINE, MESSAGE_LOG_END_TIME_CHANGE);
 			}
 			return SINGLE_DATE_TIME_FOUND;
 		}
@@ -208,7 +241,7 @@ public class AddStringParser implements Parser {
 				if (timeIndicator.equalsIgnoreCase(LIST_DEADLINE_MARKERS[i])) {
 					setEndTime(stp.parse(Auxiliary.removeFirstWord(dateTimeInfo)));
 					setTaskType(TaskType.DEADLINE);
-					log.log(Level.FINE, "End time detected and updated.");
+					log.log(Level.FINE, MESSAGE_LOG_END_TIME_CHANGE);
 					return SINGLE_DATE_TIME_FOUND;
 				}
 			}
@@ -218,7 +251,7 @@ public class AddStringParser implements Parser {
 						setTaskType(TaskType.TODO);
 					}
 					setStartTime(stp.parse(Auxiliary.removeFirstWord(dateTimeInfo)));
-					log.log(Level.FINE, "Start time detected and updated.");
+					log.log(Level.FINE, MESSAGE_LOG_START_TIME_CHANGE);
 					return SINGLE_DATE_TIME_FOUND;
 				}
 			}
@@ -303,8 +336,9 @@ public class AddStringParser implements Parser {
 			// and check the years of the input
 			if (!earlierDate.isAfter(laterDate)) {
 				setStartDate(earlierDate);
+				log.log(Level.FINE, MESSAGE_LOG_START_DATE_CHANGE);
 				setEndDate(laterDate);
-				log.log(Level.FINE, "Start and end dates detected and updated.");
+				log.log(Level.FINE, MESSAGE_LOG_END_DATE_CHANGE);
 				return true;
 			}
 		}
@@ -336,8 +370,9 @@ public class AddStringParser implements Parser {
 			// check if chronological
 			if (!earlierTime.isAfter(laterTime)) {
 				setStartTime(earlierTime);
+				log.log(Level.FINE, MESSAGE_LOG_START_TIME_CHANGE);
 				setEndTime(laterTime);
-				log.log(Level.FINE, "Start and end times detected and updated.");
+				log.log(Level.FINE, MESSAGE_LOG_END_TIME_CHANGE);
 				return true;
 			}
 		}
@@ -346,7 +381,7 @@ public class AddStringParser implements Parser {
 	
 	private Task addFloating(String details) {
 		Task floating = new Task(details);
-		log.log(Level.INFO, "Returning floating Task to logic.");
+		log.log(Level.INFO, MESSAGE_LOG_FLOATING);
 		return floating;
 	}
 	
@@ -368,8 +403,9 @@ public class AddStringParser implements Parser {
 				return addSingleDated();
 			}
 			setStartTime(null);
+			log.log(Level.FINE, MESSAGE_LOG_START_TIME_CHANGE);
 			setEndTime(null);
-			log.log(Level.FINE, "Start and end times updated.");
+			log.log(Level.FINE, MESSAGE_LOG_END_TIME_CHANGE);
 			
 			if (!endDateStore.isAfter(startDateStore)) {
 				return addFloating(taskFullDetails);
@@ -379,18 +415,19 @@ public class AddStringParser implements Parser {
 			// case: 2 T 0 D (from time T1-T2 today)
 			if (startDateStore == null && endDateStore == null) {
 				setStartDate(LocalDate.now());
+				log.log(Level.FINE, MESSAGE_LOG_START_DATE_CHANGE);
 				setEndDate(LocalDate.now());
-				log.log(Level.FINE, "Start and end dates updated.");
+				log.log(Level.FINE, MESSAGE_LOG_END_DATE_CHANGE);
 			}
 			
 			// case: 2 T 1 D (from time T1-T2 on 1D)
 			if (startDateStore == null || endDateStore == null) {
 				if (startDateStore != null) {
 					setEndDate(startDateStore);
-					log.log(Level.FINE, "Start date updated.");
+					log.log(Level.FINE, MESSAGE_LOG_START_DATE_CHANGE);
 				} else {
 					setStartDate(endDateStore);
-					log.log(Level.FINE, "End date updated.");
+					log.log(Level.FINE, MESSAGE_LOG_END_DATE_CHANGE);
 				}
 			}
 			
@@ -413,10 +450,10 @@ public class AddStringParser implements Parser {
 		
 		if (isDuringRestrictedDate(event)) {
 			Display.setFeedBack(MESSAGE_EASTER_EGG);
-			log.log(Level.INFO, "Task falls on restricted date. Returning null to logic.");
+			log.log(Level.INFO, MESSAGE_LOG_EASTER_EGG);
 			return null;
 		}	
-		log.log(Level.INFO, "Returning event Task to logic.");
+		log.log(Level.INFO, MESSAGE_LOG_EVENT);
 		return event;
 	}
 	
@@ -425,8 +462,9 @@ public class AddStringParser implements Parser {
 		// case: 1 T 0 D (add todo/deadline today)
 		if (startDateStore == null && endDateStore == null) {
 			setStartDate(LocalDate.now());
+			log.log(Level.FINE, MESSAGE_LOG_START_DATE_CHANGE);
 			setEndDate(LocalDate.now());
-			log.log(Level.FINE, "Start and end dates updated.");
+			log.log(Level.FINE, MESSAGE_LOG_END_DATE_CHANGE);
 		}
 		
 		// case: 1 T 1 D (add todo or deadline on 1D)
@@ -434,20 +472,21 @@ public class AddStringParser implements Parser {
 		if (taskTypeStore == TaskType.DEADLINE) {
 			if (endDateStore == null && startDateStore != null) {
 				setEndDate(startDateStore);
-				log.log(Level.FINE, "End date updated.");
+				log.log(Level.FINE, MESSAGE_LOG_START_TIME_CHANGE);
 			}
 			if (endTimeStore == null && startTimeStore != null) {
 				setEndTime(startTimeStore);
-				log.log(Level.FINE, "End time updated.");
+				log.log(Level.FINE, MESSAGE_LOG_END_TIME_CHANGE);
 			}
 			Task deadline = new Task(taskNameStore, endDateStore, endTimeStore,
 					TaskType.DEADLINE);
 			
 			if (deadline.getDate().isEqual(THE_MYTH_DAY)) {
 				Display.setFeedBack(MESSAGE_EASTER_EGG);
+				log.log(Level.INFO, MESSAGE_LOG_EASTER_EGG);
 				return null;
 			}
-			log.log(Level.INFO, "Returning deadline Task to logic.");
+			log.log(Level.INFO, MESSAGE_LOG_DEADLINE);
 			return deadline;
 
 		} else if (taskTypeStore == TaskType.TODO 
@@ -456,13 +495,14 @@ public class AddStringParser implements Parser {
 					TaskType.TODO);
 			if (toDoAt.getDate().isEqual(THE_MYTH_DAY)) {
 				Display.setFeedBack(MESSAGE_EASTER_EGG);
+				log.log(Level.INFO, MESSAGE_LOG_EASTER_EGG);
 				return null;
 			}			
-			log.log(Level.INFO, "Returning to-do Task to logic.");
+			log.log(Level.INFO, MESSAGE_LOG_TODO);
 			return toDoAt;
 			
 		} else {
-			log.log(Level.WARNING, "Parser logic is broken.");
+			log.log(Level.WARNING, MESSAGE_LOG_PARSER_ERROR);
 			return null;
 		}
 	}
@@ -482,11 +522,11 @@ public class AddStringParser implements Parser {
 		setStartTime(null);
 		setEndTime(null);
 		setTaskType(null);
-		log.log(Level.FINE, "All stores in parser cleared.");
+		log.log(Level.FINE, MESSAGE_LOG_RESET);
 	}
 	
 	public boolean isSingleDateTime (String dateTime, Parser parser) {
-		assert dateTime != null: MESSAGE_ASSERTION_NULL;
+		assert dateTime != null : MESSAGE_ASSERTION_NULL;
 		assert parser != null : MESSAGE_ASSERTION_NULL;
 		
 		if (parser.parse(dateTime) != null) {

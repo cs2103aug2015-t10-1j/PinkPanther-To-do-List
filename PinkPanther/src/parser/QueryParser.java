@@ -12,9 +12,14 @@ import java.util.logging.Level;
 
 public class QueryParser implements Parser {
 	
+	// attributes
+	private SingleDateParser sdp;
+	
+	// indices and indicators
 	private static final int INDEX_KEYWORD = 0;
 	private static final int INDEX_INDEX = 1;
 	
+	// messages
 	private static final String MESSAGE_ASSERTION_NULL = 
 			"Logic error. Null input is passed in as parameter!";
 	private static final String MESSAGE_INVALID_COMMA= 
@@ -25,9 +30,26 @@ public class QueryParser implements Parser {
 			"Invalid index entered.";
 	private static final String MESSAGE_ASSERTION_COMMA = 
 			"Unaccounted case where #commas detected is not 1.";
-	
-	private static final SingleDateParser sdp = new SingleDateParser();
+	private static final String MESSAGE_LOG_INVALID_FORMAT = 
+			"Invalid input format. Returning null to logic.";
+	private static final String MESSAGE_LOG_INVALID_KEYWORD = 
+			"No valid keyword detected. Returning null to logic.";
+	private static final String MESSAGE_LOG_INVALID_INDEX = 
+			"Invalid index detected. Returning null to logic.";
+	private static final String MESSAGE_LOG_PARSE_SUCCESS = 
+			"Returning Pair to logic.";
+	private static final String MESSAGE_LOG_NON_NUMERICAL_INDEX = 
+			"Non numerical index detected in list of indices.";
+
+	// other constants
 	private static final Logger log = Logger.getLogger("QueryParser");
+	
+	/**
+	 * Constructor
+	 */
+	public QueryParser() {
+		sdp = new SingleDateParser();
+	}
 	
 	/**
 	 * Return a Pair of a date and an ArrayList of indices.
@@ -44,7 +66,7 @@ public class QueryParser implements Parser {
 		// there should only be 1 comma
 		if (userInfo.length != 2) {
 			Display.setFeedBack(MESSAGE_INVALID_COMMA);
-			log.log(Level.INFO, "Invalid input format. Returning null to logic.");
+			log.log(Level.INFO, MESSAGE_LOG_INVALID_FORMAT);
 			return null;
 		}
 		assert userInfo.length == 2 : MESSAGE_ASSERTION_COMMA;
@@ -54,15 +76,15 @@ public class QueryParser implements Parser {
 		
 		if (isValidKeyword(userInfo[INDEX_KEYWORD]) 
 				&& isValidIndex(userInfo[INDEX_INDEX], indexList)) {
-			log.log(Level.INFO, "Returning Pair to logic.");
+			log.log(Level.INFO, MESSAGE_LOG_PARSE_SUCCESS);
 			return new Pair<LocalDate, ArrayList<Integer>>(keyword, indexList);
 		} else if (!isValidKeyword(userInfo[INDEX_KEYWORD])) {
 			Display.setFeedBack(MESSAGE_INVALID_KEYWORD);
-			log.log(Level.INFO, "No keyword detected. Returning null to logic.");
+			log.log(Level.INFO, MESSAGE_LOG_INVALID_KEYWORD);
 			return null;
 		} else if (!isValidIndex(userInfo[INDEX_INDEX], indexList)) {
 			Display.setFeedBack(MESSAGE_INVALID_INDEX);
-			log.log(Level.INFO, "Invalid index detected. Returning null to logic.");
+			log.log(Level.INFO, MESSAGE_LOG_INVALID_INDEX);
 			return null;
 		}
 		return null;
@@ -80,7 +102,7 @@ public class QueryParser implements Parser {
 			try {
 				list.add(Integer.valueOf(listOfIndices[i]));
 			} catch (NumberFormatException e) {
-				log.log(Level.FINE, "Non numerical index detected in list of indices.");
+				log.log(Level.FINE, MESSAGE_LOG_NON_NUMERICAL_INDEX);
 				return null;
 			}
 		}	

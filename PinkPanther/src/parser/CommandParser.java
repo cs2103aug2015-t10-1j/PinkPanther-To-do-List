@@ -8,12 +8,22 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 /** 
- * Facade class for GUI and Logic*/
+ * Facade class for Logic*/
 public class CommandParser {
 	
-	private AddStringParser asp = new AddStringParser();
-	private QueryParser qp = new QueryParser();
-	private DateRangeParser drp = new DateRangeParser(asp);
+	// attributes
+	private AddStringParser asp;
+	private QueryParser qp;
+	private DateRangeParser drp;
+	
+	/**
+	 * Constructor
+	 */
+	public CommandParser() {
+		asp = new AddStringParser();
+		qp = new QueryParser();
+		drp = new DateRangeParser(asp);
+	}
 	
 	public Task createTask(String userInput){
 		Task task = asp.parse(userInput);
