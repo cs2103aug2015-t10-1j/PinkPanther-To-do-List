@@ -110,6 +110,14 @@ public class TaskManager {
 	
 	
 //-------------------------------Task List Modifiers ---------------------------------------
+	/**
+	 * Return true if a Task object is successfully added
+	 * Task object cannot be null
+	 * 
+	 * @param task	a Task object
+	 * @return	a boolean value
+	 */
+	
 	
 	public boolean addTask(Task task){
 		assert task != null : MESSAGE_ASSERTION_NULL_INPUT;
@@ -158,6 +166,13 @@ public class TaskManager {
 		}
 	}
 	
+	
+	/**
+	 * Delete a Task object from todoList
+	 * Task object cannot be null
+	 * 
+	 * @param task	a Task object
+	 */
 	public void deleteTask(Task task){
 		assert task != null : MESSAGE_ASSERTION_NULL_INPUT;
 		boolean isDone=task.getDoneStatus();
@@ -205,7 +220,14 @@ public class TaskManager {
 	
 // ------------------------------------- Task Query -----------------------------------------
 	
-	//Retrieves an ArrayList of task objects from todoList 
+	
+	/**
+	 * Return an ArrayList of Task objects from todoList
+	 * null is returned when commandContent is empty.
+	 * 
+	 * @param pair	a holder containing a LocalDate object and an ArrayList of integer
+	 * @return	an ArrayList of Task objects
+	 */
 	
 	public ArrayList<Task> searchTasks(Pair<LocalDate,ArrayList<Integer>>pair){
 		if(pair == null){
@@ -225,6 +247,7 @@ public class TaskManager {
 	}
 	
 	protected ArrayList<Task>searchMultipleTasksAtDate(LocalDate date,ArrayList<Integer>indexList){
+		assert indexList != null : MESSAGE_ASSERTION_NULL_INPUT;
 		ArrayList<Task>taskList = new ArrayList<Task>();
 		for(int index:indexList){
 			Task task = searchSingleTask(date,index);
