@@ -7,9 +7,14 @@ import org.junit.Test;
 
 import parser.SingleDateParser;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class SingleDateParserTest {
 
+	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE");
+	String dayTodayFull = LocalDate.now().getDayOfWeek().toString();
+	String dayToday = LocalDate.now().format(dtf);
+	
 	SingleDateParser sdp = new SingleDateParser();
 	
 	// Testing fixDate
@@ -89,11 +94,9 @@ public class SingleDateParserTest {
 	}
 	
 	@Test
-	// done on Sunday
-	// please change the sundays in this test to your current day
 	public void testParseTwoWordsNormal() {
 		String[] testInput = {"next week", "next month", "next year",
-				"this sunday", "next sun"};
+				"this " + dayTodayFull, "next "+ dayToday};
 		LocalDate[] expectedOutput = {LocalDate.now().plusWeeks(1), 
 				LocalDate.now().plusMonths(1), LocalDate.now().plusYears(1), 
 				LocalDate.now(), LocalDate.now().plusWeeks(1)};

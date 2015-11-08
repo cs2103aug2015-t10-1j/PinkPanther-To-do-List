@@ -9,12 +9,17 @@ import parser.AddStringParser;
 import parser.DateRangeParser;
 import common.Pair;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @SuppressWarnings("unchecked")
 public class DateRangeParserTest {
 
 	AddStringParser asp = new AddStringParser();
 	DateRangeParser drp = new DateRangeParser(asp);
+	
+	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE");
+	String dayTodayFull = LocalDate.now().getDayOfWeek().toString();
+	String dayToday = LocalDate.now().format(dtf);
 	
 	@Test
 	public void testDateRangeParsingPositive() {
@@ -75,8 +80,8 @@ public class DateRangeParserTest {
 	public void testDateRangeSingleDateParsingPositive() {
 		String[] testInput = {"toDAy", "nOw", "Tonight", "tomorrOW",
 				"next week", "next month", "next year",
-				"this suNday", "next sun", "28 Feb 2016", "4 March", 
-				"3 07 2015", "01 01", "14/Jul/2016", "5/September", 
+				"this " + dayTodayFull, "next " + dayToday, "28 Feb 2016", 
+				"4 March", "3 07 2015", "01 01", "14/Jul/2016", "5/September", 
 				"15/02/2015", "09/04", "20-May-14", "19-November", 
 				"13-08-2018", "9-3" };
 		LocalDate[] expectedOutputFirst = {LocalDate.now(), LocalDate.now(),
