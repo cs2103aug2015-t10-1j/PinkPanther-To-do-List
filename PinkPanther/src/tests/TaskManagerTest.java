@@ -40,7 +40,7 @@ public class TaskManagerTest {
 	}
 	
 	@Test
-	public void addTask_isSorted(){
+	public void addTaskIsSorted(){
 		Task task1 = new Task("submit developer guide",date,LocalTime.of(18, 30),TaskType.DEADLINE);
 		Task task2 = new Task("apply for scholarship",date,null,TaskType.TODO);
 		manager.addTask(task1);
@@ -63,19 +63,19 @@ public class TaskManagerTest {
 	}
 	
 	@Test
-	public void addTask_checkDuplicate_negative(){
+	public void addTaskCheckDuplicateNegative(){
 		Task task = new Task("watch star war movie",LocalDate.of(2015, 12, 15),null,TaskType.TODO);
 		assertEquals(manager.addTask(task),true);
 	}
 	
 	@Test
-	public void addTask_checkDuplicate_positive(){
+	public void addTaskCheckDuplicatePositive(){
 		Task task = new Task("submit report", date,LocalTime.of(19, 30),TaskType.DEADLINE);
 		assertEquals(manager.addTask(task),false);
 	}
 	
 	@Test
-	public void addTask_checkClash_positive(){
+	public void addTaskCheckClashPositive(){
 		Task task = new Task("another event", date,LocalTime.of(16, 0),date,LocalTime.of(17, 20));
 		manager.addTask(task);
 		assertEquals(task.getClash(),true);
@@ -83,7 +83,7 @@ public class TaskManagerTest {
 	}
 	
 	@Test
-	public void addTask_checkClash_negative(){
+	public void addTaskCheckClashNegative(){
 		Task task = new Task("another event", date,LocalTime.of(16, 0),date,LocalTime.of(17, 0));
 		manager.addTask(task);
 		assertEquals(task.getClash(),false);
@@ -91,7 +91,7 @@ public class TaskManagerTest {
 	}
 	
 	@Test
-	public void searchTasks_positive(){
+	public void searchTasksPositive(){
 		ArrayList<Integer> list1 = new ArrayList<Integer>(Arrays.asList(1));
 		ArrayList<Integer> list2 = new ArrayList<Integer>(Arrays.asList(1,2,3));
 		ArrayList<Integer> list3 = new ArrayList<Integer>(Arrays.asList(1,2,5));
@@ -113,7 +113,7 @@ public class TaskManagerTest {
 	}
 	
 	@Test
-	public void searchTasks_negative(){
+	public void searchTasksNegative(){
 		ArrayList<Integer> list1 = new ArrayList<Integer>(Arrays.asList(5));
 		Pair<LocalDate,ArrayList<Integer>> pair1 = new Pair<LocalDate,ArrayList<Integer>>(date,list1);
 		
@@ -123,7 +123,7 @@ public class TaskManagerTest {
 	}
 	
 	@Test
-	public void deleteTask_taskDeleted(){
+	public void deleteTaskTaskDeleted(){
 		Task task = manager.searchTasks(new Pair<LocalDate,ArrayList<Integer>>(date,
 				new ArrayList<Integer>(Arrays.asList(2)))).get(0);
 		manager.deleteTask(task);
@@ -132,7 +132,7 @@ public class TaskManagerTest {
 	}
 	
 	@Test
-	public void deleteTask_keyDeleted(){
+	public void deleteTaskKeyDeleted(){
 		LocalDate date1 = LocalDate.of(2015, 11, 10);
 		Task task = new Task("random event",date1,null,date1,null);
 		manager.addTask(task);
