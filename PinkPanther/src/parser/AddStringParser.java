@@ -46,6 +46,14 @@ public class AddStringParser implements Parser {
 				"You have entered invalid input that broke the program.";
 	private static final String MESSAGE_EASTER_EGG = 
 			"This day is too mythical for you to perform any tasks!";
+	private static final String MESSAGE_ASSERTION_NULL = 
+			 "Logic error. Null input is passed in as parameter!";
+	private static final String MESSAGE_ASSERTION_EMPTY_USER_INPUT = 
+			"Empty user input not fully accounted for!";
+	private static final String MESSAGE_ASSERTION_INVALID_INDEX =
+			"Invalid index entered! Pls refer to limits/max/min list of valid indices.";
+	private static final String MESSAGE_ASSERTION_NOT_CHRONOLOGICAL =
+			"Date or time range not fixed properly to ensure chronology.";
 	
 	private static SingleDateParser sdp = new SingleDateParser();
 	private static SingleTimeParser stp = new SingleTimeParser();
@@ -60,8 +68,9 @@ public class AddStringParser implements Parser {
 	 * @return	Task containing info from commandContent.
 	 */
 	public Task parse(String commandContent){
-		
 		clearStores();
+		assert commandContent != null : MESSAGE_ASSERTION_NULL;
+		
 		String[] userInfo = commandContent.split(",");
 		userInfo = Auxiliary.trimStringArray(userInfo);
 		
@@ -69,6 +78,8 @@ public class AddStringParser implements Parser {
 			Display.setFeedBack(MESSAGE_EMPTY_TASK);
 			return null;
 		}
+
+		assert !Auxiliary.isEmptyArray(userInfo) : MESSAGE_ASSERTION_EMPTY_USER_INPUT ;
 		
 		setTaskName(userInfo[INDEX_TASK_NAME]);
 		int validDateTimes = findValidDateTime(userInfo);
@@ -86,6 +97,8 @@ public class AddStringParser implements Parser {
 	}
 	
 	private int findValidDateTime(String [] possiblyDateTime) {
+		assert possiblyDateTime != null : MESSAGE_ASSERTION_NULL; 
+		
 		int dateCounter = 0;
 		int timeCounter = 0;
 		for (int i = INDEX_TASK_DETAIL; i < possiblyDateTime.length; i++) {
@@ -118,7 +131,8 @@ public class AddStringParser implements Parser {
 	 * @param dateTimeInfo	An input token from the user.
 	 * @return	The number of valid dates found in input token.
 	 */
-	protected int countValidDates(String dateTimeInfo) {
+	public int countValidDates(String dateTimeInfo) {
+		assert dateTimeInfo != null : MESSAGE_ASSERTION_NULL;
 		
 		// case: itself is a date
 		if (isSingleDateTime(dateTimeInfo, sdp)) {
@@ -165,7 +179,8 @@ public class AddStringParser implements Parser {
 	}
 	
 	private int countValidTimes (String dateTimeInfo) {
-		
+		assert dateTimeInfo != null : MESSAGE_ASSERTION_NULL;
+
 		// case: itself is a time
 		if (isSingleDateTime(dateTimeInfo, stp)) {
 			if (startTimeStore == null) {
@@ -210,6 +225,9 @@ public class AddStringParser implements Parser {
 	}
 	
 	private int findDuration(String delimiter, String dateTimes, int dateTimeIndicatorIndex) {
+		assert (dateTimeIndicatorIndex == 0 || dateTimeIndicatorIndex == 1) 
+			: MESSAGE_ASSERTION_INVALID_INDEX ;
+		
 		int delimOccurrence = dateTimes.length() - dateTimes.replaceAll(delimiter, "").length();
 		if (delimOccurrence == delimiter.length()) {
 			String[] dateTimeTokens = dateTimes.split(delimiter);
@@ -238,6 +256,8 @@ public class AddStringParser implements Parser {
 				int dayOfFirstDate = Integer.parseInt(firstDate);
 				if (dayOfFirstDate <= laterDate.getDayOfMonth()) {
 					earlierDate = laterDate.withDayOfMonth(dayOfFirstDate);
+				assert !earlierDate.isAfter(laterDate) 
+					: MESSAGE_ASSERTION_NOT_CHRONOLOGICAL;
 				}
 			}
 		}
@@ -252,6 +272,8 @@ public class AddStringParser implements Parser {
 				earlierDate = earlierDate.withYear(laterDate.getYear());
 				if (earlierDate.isAfter(laterDate)) {
 					earlierDate = earlierDate.minusYears(1);
+				assert !earlierDate.isAfter(laterDate) 
+					: MESSAGE_ASSERTION_NOT_CHRONOLOGICAL;
 				}
 				
 			// if later date's year or both dates' years were appended
@@ -260,10 +282,14 @@ public class AddStringParser implements Parser {
 					laterDate = laterDate.withYear(earlierDate.getYear());
 				if (laterDate.isBefore(earlierDate)) {
 					laterDate = laterDate.plusYears(1);
+				assert !earlierDate.isAfter(laterDate) 
+					: MESSAGE_ASSERTION_NOT_CHRONOLOGICAL;
 				}
 			}
 			
 			// check if chronological
+			// date can still be non chronological parser did not append 
+			// and check the years of the input
 			if (!earlierDate.isAfter(laterDate)) {
 				setStartDate(earlierDate);
 				setEndDate(laterDate);
@@ -299,6 +325,8 @@ public class AddStringParser implements Parser {
 			if (!earlierTime.isAfter(laterTime)) {
 				setStartTime(earlierTime);
 				setEndTime(laterTime);
+				assert !earlierTime.isAfter(laterTime) 
+					: MESSAGE_ASSERTION_NOT_CHRONOLOGICAL;
 				return true;
 			}
 		}
@@ -321,8 +349,8 @@ public class AddStringParser implements Parser {
 				return addFloating(taskFullDetails);
 			}
 			
-//			assert startDateStore != null;
-//			assert endDateStore != null;
+			assert startDateStore != null : MESSAGE_ASSERTION_NULL;
+			assert endDateStore != null : MESSAGE_ASSERTION_NULL;
 			
 			if (startDateStore.equals(endDateStore)) {
 				return addSingleDated();
@@ -430,7 +458,9 @@ public class AddStringParser implements Parser {
 		setTaskType(null);
 	}
 	
-	private boolean isSingleDateTime (String dateTime, Parser parser) {
+	public boolean isSingleDateTime (String dateTime, Parser parser) {
+		assert dateTime != null: MESSAGE_ASSERTION_NULL;
+		assert parser != null : MESSAGE_ASSERTION_NULL;
 		
 		if (parser.parse(dateTime) != null) {
 			return true;

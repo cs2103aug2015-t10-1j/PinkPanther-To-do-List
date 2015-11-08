@@ -18,6 +18,9 @@ public class SingleDateParser implements Parser {
 	private static final int INDEX_DAY = 0;
 	private static final int INDEX_MONTH = 1;
 	
+	private static final String MESSAGE_ASSERTION_NULL = 
+			 "Logic error. Null input is passed in as parameter!";
+	
 	private static final String[] DATE_DELIMITERS = {"/", "-", " "};
 	private static final List<String> DATE_FORMAT_SLASH = 
 			Collections.unmodifiableList(Arrays.asList("d/M/yy", "dd/M/yy",
@@ -67,6 +70,7 @@ public class SingleDateParser implements Parser {
 	 * @return	LocalDate object of the date that was entered.
 	 */
 	public LocalDate parse(String date) {
+		assert date != null : MESSAGE_ASSERTION_NULL;
 		
 		// case: dates that contain a certain keyword
 		if (isDateIndicator(date)) {
@@ -92,6 +96,8 @@ public class SingleDateParser implements Parser {
 	}
 	
 	private LocalDate compareDateFormat(String dateString, String pattern) {
+		assert pattern != null : MESSAGE_ASSERTION_NULL;
+		
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
 			LocalDate date = LocalDate.parse(dateString, formatter);
@@ -113,6 +119,8 @@ public class SingleDateParser implements Parser {
 	 * 			reflecting whether the year was appended.
 	 */
 	public Pair<String, Boolean> fixDate(String date) {
+		assert date != null : MESSAGE_ASSERTION_NULL;
+		
 		String fixedDate;
 		boolean hasAppendedYear = false;
 		
@@ -179,6 +187,8 @@ public class SingleDateParser implements Parser {
 	private LocalDate twoWordIndicatorParser (String date) {
 		String precursor = Auxiliary.getFirstWord(date).toUpperCase();
 		String content = Auxiliary.removeFirstWord(date).toUpperCase().trim();
+		assert content != null : MESSAGE_ASSERTION_NULL;
+		
 		if (content.length() > 1) {
 			content = content.substring(0,1) + content.substring(1).toLowerCase();
 		}	
@@ -226,6 +236,7 @@ public class SingleDateParser implements Parser {
 	}
 	
 	private DayOfWeek compareDayFormat(String dateString, String pattern) {
+		assert pattern != null : MESSAGE_ASSERTION_NULL;
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
 			DayOfWeek day = DayOfWeek.from(formatter.parse(dateString));

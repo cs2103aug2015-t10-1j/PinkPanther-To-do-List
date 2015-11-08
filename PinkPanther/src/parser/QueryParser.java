@@ -13,6 +13,17 @@ public class QueryParser implements Parser {
 	private static final int INDEX_KEYWORD = 0;
 	private static final int INDEX_INDEX = 1;
 	
+	private static final String MESSAGE_ASSERTION_NULL = 
+			"Logic error. Null input is passed in as parameter!";
+	private static final String MESSAGE_INVALID_COMMA= 
+			"Invalid input format. Please enter only 1 comma.";
+	private static final String MESSAGE_INVALID_KEYWORD = 
+			"Invalid keyword or date entered.";
+	private static final String MESSAGE_INVALID_INDEX =
+			"Invalid index entered.";
+	private static final String MESSAGE_ASSERTION_COMMA = 
+			"Unaccounted case where #commas detected is not 1.";
+	
 	private static final SingleDateParser sdp = new SingleDateParser();
 	
 	/**
@@ -24,14 +35,16 @@ public class QueryParser implements Parser {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Pair parse(String commandContent) {
+		assert commandContent != null : MESSAGE_ASSERTION_NULL;
 		String[] userInfo = commandContent.split(",");
 		userInfo = Auxiliary.trimStringArray(userInfo);
 		
 		// there should only be 1 comma
 		if (userInfo.length != 2) {
-			Display.setFeedBack("Invalid input format. Please enter only 1 comma.");
+			Display.setFeedBack(MESSAGE_INVALID_COMMA);
 			return null;
 		}
+		assert userInfo.length == 2 : MESSAGE_ASSERTION_COMMA;
 		
 		LocalDate keyword = generateKeyword(userInfo[INDEX_KEYWORD]);
 		ArrayList<Integer> indexList = generateIndexList(userInfo[INDEX_INDEX]);
@@ -40,10 +53,10 @@ public class QueryParser implements Parser {
 				&& isValidIndex(userInfo[INDEX_INDEX], indexList)) {
 			return new Pair<LocalDate, ArrayList<Integer>>(keyword, indexList);
 		} else if (!isValidKeyword(userInfo[INDEX_KEYWORD])) {
-			Display.setFeedBack("Invalid keyword or date entered.");
+			Display.setFeedBack(MESSAGE_INVALID_KEYWORD);
 			return null;
 		} else if (!isValidIndex(userInfo[INDEX_INDEX], indexList)) {
-			Display.setFeedBack("Invalid index entered.");
+			Display.setFeedBack(MESSAGE_INVALID_INDEX);
 			return null;
 		}
 		return null;
@@ -54,6 +67,7 @@ public class QueryParser implements Parser {
 	}
 	
 	private ArrayList<Integer> generateIndexList(String userInfo) {
+		assert userInfo != null : MESSAGE_ASSERTION_NULL;
 		String[] listOfIndices = userInfo.split(" ");
 		ArrayList<Integer> list = new ArrayList<Integer>();
 		for (int i = INDEX_KEYWORD; i < listOfIndices.length; i++) {

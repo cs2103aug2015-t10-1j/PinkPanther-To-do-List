@@ -11,6 +11,9 @@ public class DateRangeParser implements Parser {
 	private static final int SINGLE_DATE_TIME_FOUND = 1;
 	private static final int DATE_TIME_RANGE_FOUND = 2;
 	
+	private static final String MESSAGE_ASSERTION_NULL = 
+			 "Logic error. Null input is passed in as parameter!";
+	
 	public DateRangeParser(AddStringParser asp) {
 		this.asp = asp;
 	}
@@ -25,9 +28,14 @@ public class DateRangeParser implements Parser {
 	 */
 	public Pair<LocalDate, LocalDate> parse(String commandContent) {
 		asp.clearStores();
+		assert commandContent != null : MESSAGE_ASSERTION_NULL;
+		
 		int validDates = asp.countValidDates(commandContent);
 		if (validDates == SINGLE_DATE_TIME_FOUND) {
-			return new Pair<LocalDate, LocalDate>(asp.getStartDate(), asp.getStartDate()); 
+			if (asp.getStartDate() != null) {
+				return new Pair<LocalDate, LocalDate>(asp.getStartDate(), asp.getStartDate());
+			}
+			return new Pair<LocalDate, LocalDate>(asp.getEndDate(), asp.getEndDate()); 
 		} else if (validDates == DATE_TIME_RANGE_FOUND) {
 			return new Pair<LocalDate, LocalDate>(asp.getStartDate(), asp.getEndDate());
 		} 

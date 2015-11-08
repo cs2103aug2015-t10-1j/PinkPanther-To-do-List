@@ -12,6 +12,9 @@ import java.util.List;
 
 public class SingleTimeParser implements Parser{
 	
+	private static final String MESSAGE_ASSERTION_NULL = 
+			 "Logic error. Null input is passed in as parameter!";
+	
 	private static final List<String> TIME_FORMATS= 
 			Collections.unmodifiableList(Arrays.asList("h:mma", "hh:mma", 
 					"h.mma", "hh.mma", "hmma", "hhmma", "H:mm", "HH:mm", 
@@ -35,6 +38,7 @@ public class SingleTimeParser implements Parser{
 	 * @return	LocalTime object of the time that was entered.
 	 */
 	public LocalTime parse(String time) {
+		assert time != null : MESSAGE_ASSERTION_NULL;
 		time = time.toUpperCase();
 		
 		// case: times that contain a certain keyword
@@ -57,6 +61,7 @@ public class SingleTimeParser implements Parser{
 	}
 	
 	private LocalTime compareTimeFormat(String timeString, String pattern) {
+		assert pattern != null : MESSAGE_ASSERTION_NULL;
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
 			LocalTime time = LocalTime.parse(timeString, formatter);
