@@ -25,6 +25,10 @@ public class TaskManager {
 	private SortedMap<LocalDate,ArrayList<Task>>doneList;
 	private SortedMap<LocalDate,ArrayList<Task>>todoList;
 	
+	private static final String MESSAGE_RETRIEVE_TASK = "called storage to retrieve task list";
+	private static final String MESSAGE_TASK_DO_NOT_EXIST = "Task or tasks do not exist";
+	private static final String MESSAGE_DATE_DO_NOT_EXIST = "You do not have any task on this date";
+	
 	public TaskManager(StorageControl storage){
 		doneList = new TreeMap<LocalDate,ArrayList<Task>>();
 		doneList.put(THE_MYTH_DAY, new ArrayList<Task>());
@@ -35,7 +39,7 @@ public class TaskManager {
 		storage.setStorageEnvironmentNormal();
 		addMultipleTasks(storage.loadTaskList(true));
 		addMultipleTasks(storage.loadTaskList(false));
-		log.log(Level.FINE, "called storage to retrieve task list");
+		log.log(Level.FINE, MESSAGE_RETRIEVE_TASK);
 	}
 	
 // --------------------------------------Getters------------------------------------------
@@ -223,7 +227,7 @@ public class TaskManager {
 			}
 		}
 		if(taskList.size() == 0){
-			Display.setFeedBack("Task or tasks do not exist");
+			Display.setFeedBack(MESSAGE_TASK_DO_NOT_EXIST);
 			return null;
 		}
 		return taskList;
@@ -251,7 +255,7 @@ public class TaskManager {
 			return new ArrayList<Task>(todoList.get(THE_MYTH_DAY));
 		}
 		else if(!todoList.containsKey(date)){
-			Display.setFeedBack("You do not have any task on this date");
+			Display.setFeedBack(MESSAGE_DATE_DO_NOT_EXIST);
 			return null;
 		}
 		else{

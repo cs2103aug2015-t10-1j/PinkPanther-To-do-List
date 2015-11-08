@@ -25,6 +25,16 @@ public class Controller {
 	private StorageControl storage;
 	private ProgramState state;
 	
+	private static final String MESSAGE_CHANGE_VIEW = "Input 'view normal' to return to main calendar.";
+	private static final String MESSAGE_INVALID_DATE_RANGE = "Invalid view range specified!";
+	private static final String MESSAGE_CREATE_TASK = "call parser to create a task";
+	private static final String MESSAGE_CREATE_DATE_INDEX_PAIR = "called parser to create date index pair";
+	private static final String MESSAGE_CREATE_DATE_PAIR = "called parser to create date pair";
+	private static final String MESSAGE_EDIT = "Edit the task in text box, then press ENTER";
+	private static final String MESSAGE_UNRECOGNISED_COMMAND = "Unrecognized command. Press F2 for Help Screen";
+	private static final String MESSAGE_CLEAR = "All tasks have been cleared";
+	private static final String MESSAGE_INPUT_INSTRUCTION = "Input command into the field above";
+	
 	public Controller(){
 		storage = new StorageControl();
 		manager = new TaskManager(storage);
@@ -65,7 +75,7 @@ public class Controller {
 			Task task = parser.createTask(command);
 			if(task!=null){
 				taskPair.setSecond(parser.createTask(command));
-				log.log(Level.FINE, "called parser to create a task");
+				log.log(Level.FINE, MESSAGE_CREATE_TASK);
 				EditCommand edit = new EditCommand(manager);
 				if(edit.execute(taskPair)){
 					commandStack.addCommand(edit);
@@ -82,7 +92,7 @@ public class Controller {
 					if(add.execute(parser.createTask(parameterString))){
 						commandStack.addCommand(add);
 					}	
-					log.log(Level.FINE, "called parser to create a task");
+					log.log(Level.FINE, MESSAGE_CREATE_TASK);
 					break;
 				case "edit":
 					ArrayList<Task>taskList = manager.searchTasks(parser.query(parameterString));
@@ -90,11 +100,11 @@ public class Controller {
 						Task unmodified = taskList.get(0);
 						taskPair.setFirst(unmodified);
 						state.setInputBoxText(unmodified.toString());
-						Display.setFeedBack("Edit the task in text box, then press ENTER.");
+						Display.setFeedBack(MESSAGE_EDIT);
 					} else{
 						state.setInputBoxText(command);
 					}
-					log.log(Level.FINE, "called parser to create date index pair");
+					log.log(Level.FINE, MESSAGE_CREATE_DATE_INDEX_PAIR);
 					break;
 				case "done":
 					DoneCommand done = new DoneCommand(manager);
@@ -103,7 +113,7 @@ public class Controller {
 					} else{
 						state.setInputBoxText(command);
 					}
-					log.log(Level.FINE, "called parser to create date index pair");
+					log.log(Level.FINE, MESSAGE_CREATE_DATE_INDEX_PAIR);
 					break;
 				case "del":
 				case "delete":
@@ -113,13 +123,13 @@ public class Controller {
 					} else{
 						state.setInputBoxText(command);
 					}
-					log.log(Level.FINE, "called parser to create date index pair");
+					log.log(Level.FINE, MESSAGE_CREATE_DATE_INDEX_PAIR);
 					break;	
 				case "search":
 					state.setFLoatingList(manager.getMatchedFloating(parameterString));
 					state.setTodoList(manager.getMatchedDated(parameterString));
 					state.setTitle("         ● Searching: [" + parameterString + "] ●");
-					Display.setFeedBack("Input 'view normal' to return to main calendar.");
+					Display.setFeedBack(MESSAGE_CHANGE_VIEW);
 					canSave = false;
 					break;
 				case "view":
@@ -148,10 +158,10 @@ public class Controller {
 					manager.clearAllTasks();
 					state.setFLoatingList(manager.getFloating(false));
 					state.setTodoList(manager.getDated(false));
-					Display.setFeedBack("All tasks have been cleared");
+					Display.setFeedBack(MESSAGE_CLEAR);
 					break;
 				default:
-					Display.setFeedBack("Unrecognized command. Press F2 for Help Screen.");
+					Display.setFeedBack(MESSAGE_UNRECOGNISED_COMMAND);
 					state.setInputBoxText(command);
 			}
 		}
@@ -174,25 +184,25 @@ public class Controller {
 			state.setFLoatingList(manager.getFloating(true));
 			state.setTodoList(manager.getDated(true));
 			state.setTitle("              ● Viewing: Done Tasks ●");
-			Display.setFeedBack("Input 'view normal' to return to main calendar.");
+			Display.setFeedBack(MESSAGE_CHANGE_VIEW);
 		} else if(mode.equals("normal") || mode.equals("norm")){
 			state.setFLoatingList(manager.getFloating(false));
 			state.setTodoList(manager.getTwoWeek());
 			state.setTitle("                      Your Calendar");
-			Display.setFeedBack("Input command into the field above");
+			Display.setFeedBack(MESSAGE_INPUT_INSTRUCTION);
 		} else if(mode.equals("all")){
 			state.setFLoatingList(manager.getFloating(false));
 			state.setTodoList(manager.getDated(false));
 			state.setTitle("              ● Viewing: All Tasks ●");
-			Display.setFeedBack("Input 'view normal' to return to main calendar.");
+			Display.setFeedBack(MESSAGE_CHANGE_VIEW);
 		} else if(mode.equals("previous") || mode.equals("prev") || mode.equals("overdue")){
 			state.setFLoatingList(null);
 			state.setTodoList(manager.getDatedPrevious());
 			state.setTitle("              ● Viewing: Overdue Tasks ●");
-			Display.setFeedBack("Input 'view normal' to return to main calendar.");
+			Display.setFeedBack(MESSAGE_CHANGE_VIEW);
 		} else if(parser.queryDateRange(mode) != null){
 			Pair<LocalDate,LocalDate>datePair = parser.queryDateRange(mode);
-			log.log(Level.FINE, "called parser to create date pair");
+			log.log(Level.FINE, MESSAGE_CREATE_DATE_PAIR);
 			state.setFLoatingList(null);
 			state.setTodoList(manager.getDateRange(datePair.getFirst(), datePair.getSecond()));
 			String dateRange = datePair.getFirst().toString();
@@ -204,9 +214,9 @@ public class Controller {
 				state.setTitle("● Viewing: " + dateRange + " ●");
 			
 			}
-			Display.setFeedBack("Input 'view normal' to return to main calendar.");
+			Display.setFeedBack(MESSAGE_CHANGE_VIEW);
 		} else{
-			Display.setFeedBack("Invalid view range specified!");
+			Display.setFeedBack(MESSAGE_INVALID_DATE_RANGE);
 			canView = false;
 		}
 		return canView;
