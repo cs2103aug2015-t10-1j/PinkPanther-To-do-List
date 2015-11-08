@@ -26,12 +26,12 @@ public class TaskBox extends StackPane{
 	private static int POSITION_DEFAULT_RIGHT_ALIGNED_X_COORD = 2;
 	private static int SIZE_PADDING_GRID_H = 5;
 	private static int SIZE_PADDING_GRID_V = 0;
-	private static int SIZE_PADDING_TIMEBOX_V_GAP = 5;
+	private static int SIZE_PADDING_TIMEBOX_V_GAP = 10;
 	
 	//These settings help set the font and text to align properly within the grid
 	private static String DEFAULT_FONT_NAME = "Tahoma";
 	private static int FONTSIZE_TASK_NAME = 20;
-	private static int FONTSIZE_TIMESPAN_ARROW = 25;
+	private static int FONTSIZE_TIMESPAN_ARROW = 15;
 	private static String OFFSET_TASK_NAME = "     ";
 	private static String OFFSET_DEADLINE_INDICATOR = "by ";
 	private static String OFFSET_TRUNCATED_DOTS = "...";
