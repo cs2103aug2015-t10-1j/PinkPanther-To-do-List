@@ -75,7 +75,7 @@ public class ConsoleInputColorizer {
 		        	String taskInfo = inputString.split(DELIMITER_STRING_SPLIT_SPACE, 
 		        			PARAMETER_STRING_SPLIT_TWO)[INDEX_SECOND_WORD];	
 		        	if (taskInfo != null) {
-		        		textChunks.addAll(breakTaskIntoFlowPane(addParser.parse(taskInfo)));
+		        		textChunks.addAll(breakTaskIntoFlowPane(controller.parseNewTask(taskInfo)));
 		        	}
 	        	}
 	        	break;
