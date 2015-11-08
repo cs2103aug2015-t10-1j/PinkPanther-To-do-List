@@ -4,7 +4,6 @@ package logic;
 import common.Pair;
 import common.ProgramState;
 import common.Task;
-import parser.AddStringParser;
 import parser.CommandParser;
 import storage.StorageControl;
 
@@ -25,7 +24,6 @@ public class Controller {
 	private CommandParser parser;
 	private StorageControl storage;
 	private ProgramState state;
-	private AddStringParser addParser;
 	
 	private static final String MESSAGE_CHANGE_VIEW = "Input 'view normal' to return to main calendar.";
 	private static final String MESSAGE_INVALID_DATE_RANGE = "Invalid view range specified!";
@@ -45,7 +43,6 @@ public class Controller {
 		commandStack = new CommandStack();
 		parser = new CommandParser();
 		state = new ProgramState();
-		addParser = new AddStringParser();
 		initializeProgramState();
 	}
 	
@@ -233,7 +230,7 @@ public class Controller {
 	 * @param taskInformation is the task string without 'add' in front.
 	 */
 	public Task parseNewTask(String taskInformation){
-		return addParser.parse(taskInformation);
+		return parser.createTask(taskInformation);
 	}
 	
 }

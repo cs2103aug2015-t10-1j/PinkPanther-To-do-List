@@ -69,7 +69,6 @@ public class ConsoleInputColorizer {
 	        switch (wordList[0].toLowerCase()) {
 	        	
 	        case "add":
-	        	AddStringParser addParser = new AddStringParser();
 	        	textChunks.add(customize(INDICATOR_ADDING, Color.GREEN));
 	        	if (wordList.length > 1) {
 		        	String taskInfo = inputString.split(DELIMITER_STRING_SPLIT_SPACE, 
