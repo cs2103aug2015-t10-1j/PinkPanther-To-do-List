@@ -420,14 +420,14 @@ public class PrettyDisplay extends Application {
     }
     
     //Changes the text currently in user's input box
-    public void setUserTextField(String text) {
+    private void setUserTextField(String text) {
     	if(userTextField!=null) {
     		userTextField.setText(text);
     		userTextField.positionCaret(text.length());
     	}
     }
     
-    public void clearTextField() {
+    private void clearTextField() {
     	userTextField.clear();
     }
 	
@@ -623,16 +623,16 @@ public class PrettyDisplay extends Application {
 		}
 	}
 
-	public void closeWindow() {
+	private void closeWindow() {
         logger.log(Level.INFO, "Exit command called");
 		Platform.exit();
 	}
 
-	public int getCurrentStageHeight() {
+	private int getCurrentStageHeight() {
 		return currentStageHeight;
 	}
 
-	public void setCurrentStageHeight(int currentStageHeight) {
+	private void setCurrentStageHeight(int currentStageHeight) {
 		this.currentStageHeight = currentStageHeight;
 	}
 
