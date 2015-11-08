@@ -14,6 +14,8 @@ import parser.*;
 
 public class ConsoleInputColorizer {
 	private String DELIMITER_SPLIT_NAME = "[ ]+";
+	
+	//These strings are the feedbacks
 	private String INDICATOR_ADDING = "Adding \u25b6  ";
 	private String INDICATOR_DELETE = "Delete  \u25b6  ";
 	private String INDICATOR_DONE = "  Done  \u25b6  ";
@@ -24,6 +26,7 @@ public class ConsoleInputColorizer {
 	private String INDICATOR_EXIT = "Exit command detected: Program will close if you press ENTER.";
 	private String INDICATOR_NOTFOUND = " [Valid task date and index not detected yet]";
 	private String INDICATOR_TRUNCATED_DOTS = "...";
+	
 	private int INDEX_SECOND_WORD = 1;
 	private int PARAMETER_STRING_SPLIT_TWO = 2;
 	private String DELIMITER_STRING_SPLIT_SPACE = " ";
@@ -33,10 +36,8 @@ public class ConsoleInputColorizer {
 	private int TRIM_LENGTH_TASK_NAME_NON_BROKEN = 55;
 	
 	private String[] wordList = {};
-	public ConsoleInputColorizer() {}
 	private String inputString;
 	private Controller controller;
-	CommandParser parser = new CommandParser();
 	
 	/* 
 	 * Gets string input and splits it into an array of strings, then calls colorize()
