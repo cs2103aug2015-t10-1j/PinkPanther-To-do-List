@@ -1,4 +1,4 @@
-/* @@author Brayton */
+/* @@author A0125250W */
 
 package storage;
 
@@ -48,6 +48,7 @@ public class TaskStorage {
 	
 	// Assertion Messages
 	private static final String MESSAGE_ASSERTION_NULL_PARAMETER = "StorageControl error. Null input passed in as parameter!";
+	private static final String MESSAGE_ASSERTION_INVALID_NUMBER_OF_FILES = "Invalid number of files in current directory";
 	
 	protected TaskStorage(File directory) {
 		taskLists = new ArrayList<File>();
@@ -65,6 +66,7 @@ public class TaskStorage {
 	private void setLatestFiles(File currentDirectory) {
 		assert currentDirectory != null : MESSAGE_ASSERTION_NULL_PARAMETER;
 		File[] listOfFiles = currentDirectory.listFiles();
+		assert (listOfFiles.length == 2 || listOfFiles.length == 0) : MESSAGE_ASSERTION_INVALID_NUMBER_OF_FILES;
 		logger.log(Level.FINE, MESSAGE_LOG_START_SETLATESTFILES);
 		
 		if (listOfFiles.length == 0) {

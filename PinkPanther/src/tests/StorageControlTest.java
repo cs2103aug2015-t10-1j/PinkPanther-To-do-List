@@ -1,4 +1,4 @@
-/* @@author Brayton */
+/* @@author A0125250W */
 
 package tests;
 
@@ -13,7 +13,6 @@ import org.junit.Test;
 
 import com.google.gson.Gson;
 
-import common.Task;
 import storage.StorageControl;
 
 public class StorageControlTest {
