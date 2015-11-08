@@ -23,7 +23,7 @@ public class SingleDateParserTest_NaturalLanguage {
 		assertEquals(dateParser.parse(listOfWords[3]), LocalDate.now().plusDays(1));
 	}
 	
-	@Test
+	//@Test
 	public void test_Parse_TestCase2() { //As tested on 30 September 2015, Wednesday
 		SingleDateParser dateParser = new SingleDateParser();
 		/*String[] listOfWords = {"This", "Next"};
@@ -48,7 +48,7 @@ public class SingleDateParserTest_NaturalLanguage {
 		assertEquals(dateParser.parse("next sunday"), LocalDate.now().plusDays(11));	
 	}
 	
-	@Test
+	//@Test
 	public void test_Parse_TestCase3() { //As tested on 30 September 2015, Wednesday
 		SingleDateParser dateParser = new SingleDateParser();
 		/*String[] listOfWords = {"This", "Next"};
@@ -59,5 +59,18 @@ public class SingleDateParserTest_NaturalLanguage {
 		assertEquals(dateParser.parse("next week"), LocalDate.now().plusWeeks(1));	
 		assertEquals(dateParser.parse("next month"), LocalDate.now().plusMonths(1));
 		assertEquals(dateParser.parse("next year"), LocalDate.now().plusYears(1));
+	}
+	
+	@Test
+	/* @@author A0122545M */
+	public void test_Parser_PastDates() {
+		//these test cases should 'gracefully fail' as parser does not
+		//recognize natural language of past dates
+		
+		SingleDateParser dateParser = new SingleDateParser();
+
+		assertEquals(dateParser.parse("yesterday"), null);	
+		assertEquals(dateParser.parse("last month"), null);
+		assertEquals(dateParser.parse("last year"), null);
 	}
 }

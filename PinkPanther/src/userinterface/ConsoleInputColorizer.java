@@ -95,12 +95,17 @@ public class ConsoleInputColorizer {
 	        	if (wordList.length > 1) {
 		        	String taskInfo = inputString.split(" ", 2)[1];	
 		        	if (taskInfo != null) {
-		        		Task task = controller.findTask(taskInfo);
-		        		if (task != null) {
-		        			textChunks.addAll(breakTaskIntoFlowPane(task));
-		        		} else {
-				        	textChunks.add(customize(" [Specify task date and index]", Color.RED));
-			        	}
+		        		try{
+			        		Task task = controller.findTask(taskInfo);
+			        		if (task != null) {
+			        			textChunks.addAll(breakTaskIntoFlowPane(task));
+			        		} else {
+					        	textChunks.add(customize(" [Specify task date and index]", Color.RED));
+				        	}
+		        		} catch (NullPointerException e){
+		        			
+		        		}
+		        		
 		        	}
 	        	}
 	        break;

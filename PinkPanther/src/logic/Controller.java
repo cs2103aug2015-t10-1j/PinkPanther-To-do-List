@@ -65,7 +65,6 @@ public class Controller {
 	
 	
 	public void addCommand(String command){
-    	System.out.println("Called mainController to add command: " + command);
 		String commandString = Auxiliary.getFirstWord(command);
 		String parameterString = Auxiliary.removeFirstWord(command);
 		boolean canSave = true;
@@ -188,7 +187,7 @@ public class Controller {
 		} else if(mode.equals("normal") || mode.equals("norm")){
 			state.setFLoatingList(manager.getFloating(false));
 			state.setTodoList(manager.getTwoWeek());
-			state.setTitle("                      Your Calendar");
+			state.setTitle("                         To-Do List");
 			Display.setFeedBack(MESSAGE_INPUT_INSTRUCTION);
 		} else if(mode.equals("all")){
 			state.setFLoatingList(manager.getFloating(false));
