@@ -22,7 +22,7 @@ public class AddCommand implements Command{
 		}
 		
 	    if(!manager.addTask(task)){
-	    	Display.setFeedBack("You have already added this task");
+	    	Display.setFeedBack("You have already added this task.");
 	    	return false;
 	    }
 	    

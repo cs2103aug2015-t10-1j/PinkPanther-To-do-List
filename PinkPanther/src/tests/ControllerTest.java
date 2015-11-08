@@ -41,7 +41,7 @@ public class ControllerTest {
 	public void addTaskNegative(){
 		controller.addCommand("add do homework, 2 to 5pm, 7 nov");
 		assertEquals(state.getTodoList().get(date).size(),2);
-		assertEquals(Display.showFeedBack(),"You have already added this task");
+		assertEquals(Display.showFeedBack(),"You have already added this task.");
 	}
 	
 	@Test
@@ -57,7 +57,7 @@ public class ControllerTest {
 	public void deleteTaskNegative(){
 		controller.addCommand("del 7 nov,3");
 		assertEquals(state.getTodoList().get(date).size(),2);
-		String feedbackString = "Task or tasks do not exist";
+		String feedbackString = "Task or tasks do not exist.";
 		assertEquals(Display.showFeedBack(),feedbackString);
 	}
 	
@@ -73,21 +73,21 @@ public class ControllerTest {
 		controller.addCommand("del 7 nov,4 5");
 		assertEquals(state.getTodoList().containsKey(date),true);
 		assertEquals(state.getTodoList().get(date).size(),2);
-		assertEquals(Display.showFeedBack(),"Task or tasks do not exist");
+		assertEquals(Display.showFeedBack(),"Task or tasks do not exist.");
 	}
 	
 	@Test
 	public void editTaskPositive(){
 		controller.addCommand("edit 7 nov,1");
 		assertEquals(state.getInputBoxText(),"do homework, 2.00PM to 5.00PM, 7/11/15");
-		assertEquals(Display.showFeedBack(),"Edit the task in text box, then press ENTER");
+		assertEquals(Display.showFeedBack(),"Edit the task in text box, then press ENTER.");
 	}
 	
 	@Test
 	public void editTaskNegative(){
 		controller.addCommand("edit 7 nov,3");
 		assertEquals(state.getInputBoxText(),"edit 7 nov,3");
-		assertEquals(Display.showFeedBack(),"Task or tasks do not exist");
+		assertEquals(Display.showFeedBack(),"Task or tasks do not exist.");
 	}
 	
 	@Test
@@ -123,7 +123,7 @@ public class ControllerTest {
 	public void doneTaskNegative(){
 		controller.addCommand("done 7 nov,3");
 		assertEquals(state.getInputBoxText(),"done 7 nov,3");
-		assertEquals(Display.showFeedBack(),"Task or tasks do not exist");
+		assertEquals(Display.showFeedBack(),"Task or tasks do not exist.");
 	}
 	
 	@Test
@@ -148,7 +148,7 @@ public class ControllerTest {
 	public void randomWord(){
 		controller.addCommand("what is a quantum computer");
 		assertEquals(state.getInputBoxText(),"what is a quantum computer");
-		assertEquals(Display.showFeedBack(),"Unrecognized command. Press F2 for Help Screenvie ");
+		assertEquals(Display.showFeedBack(),"Unrecognized command. Press F2 for Help Screen.");
 	}
 	
 	@Test

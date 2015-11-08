@@ -119,7 +119,7 @@ public class TaskManagerTest {
 		
 		ArrayList<Task> output1 = manager.searchTasks(pair1);
 		assertEquals(output1,null);
-		assertEquals(Display.showFeedBack(),"Task or tasks do not exist");
+		assertEquals(Display.showFeedBack(),"Task or tasks do not exist.");
 	}
 	
 	@Test

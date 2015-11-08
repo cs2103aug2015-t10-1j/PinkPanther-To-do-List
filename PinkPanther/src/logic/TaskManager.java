@@ -25,9 +25,9 @@ public class TaskManager {
 	private SortedMap<LocalDate,ArrayList<Task>>doneList;
 	private SortedMap<LocalDate,ArrayList<Task>>todoList;
 	
-	private static final String MESSAGE_RETRIEVE_TASK = "called storage to retrieve task list";
-	private static final String MESSAGE_TASK_DO_NOT_EXIST = "Task or tasks do not exist";
-	private static final String MESSAGE_DATE_DO_NOT_EXIST = "You do not have any task on this date";
+	private static final String MESSAGE_RETRIEVE_TASK = "called storage to retrieve task list.";
+	private static final String MESSAGE_TASK_DO_NOT_EXIST = "Task or tasks do not exist.";
+	private static final String MESSAGE_DATE_DO_NOT_EXIST = "You do not have any task on this date.";
 	
 	private static final String MESSAGE_ASSERTION_NULL_INPUT = "Null input detected";
 	
@@ -41,7 +41,7 @@ public class TaskManager {
 		storage.setStorageEnvironmentNormal();
 		addMultipleTasks(storage.loadTaskList(true));
 		addMultipleTasks(storage.loadTaskList(false));
-		log.log(Level.FINE, MESSAGE_RETRIEVE_TASK);
+		log.log(Level.INFO, MESSAGE_RETRIEVE_TASK);
 	}
 	
 // --------------------------------------Getters------------------------------------------
