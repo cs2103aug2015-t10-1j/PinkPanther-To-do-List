@@ -57,7 +57,7 @@ public class ControllerTest {
 	public void deleteTaskNegative(){
 		controller.addCommand("del 7 nov,3");
 		assertEquals(state.getTodoList().get(date).size(),2);
-		String feedbackString = "Task or tasks do not exist.";
+		String feedbackString = "Error : Task or tasks do not exist.";
 		assertEquals(Display.showFeedBack(),feedbackString);
 	}
 	
@@ -73,7 +73,7 @@ public class ControllerTest {
 		controller.addCommand("del 7 nov,4 5");
 		assertEquals(state.getTodoList().containsKey(date),true);
 		assertEquals(state.getTodoList().get(date).size(),2);
-		assertEquals(Display.showFeedBack(),"Task or tasks do not exist.");
+		assertEquals(Display.showFeedBack(),"Error : Task or tasks do not exist.");
 	}
 	
 	@Test
@@ -87,7 +87,7 @@ public class ControllerTest {
 	public void editTaskNegative(){
 		controller.addCommand("edit 7 nov,3");
 		assertEquals(state.getInputBoxText(),"edit 7 nov,3");
-		assertEquals(Display.showFeedBack(),"Task or tasks do not exist.");
+		assertEquals(Display.showFeedBack(),"Error : Task or tasks do not exist.");
 	}
 	
 	@Test
@@ -123,7 +123,7 @@ public class ControllerTest {
 	public void doneTaskNegative(){
 		controller.addCommand("done 7 nov,3");
 		assertEquals(state.getInputBoxText(),"done 7 nov,3");
-		assertEquals(Display.showFeedBack(),"Task or tasks do not exist.");
+		assertEquals(Display.showFeedBack(),"Error : Task or tasks do not exist.");
 	}
 	
 	@Test

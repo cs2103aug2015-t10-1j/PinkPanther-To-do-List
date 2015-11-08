@@ -119,8 +119,26 @@ public class TaskManagerTest {
 		
 		ArrayList<Task> output1 = manager.searchTasks(pair1);
 		assertEquals(output1,null);
-		assertEquals(Display.showFeedBack(),"Task or tasks do not exist.");
+		assertEquals(Display.showFeedBack(),"Error : Task or tasks do not exist.");
 	}
+	
+	@Test
+	public void searchAllTasksAtDatePositive(){
+		Pair<LocalDate,ArrayList<Integer>> pair1 = new Pair<LocalDate,ArrayList<Integer>>(date,null);
+		
+		ArrayList<Task> output1 = manager.searchTasks(pair1);
+		assertEquals(output1.size(),3);
+	}
+	
+	@Test
+	public void searchAllTasksAtDateNegative(){
+		LocalDate date1 = LocalDate.of(2015,1,12);
+		Pair<LocalDate,ArrayList<Integer>> pair1 = new Pair<LocalDate,ArrayList<Integer>>(date1,null);
+		
+		ArrayList<Task> output1 = manager.searchTasks(pair1);
+		assertEquals(output1,null);
+	}
+	
 	
 	@Test
 	public void deleteTaskTaskDeleted(){
