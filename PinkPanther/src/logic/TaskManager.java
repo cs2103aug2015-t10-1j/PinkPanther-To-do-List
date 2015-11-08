@@ -29,6 +29,8 @@ public class TaskManager {
 	private static final String MESSAGE_TASK_DO_NOT_EXIST = "Task or tasks do not exist";
 	private static final String MESSAGE_DATE_DO_NOT_EXIST = "You do not have any task on this date";
 	
+	private static final String MESSAGE_ASSERTION_NULL_INPUT = "Null input detected";
+	
 	public TaskManager(StorageControl storage){
 		doneList = new TreeMap<LocalDate,ArrayList<Task>>();
 		doneList.put(THE_MYTH_DAY, new ArrayList<Task>());
@@ -110,6 +112,7 @@ public class TaskManager {
 //-------------------------------Task List Modifiers ---------------------------------------
 	
 	public boolean addTask(Task task){
+		assert task != null : MESSAGE_ASSERTION_NULL_INPUT;
 		boolean isDone = task.getDoneStatus();
 		SortedMap<LocalDate,ArrayList<Task>>taskList = isDone?doneList:todoList;
 		
@@ -149,12 +152,14 @@ public class TaskManager {
 	}
 	
 	public void addMultipleTasks(ArrayList<Task>taskList){
+		assert taskList != null : MESSAGE_ASSERTION_NULL_INPUT;
 		for(Task task:taskList){
 			addTask(task);
 		}
 	}
 	
 	public void deleteTask(Task task){
+		assert task != null : MESSAGE_ASSERTION_NULL_INPUT;
 		boolean isDone=task.getDoneStatus();
 		SortedMap<LocalDate,ArrayList<Task>>taskList = isDone?doneList:todoList;
 		
@@ -184,6 +189,7 @@ public class TaskManager {
 	}
 	
 	public void deleteMultipleTasks(ArrayList<Task>taskList){
+		assert taskList != null : MESSAGE_ASSERTION_NULL_INPUT;
 		for(Task task:taskList){
 			deleteTask(task);
 		}
@@ -267,7 +273,7 @@ public class TaskManager {
 	
 	protected static void sortTaskAtDate(SortedMap<LocalDate,ArrayList<Task>>taskList,
 			LocalDate date){
-		
+		assert (taskList != null && date != null) : MESSAGE_ASSERTION_NULL_INPUT;
 		ArrayList<Task>tasks = taskList.get(date);
 		
 		//sort by time or name
@@ -295,6 +301,7 @@ public class TaskManager {
 	
 	protected static boolean addTaskAtDate(SortedMap<LocalDate,ArrayList<Task>>map,
 			LocalDate date,Task input){
+		assert (map != null && date != null && input != null) : MESSAGE_ASSERTION_NULL_INPUT;
 		
 		if(!map.containsKey(date)){
 			map.put(date, new ArrayList<Task>());
@@ -311,6 +318,7 @@ public class TaskManager {
 	
 	protected static void removeTaskAtDate(SortedMap<LocalDate,ArrayList<Task>>map,
 			LocalDate date,Task task){
+		assert (map != null && date != null && task != null) : MESSAGE_ASSERTION_NULL_INPUT;
 		
 		map.get(date).remove(task);
 		if(map.get(date).isEmpty() && !date.isEqual(THE_MYTH_DAY)){
@@ -320,6 +328,8 @@ public class TaskManager {
 	
 	//Update if timing of one event task clashes with that of another event task
 	protected static void updateClashStatus(ArrayList<Task>taskList){
+		assert taskList != null : MESSAGE_ASSERTION_NULL_INPUT;
+		
 		boolean isDone = taskList.get(0).getDoneStatus();
 		ArrayList<Task>eventList = new ArrayList<Task>();
 		for(Task task:taskList){
