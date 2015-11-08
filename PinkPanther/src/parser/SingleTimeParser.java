@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SingleTimeParser implements Parser{
 	
@@ -22,6 +24,8 @@ public class SingleTimeParser implements Parser{
 	private static final String[] TIME_INDICATORS = {"TONIGHT", "NOW", "MORNING",
 			"AFTERNOON", "NIGHT"};
 	
+	private static final Logger log = Logger.getLogger("SingleTimeParser");
+	
 	private static ArrayList<String> validTimeFormats;
 	
 	public SingleTimeParser() {
@@ -29,7 +33,6 @@ public class SingleTimeParser implements Parser{
 		validTimeFormats.addAll(TIME_FORMATS);
 	}
 
-	@SuppressWarnings("unchecked")
 	/**
 	 * Return a time based on user input.
 	 * null is returned when user input is not a time.
@@ -44,6 +47,7 @@ public class SingleTimeParser implements Parser{
 		// case: times that contain a certain keyword
 		for (int i = 0; i < TIME_INDICATORS.length; i++) {
 			if (time.equals(TIME_INDICATORS[i])) {
+				log.log(Level.FINE, "Successful parsing. Returning a LocalTime.");
 				return parseTimeWord(time);
 			}
 		}
@@ -52,11 +56,13 @@ public class SingleTimeParser implements Parser{
 		for (String timeFormat : validTimeFormats) {
 			LocalTime parsedTime = compareTimeFormat(time, timeFormat);
 			if (parsedTime != null) {
+				log.log(Level.FINE, "Successful parsing. Returning a LocalTime.");
 				return parsedTime;
 			}
 		}
 		
 		// case: not a time
+		log.log(Level.FINE, "Not a time. Returning null.");
 		return null;
 	}
 	
@@ -67,7 +73,7 @@ public class SingleTimeParser implements Parser{
 			LocalTime time = LocalTime.parse(timeString, formatter);
 			return time;
 		} catch (DateTimeException e) {
-			// do logging
+			log.log(Level.FINE, "Not a time. Returning null.");
 			return null;
 		}
 

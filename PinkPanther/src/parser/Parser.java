@@ -2,5 +2,5 @@
 package parser;
 
 public interface Parser {
-	public <T>T parse(String input);
+	public Object parse(String input);
 }
