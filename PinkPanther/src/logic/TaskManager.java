@@ -39,7 +39,7 @@ public class TaskManager {
 		todoList.put(THE_MYTH_DAY, new ArrayList<Task>());
 		
 		
-		storage.setStorageEnvironmentNormal();
+		storage.setEnvironment();
 		addMultipleTasks(storage.loadTaskList(true));
 		addMultipleTasks(storage.loadTaskList(false));
 		log.log(Level.INFO, MESSAGE_RETRIEVE_TASK);

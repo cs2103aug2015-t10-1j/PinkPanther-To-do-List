@@ -76,7 +76,7 @@ public class StorageControl {
 	 * @param Void.
 	 * @return	String of the current directory's filepath
 	 */
-	public String setStorageEnvironmentNormal() {
+	public String setEnvironment() {
 		directory = getLatestDirectory();
 		logger.log(Level.FINE, MESSAGE_LOG_START_SET_ENVIRONMENT);
 		
