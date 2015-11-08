@@ -62,8 +62,8 @@ public class PrettyDisplay extends Application {
     private static int YPOS_USER_FEEDBACK_DEFAULT = 2;
     private static int YPOS_TASK_INDICATOR_BOX = 3;
     private static int XPOS_TASK_INDICATOR_BOX = 55;
-    private static int PARAMETER_CALENDAR_GRID_PADDING = 10;
     private static int PARAMETER_GRID_GAP = 1;
+    private static Insets PADDING_CALENDAR_GRID = new Insets(10, 10, 10, 10);
     private static Insets PADDING_MAIN_GRID = new Insets(25, 25, 25, 25);
     private static int WIDTH_PROGRAM_DEFAULT = 720;
     private static int POSITION_DEFAULT_X_LEFT = 0;
@@ -74,6 +74,10 @@ public class PrettyDisplay extends Application {
     private static float AMOUNT_SCROLL_PER_CLICK = 0.25f;
     private static int OFFSET_X_POS_CLASH_INDICATOR = 3;
     private static int OFFSET_Y_POS_CLASH_INDICATOR = 1;
+    private static int STEP_PROGRAM_HEIGHT_CHANGE = 30;
+    private static int HEIGHT_MINIMUM_PROGRAM = 210;
+    private static int HGAP_MINI_TASK_INDICATORS = 10;
+    private static int VGAP_MINI_TASK_INDICATORS = 5;
     
     //Enumerator and state to note which state the program is in
     private enum CurrentState {VIEWING_CALENDAR, VIEWING_HELPSCREEN, VIEWING_HIDDEN}
@@ -131,8 +135,7 @@ public class PrettyDisplay extends Application {
         calendarGrid.setAlignment(Pos.TOP_LEFT);
         calendarGrid.setHgap(PARAMETER_GRID_GAP);
         calendarGrid.setVgap(PARAMETER_GRID_GAP);
-        calendarGrid.setPadding(new Insets(PARAMETER_CALENDAR_GRID_PADDING, 
-        		PARAMETER_CALENDAR_GRID_PADDING, PARAMETER_CALENDAR_GRID_PADDING, PARAMETER_CALENDAR_GRID_PADDING));
+        calendarGrid.setPadding(PADDING_CALENDAR_GRID);
         populateGrid(calendarGrid);	
     }
     //calendarScrollPane holds mainCalendarGrid
@@ -313,8 +316,8 @@ public class PrettyDisplay extends Application {
 				}
 				
 				GridPane miniTaskIndicators = new GridPane();
-				miniTaskIndicators.setHgap(10);
-				miniTaskIndicators.setVgap(5);
+				miniTaskIndicators.setHgap(HGAP_MINI_TASK_INDICATORS);
+				miniTaskIndicators.setVgap(VGAP_MINI_TASK_INDICATORS);
 				currDayXPos = XPOS_TASK_INDICATOR_BOX;
 	    		for (int i=0; i<3; i++) {
 	    			if (i==0 && totalDeadline != 0) {
@@ -359,8 +362,8 @@ public class PrettyDisplay extends Application {
 	    	}
 
 			GridPane miniTaskIndicators = new GridPane();
-			miniTaskIndicators.setHgap(10);
-			miniTaskIndicators.setVgap(5);
+			miniTaskIndicators.setHgap(HGAP_MINI_TASK_INDICATORS);
+			miniTaskIndicators.setVgap(VGAP_MINI_TASK_INDICATORS);
 			IndexBox blankColoredBox = new IndexBox(totalFloat, TaskType.FLOATING);
 			miniTaskIndicators.add(blankColoredBox, XPOS_TASK_INDICATOR_BOX, dayTextYPos);
 			grid.add(miniTaskIndicators, POSITION_DEFAULT_X_CENTRE, dayTextYPos);
@@ -446,15 +449,15 @@ public class PrettyDisplay extends Application {
         	attemptToggleHelpScreenView();
         }
         else if (ke.getCode().equals(KeyCode.PAGE_UP) || ke.getCode().equals(KeyCode.F6)) {
-        	if (getCurrentStageHeight() > 210) {
-        		setCurrentStageHeight(getCurrentStageHeight() - 30);
+        	if (getCurrentStageHeight() > HEIGHT_MINIMUM_PROGRAM) {
+        		setCurrentStageHeight(getCurrentStageHeight() - STEP_PROGRAM_HEIGHT_CHANGE);
         	}
         	setScrollPaneHeight();
         	setStageHeight();
         }
         else if (ke.getCode().equals(KeyCode.PAGE_DOWN) || ke.getCode().equals(KeyCode.F5)) {
-        	if (getCurrentStageHeight() < HEIGHT_STAGE_DEFAULT) {
-        		setCurrentStageHeight(getCurrentStageHeight() + 30);
+        	if (getCurrentStageHeight() < HEIGHT_STAGE_DEFAULT + STEP_PROGRAM_HEIGHT_CHANGE) {
+        		setCurrentStageHeight(getCurrentStageHeight() + STEP_PROGRAM_HEIGHT_CHANGE);
         	}
         	setScrollPaneHeight();
         	setStageHeight();
