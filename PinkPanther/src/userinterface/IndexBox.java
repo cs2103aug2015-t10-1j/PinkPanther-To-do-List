@@ -11,37 +11,44 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 public class IndexBox extends StackPane{
+	private static int FONTSIZE_DEFAULT = 13;
+	private static Color[] COLOR_ARRAY_BOX = {(Color.web("D652FF")), Color.web("6495ED"), 
+			(Color.web("51D444")), (Color.web("D4573A")), (Color.POWDERBLUE)};
+
+	private static int BOX_WIDTH_HEIGHT_DEFAULT = 20;
+	private static int BOX_ARC_SIZE_DEFAULT = 4;
+	private static float BOX_STROKE_SIZE_DEFAULT = 2.0f;
+	private static String FONT_TYPE = "Tahoma";
+	
 	
 	//Constructor for colored box according to task type
 	public IndexBox(int index, TaskType inputTaskType) {
-		Color[] col = {(Color.web("D652FF")), Color.web("6495ED"), 
-				(Color.web("51D444")), (Color.web("D4573A")), (Color.POWDERBLUE)};
 		
 		Rectangle box = new Rectangle();
-		box.setWidth(20);
-		box.setHeight(20);
-		box.setArcWidth(4);
-		box.setArcHeight(4);               
+		box.setWidth(BOX_WIDTH_HEIGHT_DEFAULT);
+		box.setHeight(BOX_WIDTH_HEIGHT_DEFAULT);
+		box.setArcWidth(BOX_ARC_SIZE_DEFAULT);
+		box.setArcHeight(BOX_ARC_SIZE_DEFAULT);               
 		box.setStroke(Color.DIMGRAY);
-		box.setStrokeWidth(2.0f);
+		box.setStrokeWidth(BOX_STROKE_SIZE_DEFAULT);
 
 		switch (inputTaskType) {
 		case FLOATING:
-			box.setFill(col[0]);
+			box.setFill(COLOR_ARRAY_BOX[0]);
 			break;
 		case EVENT:
-			box.setFill(col[1]);
+			box.setFill(COLOR_ARRAY_BOX[1]);
 			break;
 		case TODO:
-			box.setFill(col[2]);
+			box.setFill(COLOR_ARRAY_BOX[2]);
 			break;
 		default:
-			box.setFill(col[3]);
+			box.setFill(COLOR_ARRAY_BOX[3]);
 			break;
 		}
 		
 		Text text = new Text(Integer.toString(index));
-		text.setFont(Font.font("Tahoma", FontWeight.BOLD, 13));
+		text.setFont(Font.font(FONT_TYPE, FontWeight.BOLD, FONTSIZE_DEFAULT));
 		text.setTextAlignment(TextAlignment.CENTER);
 		text.setFill(Color.WHITE);
 		
@@ -53,39 +60,37 @@ public class IndexBox extends StackPane{
 	}
 	
 	//Constructor for RED index box
-	public IndexBox (int index) {		
+	public IndexBox () {		
 		Rectangle box = new Rectangle();
-		box.setWidth(20);
-		box.setHeight(20);
-		box.setArcWidth(4);
-		box.setArcHeight(4);               
+		box.setWidth(BOX_WIDTH_HEIGHT_DEFAULT);
+		box.setHeight(BOX_WIDTH_HEIGHT_DEFAULT);
+		box.setArcWidth(BOX_ARC_SIZE_DEFAULT);
+		box.setArcHeight(BOX_ARC_SIZE_DEFAULT);               
 		box.setStroke(Color.DIMGRAY);
-		box.setStrokeWidth(2.0f);
-
-		Text text = new Text(Integer.toString(index));
-		text.setFont(Font.font("Tahoma", FontWeight.BOLD, 15));
+		box.setStrokeWidth(BOX_STROKE_SIZE_DEFAULT);
+		
+		Text text = new Text();
+		text.setFont(Font.font(FONT_TYPE, FontWeight.BOLD, FONTSIZE_DEFAULT));
 		text.setTextAlignment(TextAlignment.CENTER);
 		text.setFill(Color.WHITE);
-		
-		if (index==0) {
-			text.setText("!");
-			box.setFill(Color.RED);
-		}
+		text.setText("!");
+		box.setFill(Color.RED);
+
 		this.getChildren().addAll(box, text);
 	}
 	
 	//Constructor for non-digit IndexBox
 	public IndexBox (String textInput) {
 		Rectangle box = new Rectangle();
-		box.setWidth(20);
-		box.setHeight(20);
-		box.setArcWidth(4);
-		box.setArcHeight(4);               
+		box.setWidth(BOX_WIDTH_HEIGHT_DEFAULT);
+		box.setHeight(BOX_WIDTH_HEIGHT_DEFAULT);
+		box.setArcWidth(BOX_ARC_SIZE_DEFAULT);
+		box.setArcHeight(BOX_ARC_SIZE_DEFAULT);               
 		box.setStroke(Color.DIMGRAY);
-		box.setStrokeWidth(2.0f);
+		box.setStrokeWidth(BOX_STROKE_SIZE_DEFAULT);
 
 		Text text = new Text(textInput);
-		text.setFont(Font.font("Tahoma", FontWeight.BOLD, 13));
+		text.setFont(Font.font(FONT_TYPE, FontWeight.BOLD, FONTSIZE_DEFAULT));
 		text.setTextAlignment(TextAlignment.CENTER);
 		text.setFill(Color.WHITE);
 
