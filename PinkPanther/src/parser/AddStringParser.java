@@ -20,8 +20,10 @@ public class AddStringParser implements Parser {
 	private LocalTime startTimeStore;
 	private LocalTime endTimeStore;
 	private TaskType taskTypeStore;
+	private SingleDateParser sdp;
+	private SingleTimeParser stp;
 	
-	// indexes and indicators
+	// indices and indicators
 	private static final int INDEX_TASK_NAME = 0;
 	private static final int INDEX_TASK_DETAIL = 1;
 	private static final int INDEX_DATE = 0;
@@ -81,9 +83,16 @@ public class AddStringParser implements Parser {
 	private static final String MESSAGE_LOG_RESET = 
 			"All stores in parser cleared.";
 	
-	private static SingleDateParser sdp = new SingleDateParser();
-	private static SingleTimeParser stp = new SingleTimeParser();
+	// other constants
 	private static final Logger log = Logger.getLogger("AddStringParser");
+	
+	/**
+	 * Constructor
+	 */
+	public AddStringParser() {
+		sdp = new SingleDateParser();
+		stp = new SingleTimeParser();
+	}
 	
 	/**
 	 * Return a Task based on commandContent.

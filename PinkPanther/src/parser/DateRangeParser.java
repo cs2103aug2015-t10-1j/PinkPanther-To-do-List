@@ -8,11 +8,14 @@ import java.util.logging.Level;
 
 public class DateRangeParser implements Parser {
 	
+	// attributes
 	private AddStringParser asp;
 	
+	// indices and indicators
 	private static final int SINGLE_DATE_TIME_FOUND = 1;
 	private static final int DATE_TIME_RANGE_FOUND = 2;
 	
+	// messages
 	private static final String MESSAGE_ASSERTION_NULL = 
 			 "Logic error. Null input is passed in as parameter!";
 	private static final String MESSAGE_LOG_LEGIT_DATE = 
@@ -24,8 +27,12 @@ public class DateRangeParser implements Parser {
 	private static final String MESSAGE_LOG_PARSE_FAIL = 
 			"No dates detected. Returning null to logic.";
 	
+	// other constants
 	private static final Logger log = Logger.getLogger("DateRangeParser");
 	
+	/**
+	 * Constructor
+	 */
 	public DateRangeParser(AddStringParser asp) {
 		this.asp = asp;
 	}

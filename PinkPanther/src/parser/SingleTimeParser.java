@@ -14,6 +14,10 @@ import java.util.logging.Logger;
 
 public class SingleTimeParser implements Parser{
 	
+	// Class attributes
+	private static ArrayList<String> validTimeFormats;
+	
+	// messages
 	private static final String MESSAGE_ASSERTION_NULL = 
 			 "Logic error. Null input is passed in as parameter!";
 	private static final String MESSAGE_LOG_PARSE_SUCCESS = 
@@ -23,6 +27,7 @@ public class SingleTimeParser implements Parser{
 	private static final String MESSAGE_LOG_INVALID_FORMAT = 
 			"Not an accepted format of time. Returning null.";
 	
+	// word/format lists
 	private static final List<String> TIME_FORMATS= 
 			Collections.unmodifiableList(Arrays.asList("h:mma", "hh:mma", 
 					"h.mma", "hh.mma", "hmma", "hhmma", "H:mm", "HH:mm", 
@@ -30,9 +35,8 @@ public class SingleTimeParser implements Parser{
 	private static final String[] TIME_INDICATORS = {"TONIGHT", "NOW", "MORNING",
 			"AFTERNOON", "NIGHT"};
 	
+	// other constants
 	private static final Logger log = Logger.getLogger("SingleTimeParser");
-	
-	private static ArrayList<String> validTimeFormats;
 	
 	public SingleTimeParser() {
 		validTimeFormats = new ArrayList<String>();

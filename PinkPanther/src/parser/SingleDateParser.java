@@ -17,9 +17,15 @@ import java.util.logging.Logger;
 
 public class SingleDateParser implements Parser {
 	
+	// Class attributes
+	private static ArrayList<String> validDateFormats;
+	private static ArrayList<String> validDayFormats;
+	
+	// indices and indicators
 	private static final int INDEX_DAY = 0;
 	private static final int INDEX_MONTH = 1;
 	
+	// messages
 	private static final String MESSAGE_ASSERTION_NULL = 
 			 "Logic error. Null input is passed in as parameter!";
 	private static final String MESSAGE_LOG_PARSE_SUCCESS = 
@@ -35,6 +41,7 @@ public class SingleDateParser implements Parser {
 	private static final String MESSAGE_LOG_DATE_NOT_FIXED =
 			"Date has not been fixed.";
 	
+	// word/format lists
 	private static final String[] DATE_DELIMITERS = {"/", "-", " "};
 	private static final List<String> DATE_FORMAT_SLASH = 
 			Collections.unmodifiableList(Arrays.asList("d/M/yy", "dd/M/yy",
@@ -53,14 +60,11 @@ public class SingleDateParser implements Parser {
 		    		"d MMM yyyy", "dd MMM yyyy", "d MMMM yyyy", "dd MMMM yyyy"));
 	private static final List<String> DAY_FORMAT = 
 			Collections.unmodifiableList(Arrays.asList("EEE", "EEEE"));
-	
 	private static final String[] DATE_INDICATORS_ONE = {"TONIGHT", "NOW", "TODAY",
 			"TOMORROW",};
 	
+	// other constants
 	private static final Logger log = Logger.getLogger("SingleDateParser");
-	
-	private static ArrayList<String> validDateFormats;
-	private static ArrayList<String> validDayFormats;
 	
 	public SingleDateParser() {
 		validDateFormats = new ArrayList<String>();

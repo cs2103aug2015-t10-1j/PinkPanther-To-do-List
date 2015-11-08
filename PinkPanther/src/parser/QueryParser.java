@@ -12,9 +12,14 @@ import java.util.logging.Level;
 
 public class QueryParser implements Parser {
 	
+	// attributes
+	private SingleDateParser sdp;
+	
+	// indices and indicators
 	private static final int INDEX_KEYWORD = 0;
 	private static final int INDEX_INDEX = 1;
 	
+	// messages
 	private static final String MESSAGE_ASSERTION_NULL = 
 			"Logic error. Null input is passed in as parameter!";
 	private static final String MESSAGE_INVALID_COMMA= 
@@ -35,9 +40,16 @@ public class QueryParser implements Parser {
 			"Returning Pair to logic.";
 	private static final String MESSAGE_LOG_NON_NUMERICAL_INDEX = 
 			"Non numerical index detected in list of indices.";
-	
-	private static final SingleDateParser sdp = new SingleDateParser();
+
+	// other constants
 	private static final Logger log = Logger.getLogger("QueryParser");
+	
+	/**
+	 * Constructor
+	 */
+	public QueryParser() {
+		sdp = new SingleDateParser();
+	}
 	
 	/**
 	 * Return a Pair of a date and an ArrayList of indices.
