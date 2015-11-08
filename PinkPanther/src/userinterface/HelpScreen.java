@@ -21,6 +21,7 @@ public class HelpScreen extends ScrollPane{
 	private static int FONT_SIZE_COMMANDS_TEXTS = 25;
 	private static int FONT_SIZE_SHORTCUTS = 13;
 
+	//These coordinates help place objects correctly in the scene
 	private static int X_POS_SCENE_TITLE = 2;
 	private static int Y_POS_SCENE_TITLE = 1;
 	private static int X_POS_TEXT_IN_GRID = 4;
@@ -41,19 +42,17 @@ public class HelpScreen extends ScrollPane{
 	private static float SIZE_STROKE_WIDTHS = 2.0f;
 	private static int MULTIPLIER_BOX_TO_TEXT_SIZE = 10;
 	
+	//These dimensions size the individual rows of information
 	private int HEIGHT_ENTIRE_BOX = 30;
 	private int ARC_ENTIRE_BOX = 4;
 	private static Color FONT_COLOR_DEFAULT = Color.DIMGRAY;
-	
 
+	//These coordinates help set window to be of correct size
 	private int WIDTH_PREFERRED_WINDOW = 1080;
 	private int HEIGHT_PREFERRED_WINDOW = 1060;
 	private int H_PADDING_HELPSCREEN = 5;
 	private int V_PADDING_HELPSCREEN = 7;
 	private Insets INSET_GRID_DEFAULT = new Insets(10, 10, 10, 10);
-	
-	private Color[] COLORS_ARRAY_STACKPANE_BOX = {(Color.RED), Color.web("D1D2D4"), 
-			(Color.web("D1D2D4")), (Color.web("D4573A")), (Color.POWDERBLUE)};
 	
 	GridPane grid;
 	int currentYPosition = 3;
@@ -389,7 +388,7 @@ public class HelpScreen extends ScrollPane{
 		box.setArcHeight(ARC_ENTIRE_BOX);               
 		box.setStroke(FONT_COLOR_DEFAULT);
 		box.setStrokeWidth(SIZE_STROKE_WIDTHS);
-		box.setFill(COLORS_ARRAY_STACKPANE_BOX[1]);
+		box.setFill(Color.LIGHTGREY);
 
 		Text text = new Text(boxText);
 		text.setFont(Font.font(FONT_TYPE_DEFAULT, FontWeight.BOLD, FONT_SIZE_SHORTCUTS));
