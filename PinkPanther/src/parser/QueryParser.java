@@ -23,7 +23,7 @@ public class QueryParser implements Parser {
 	private static final String MESSAGE_ASSERTION_NULL = 
 			"Logic error. Null input is passed in as parameter!";
 	private static final String MESSAGE_INVALID_COMMA= 
-			"Invalid input format. Please enter only 1 comma.";
+			"Invalid input format.";
 	private static final String MESSAGE_INVALID_KEYWORD = 
 			"Invalid keyword or date entered.";
 	private static final String MESSAGE_INVALID_INDEX =

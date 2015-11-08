@@ -82,8 +82,8 @@ public class AddStringParserTest {
 				"whatever, 4 to 5 jan 2016, 2-4am",
 				"feed cats, today, next week, 10am, 1733"};
 		String[] expectedDetails = {"something, 2.00PM to 3.00PM, " + dateToday, 
-				"whatever, 2.00AM, 4/1/16, 4.00AM, 5/1/16",
-				"feed cats, 10.00AM, " + dateToday + ", 5.33PM, " + dateNextWeek};
+				"whatever, 2.00AM to 4.00AM, 4/1/16 to 5/1/16",
+				"feed cats, 10.00AM to 5.33PM, " + dateToday + " to " + dateNextWeek};
 		for (int i = 0; i < taskContents.length; i++) {
 			Task actualTask = asp.parse(taskContents[i]);
 			Task expectedTask = new Task(expectedDetails[i]);

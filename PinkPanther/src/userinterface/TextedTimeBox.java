@@ -33,8 +33,7 @@ public class TextedTimeBox extends StackPane{
 		box.setArcWidth(20);
 		box.setArcHeight(20);
 
-        Color textColor = Color.DIMGRAY;
-        box.setFill(textColor.deriveColor(0, 1.2, 1, 0.6));
+        box.setFill(Color.DIMGRAY.deriveColor(0, 1.2, 1, 0.6));
         
         return box;
      } 

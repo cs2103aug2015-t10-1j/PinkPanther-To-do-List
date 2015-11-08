@@ -31,10 +31,10 @@ public class PrettyDisplay extends Application {
 	//Variables to help track current state of GUI
     private double currentScrollYPos = 0;
     private boolean isTruncatedMode = false;
-    private int currentStageHeight = DEFAULT_STAGE_HEIGHT;
+    private int currentStageHeight = HEIGHT_STAGE_DEFAULT;
     
     //Instantiated objects that GUI uses and needs to point to at various instances
-	Text scenetitle = new Text(DEFAULT_SCENE_TITLE);
+	Text sceneTitle = new Text(DEFAULT_SCENE_TITLE);
     Controller mainController;
     GridPane calendarGrid;
     GridPane programMainGrid;
@@ -51,14 +51,29 @@ public class PrettyDisplay extends Application {
     private static String DEFAULT_SCENE_TITLE = "                         To-Do List";
     private static String STRING_INVALID_COMMAND = "Unrecognized command. Press PAGE_UP for Help Screen.";
     private static String STRING_DEFAULT_FEEDBACK = "Input command into the field below";
+    private static String STRING_DEFAULT_PROGRAM_TITLE = "PinkPanther: The best to-do list";
+    private static String STRING_LOGO_DIRECTORY = "PPLogo.png";
     
-    //Default values for objects' positions in program window
-    private static int DEFAULT_STAGE_HEIGHT = 1020;
-    private static int DEFAULT_STAGE_WIDTH = 1080;
-    private static int DEFAULT_USER_INPUT_YPOS = 5;
-    private static int DEFAULT_USER_FEEDBACK_YPOS = 2;
+    //Default values for objects' positions and sizes in program window
+    private static int HEIGHT_STAGE_DEFAULT = 1020;
+    private static int OFFSET_SCREEN_PROGRAM_BUFFER = 10;
+    private static int WIDTH_STAGE_DEFAULT = 1080;
+    private static int YPOS_USER_INPUT_DEFAULT = 5;
+    private static int YPOS_USER_FEEDBACK_DEFAULT = 2;
+    private static int YPOS_TASK_INDICATOR_BOX = 3;
+    private static int XPOS_TASK_INDICATOR_BOX = 55;
     private static int PARAMETER_CALENDAR_GRID_PADDING = 10;
     private static int PARAMETER_GRID_GAP = 1;
+    private static Insets PADDING_MAIN_GRID = new Insets(25, 25, 25, 25);
+    private static int WIDTH_PROGRAM_DEFAULT = 720;
+    private static int POSITION_DEFAULT_X_LEFT = 0;
+    private static int POSITION_DEFAULT_X_CENTRE = 1;
+    private static int POSITION_DEFAULT_Y_FIRST_ITEM = 0;
+    private static int HEIGHT_HIDDEN_CALENDAR = 200;
+    private static int FONTSIZE_SCENE_TITLE = 33;
+    private static float AMOUNT_SCROLL_PER_CLICK = 0.25f;
+    private static int OFFSET_X_POS_CLASH_INDICATOR = 3;
+    private static int OFFSET_Y_POS_CLASH_INDICATOR = 1;
     
     //Enumerator and state to note which state the program is in
     private enum CurrentState {VIEWING_CALENDAR, VIEWING_HELPSCREEN, VIEWING_HIDDEN}
@@ -84,8 +99,8 @@ public class PrettyDisplay extends Application {
     
     private void implementSceneObjects(){
     	setProgramHeightToUserScreen();
-    	objPrimaryStage.setTitle("PinkPanther: The best to-do list");
-    	Image logoImage = new Image("PPLogo.png");
+    	objPrimaryStage.setTitle(STRING_DEFAULT_PROGRAM_TITLE);
+    	Image logoImage = new Image(STRING_LOGO_DIRECTORY);
     	objPrimaryStage.getIcons().add(logoImage);
         //Holds all calendar items
         implementCalendarGrid();
@@ -107,7 +122,7 @@ public class PrettyDisplay extends Application {
     
     private void setProgramHeightToUserScreen() {
     	Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
-        setCurrentStageHeight((int) (primScreenBounds.getHeight() - 10));
+        setCurrentStageHeight((int) (primScreenBounds.getHeight() - OFFSET_SCREEN_PROGRAM_BUFFER));
     }
 
     //Implements main Grid: Holds contents for the Calendar
@@ -116,13 +131,14 @@ public class PrettyDisplay extends Application {
         calendarGrid.setAlignment(Pos.TOP_LEFT);
         calendarGrid.setHgap(PARAMETER_GRID_GAP);
         calendarGrid.setVgap(PARAMETER_GRID_GAP);
-        calendarGrid.setPadding(new Insets(PARAMETER_CALENDAR_GRID_PADDING, PARAMETER_CALENDAR_GRID_PADDING, PARAMETER_CALENDAR_GRID_PADDING, PARAMETER_CALENDAR_GRID_PADDING));
+        calendarGrid.setPadding(new Insets(PARAMETER_CALENDAR_GRID_PADDING, 
+        		PARAMETER_CALENDAR_GRID_PADDING, PARAMETER_CALENDAR_GRID_PADDING, PARAMETER_CALENDAR_GRID_PADDING));
         populateGrid(calendarGrid);	
     }
     //calendarScrollPane holds mainCalendarGrid
     private void implementScrollPane() {
     	calendarScrollPane = new ScrollPane();
-        calendarScrollPane.setPrefSize(DEFAULT_STAGE_WIDTH, DEFAULT_STAGE_HEIGHT);
+        calendarScrollPane.setPrefSize(WIDTH_STAGE_DEFAULT, HEIGHT_STAGE_DEFAULT);
         calendarScrollPane.setContent(calendarGrid);
         calendarScrollPane.setStyle("-fx-background-color: transparent;");
     }
@@ -132,8 +148,8 @@ public class PrettyDisplay extends Application {
         programMainGrid.setAlignment(Pos.TOP_LEFT);
         programMainGrid.setHgap(PARAMETER_GRID_GAP);
         programMainGrid.setVgap(PARAMETER_GRID_GAP);
-        programMainGrid.setPadding(new Insets(25, 25, 25, 25));
-        programMainGrid.add(calendarScrollPane,0,0);
+        programMainGrid.setPadding(PADDING_MAIN_GRID);
+        programMainGrid.add(calendarScrollPane,POSITION_DEFAULT_X_LEFT, POSITION_DEFAULT_Y_FIRST_ITEM);
         
     }
     //UserTextField is the text box that the user types in
@@ -147,12 +163,12 @@ public class PrettyDisplay extends Application {
         + "-fx-border-width: 6px;"
         + "-fx-border-color: DIMGRAY;"
         + "-fx-background-color: WHITE");
-        programMainGrid.add(userTextField, 0, DEFAULT_USER_INPUT_YPOS);
+        programMainGrid.add(userTextField, POSITION_DEFAULT_X_LEFT, YPOS_USER_INPUT_DEFAULT);
     }
     //UserFeedback is the text that displays messages to the user, above the input box
     private void implementUserFeedback(String newInput) {
         programFeedback = new FlowPane();
-        programMainGrid.add(programFeedback, 0, DEFAULT_USER_FEEDBACK_YPOS);
+        programMainGrid.add(programFeedback, POSITION_DEFAULT_X_LEFT, YPOS_USER_FEEDBACK_DEFAULT);
         colorizer = new ConsoleInputColorizer();
         colorizer.setController(mainController);
     }
@@ -170,7 +186,7 @@ public class PrettyDisplay extends Application {
     }
     //Sets scene to correct dimensions
     private void implementScene() {
-        scene = new Scene(programMainGrid, 720, DEFAULT_STAGE_HEIGHT);
+        scene = new Scene(programMainGrid, WIDTH_PROGRAM_DEFAULT, HEIGHT_STAGE_DEFAULT);
         scene.getStylesheets().clear();
         scene.getStylesheets().add(this.getClass().getResource("PinkPanther.css").toExternalForm());
     }
@@ -185,7 +201,7 @@ public class PrettyDisplay extends Application {
 		objPrimaryStage.setHeight(getCurrentStageHeight());
 	}
     private void setScrollPaneHeight() {
-        calendarScrollPane.setPrefSize(DEFAULT_STAGE_WIDTH, getCurrentStageHeight());
+        calendarScrollPane.setPrefSize(WIDTH_STAGE_DEFAULT, getCurrentStageHeight());
 		objPrimaryStage.setHeight(getCurrentStageHeight());
 	}
 	
@@ -194,14 +210,14 @@ public class PrettyDisplay extends Application {
 	 * needs to refresh due to a change in calendar items
 	 */
     private void populateGrid(GridPane grid) {
-        scenetitle.setFont(Font.font("Tahoma", FontWeight.BOLD, 33));
-        scenetitle.setFill(Color.DIMGRAY);
-        grid.add(scenetitle, 1, 0);
+        sceneTitle.setFont(Font.font("Tahoma", FontWeight.BOLD, FONTSIZE_SCENE_TITLE));
+        sceneTitle.setFill(Color.DIMGRAY);
+        grid.add(sceneTitle, POSITION_DEFAULT_X_CENTRE, POSITION_DEFAULT_Y_FIRST_ITEM);
         
         try{
-        	scenetitle.setText(programState.getTitle());
+        	sceneTitle.setText(programState.getTitle());
         } catch (NullPointerException e) {
-        	scenetitle.setText(DEFAULT_SCENE_TITLE);
+        	sceneTitle.setText(DEFAULT_SCENE_TITLE);
         }
         
     	programState = mainController.getProgramState();
@@ -230,7 +246,7 @@ public class PrettyDisplay extends Application {
 		if (programState.getTitle().equals(DEFAULT_SCENE_TITLE)) {
 	    	SortedMap<LocalDate,ArrayList<Task>> overdueList = programState.getOverdueList();
 	    	if (overdueList != null) {
-	    		grid.add(new TransparentCircle(), 1, currentYPos++);
+	    		grid.add(new TransparentCircle(), POSITION_DEFAULT_X_CENTRE, currentYPos++);
 	    		int numOverdueTasks = 0;
 	    		for(LocalDate date:overdueList.keySet()) {
 	    			for(@SuppressWarnings("unused") Task task:overdueList.get(date)) { 
@@ -242,7 +258,7 @@ public class PrettyDisplay extends Application {
 		    		currentYPos++;
 		    		TaskBox overdueTaskReminder = new TaskBox(numOverdueTasks + " OVERDUE TASKS : CLICK F8 TO VIEW ");
 					currTaskIndex++;
-		    		grid.add(overdueTaskReminder, 1, currentYPos);
+		    		grid.add(overdueTaskReminder, POSITION_DEFAULT_X_CENTRE, currentYPos);
 		    		currentYPos++;
 	    		}
 	    	}
@@ -258,9 +274,9 @@ public class PrettyDisplay extends Application {
 	    	for(LocalDate date:todoList.keySet()) { //looping through dates which have Tasks inside
 	    		int totalDeadline = 0, totalEvent = 0, totalTodo = 0;
 	    		
-	    		grid.add(new TransparentCircle(), 1, currentYPos++);
+	    		grid.add(new TransparentCircle(), POSITION_DEFAULT_X_CENTRE, currentYPos++);
 	    		String month = date.getMonth().toString();
-	    		month = month.substring(0, 1)+ month.substring(1, month.length()).toLowerCase();
+	    		month = month.substring(0, POSITION_DEFAULT_X_CENTRE)+ month.substring(1, month.length()).toLowerCase();
 	    		String year = String.valueOf(date.getYear() %100);
 	    		String currDayNum = Integer.toString(date.getDayOfMonth());
 	    		int currDayXPos = 1;
@@ -270,7 +286,6 @@ public class PrettyDisplay extends Application {
 	    		currentYPos ++;
 	    		int currXPos = 1;
 	    		currTaskIndex = 1;
-	    		
 	    		
 	    		//count total number of tasks of particular types
 				for(Task task:todoList.get(date)) { 
@@ -286,43 +301,36 @@ public class PrettyDisplay extends Application {
 							break;
 					}
 					if (task.getClash()) {
-						IndexBox testBox = new IndexBox(0);
-						grid.add(testBox, currXPos+14, currentYPos+1);
+						IndexBox clashIndicatorBox = new IndexBox();
+						grid.add(clashIndicatorBox, currXPos + OFFSET_X_POS_CLASH_INDICATOR, 
+								currentYPos + OFFSET_Y_POS_CLASH_INDICATOR);
 					}
 					
 		    		currentYPos++;
 	    			TaskBox taskBox = new TaskBox(currTaskIndex, task, isTruncatedMode);
 	    			currTaskIndex++;
 		    		grid.add(taskBox, currXPos, currentYPos);
-	
-		    		
 				}
-				
 				
 				GridPane miniTaskIndicators = new GridPane();
 				miniTaskIndicators.setHgap(10);
 				miniTaskIndicators.setVgap(5);
-				currDayXPos = 54;
+				currDayXPos = XPOS_TASK_INDICATOR_BOX;
 	    		for (int i=0; i<3; i++) {
 	    			if (i==0 && totalDeadline != 0) {
 		    			IndexBox blankColoredBox = new IndexBox(totalDeadline, TaskType.DEADLINE);
-		    			miniTaskIndicators.add(blankColoredBox, currDayXPos--, 3);
+		    			miniTaskIndicators.add(blankColoredBox, currDayXPos--, YPOS_TASK_INDICATOR_BOX);
 	    			} else if (i==1 && totalTodo != 0) {
 		    			IndexBox blankColoredBox = new IndexBox(totalTodo, TaskType.TODO);
-		    			miniTaskIndicators.add(blankColoredBox, currDayXPos--, 3);
+		    			miniTaskIndicators.add(blankColoredBox, currDayXPos--, YPOS_TASK_INDICATOR_BOX);
 	    			} else if (i==2 && totalEvent != 0) {
 		    			IndexBox blankColoredBox = new IndexBox(totalEvent, TaskType.EVENT);
-		    			miniTaskIndicators.add(blankColoredBox, currDayXPos--, 3);
+		    			miniTaskIndicators.add(blankColoredBox, currDayXPos--, YPOS_TASK_INDICATOR_BOX);
 	    			}
-	    			
 	    		}
-	    		grid.add(miniTaskIndicators, 1, dayBoxYPos);
-				
-	    		
+	    		grid.add(miniTaskIndicators, POSITION_DEFAULT_X_CENTRE, dayBoxYPos);
 				currentYPos++;
 			}
-
-	    	
 	    }
     	return currentYPos;
     }
@@ -332,7 +340,7 @@ public class PrettyDisplay extends Application {
     	//for unpacking floatingTasks
     	ArrayList<Task> floatingTasks = programState.getFloatingList();	
     	if (floatingTasks != null && floatingTasks.size() != 0) {
-    		grid.add(new TransparentCircle(), 1, currentYPos++);
+    		grid.add(new TransparentCircle(), POSITION_DEFAULT_X_CENTRE, currentYPos++);
     		int totalFloat = 0;
 
     		currentYPos++;
@@ -340,7 +348,7 @@ public class PrettyDisplay extends Application {
 	    	int currFloatXPos = 1;
     		DayBox dayBox = new DayBox("Undated Tasks");
     		int dayTextYPos = currentYPos;
-    		grid.add(dayBox, 1, currentYPos++);
+    		grid.add(dayBox, POSITION_DEFAULT_X_CENTRE, currentYPos++);
 	    	for (int i=0; i<floatingTasks.size(); i++) {
 	    		totalFloat++;
 	    		currentYPos++;
@@ -354,8 +362,8 @@ public class PrettyDisplay extends Application {
 			miniTaskIndicators.setHgap(10);
 			miniTaskIndicators.setVgap(5);
 			IndexBox blankColoredBox = new IndexBox(totalFloat, TaskType.FLOATING);
-			miniTaskIndicators.add(blankColoredBox, 54, dayTextYPos);
-			grid.add(miniTaskIndicators, 1, dayTextYPos);
+			miniTaskIndicators.add(blankColoredBox, XPOS_TASK_INDICATOR_BOX, dayTextYPos);
+			grid.add(miniTaskIndicators, POSITION_DEFAULT_X_CENTRE, dayTextYPos);
 	    	currentYPos++;
     	}
     	
@@ -369,12 +377,11 @@ public class PrettyDisplay extends Application {
     	mainController.addCommand(command);
     	setUserFeedback();
     	calendarGrid.getChildren().clear();
-    	scenetitle.setText(programState.getTitle());
+    	sceneTitle.setText(programState.getTitle());
         populateGrid(calendarGrid);
         if(mainController.getProgramState().getExitState()) {
         	closeWindow();
         }
-
     }
     
     //This function transforms a string of text to a colorized FlowPane
@@ -394,7 +401,7 @@ public class PrettyDisplay extends Application {
     		}
     	}
     	programFeedback = feedback;
-    	programMainGrid.add(programFeedback , 0, DEFAULT_USER_FEEDBACK_YPOS);
+    	programMainGrid.add(programFeedback , POSITION_DEFAULT_X_LEFT, YPOS_USER_FEEDBACK_DEFAULT);
     }
     
   //Sets userFeedBack as STRING_DEFAULT_FEEDBACK
@@ -413,7 +420,7 @@ public class PrettyDisplay extends Application {
     public void setUserTextField(String text) {
     	if(userTextField!=null) {
     		userTextField.setText(text);
-    		userTextField.positionCaret(text.length()-1);
+    		userTextField.positionCaret(text.length());
     	}
     }
     
@@ -430,10 +437,10 @@ public class PrettyDisplay extends Application {
         }
         
         else if (ke.getCode().equals(KeyCode.DOWN)) {
-    		scrollDown(0.25f);
+    		scrollDown(AMOUNT_SCROLL_PER_CLICK);
         }
         else if (ke.getCode().equals(KeyCode.UP)) {
-    		scrollUp(0.25f);
+    		scrollUp(AMOUNT_SCROLL_PER_CLICK);
         }
         else if (ke.getCode().equals(KeyCode.F2)) {
         	attemptToggleHelpScreenView();
@@ -446,7 +453,7 @@ public class PrettyDisplay extends Application {
         	setStageHeight();
         }
         else if (ke.getCode().equals(KeyCode.PAGE_DOWN) || ke.getCode().equals(KeyCode.F5)) {
-        	if (getCurrentStageHeight() < DEFAULT_STAGE_HEIGHT) {
+        	if (getCurrentStageHeight() < HEIGHT_STAGE_DEFAULT) {
         		setCurrentStageHeight(getCurrentStageHeight() + 30);
         	}
         	setScrollPaneHeight();
@@ -465,7 +472,7 @@ public class PrettyDisplay extends Application {
         else if (ke.getCode().equals(KeyCode.F4) && currentState == CurrentState.VIEWING_CALENDAR) {
         	isTruncatedMode = !isTruncatedMode;
         	calendarGrid.getChildren().clear();
-        	scenetitle.setText(programState.getTitle());
+        	sceneTitle.setText(programState.getTitle());
             populateGrid(calendarGrid);
         }
         else if (ke.getCode().equals(KeyCode.BACK_SPACE)) {
@@ -526,8 +533,6 @@ public class PrettyDisplay extends Application {
     		userText = userText + " ";
     	}
     	
-    	
-    	
     	FlowPane colorizedText = parseAndColorize(userText);
     	setUserFeedback(colorizedText);
 	}
@@ -573,15 +578,15 @@ public class PrettyDisplay extends Application {
 	//Shifts program to CheatSheet screen. Only accessible in Calendar mode.
     private void viewHelpScreen() {
     	programMainGrid.getChildren().remove(calendarScrollPane);
-    	programMainGrid.add(helpScreen, 0, 0);
+    	programMainGrid.add(helpScreen, POSITION_DEFAULT_X_LEFT, POSITION_DEFAULT_Y_FIRST_ITEM);
 		currentState = CurrentState.VIEWING_HELPSCREEN;
 	}
 
 	//Shifts program back to Calendar screen from CheatSheet screen.
     private void hideHelpScreen() {
 		programMainGrid.getChildren().clear();
-		programMainGrid.add(calendarScrollPane,0,0);
-        programMainGrid.add(userTextField, 0, DEFAULT_USER_INPUT_YPOS);
+		programMainGrid.add(calendarScrollPane,POSITION_DEFAULT_X_LEFT, POSITION_DEFAULT_Y_FIRST_ITEM);
+        programMainGrid.add(userTextField, POSITION_DEFAULT_X_LEFT, YPOS_USER_INPUT_DEFAULT);
         setUserFeedback();
 		currentState = CurrentState.VIEWING_CALENDAR;
 	}
@@ -597,7 +602,7 @@ public class PrettyDisplay extends Application {
 	//Restores screen back to last configured height and unhides calendar
     private void unHideCalendar(Stage stage) {
         stage.setHeight(getCurrentStageHeight());
-        scenetitle.setText(programState.getTitle());
+        sceneTitle.setText(programState.getTitle());
         calendarScrollPane.setDisable(false);
  		calendarScrollPane.setVvalue(currentScrollYPos);
 		currentState = CurrentState.VIEWING_CALENDAR;
@@ -607,8 +612,8 @@ public class PrettyDisplay extends Application {
 	//Can only be accessed in Calendar mode
     private void hideCalendar(Stage stage) {
 		if (currentState != CurrentState.VIEWING_HELPSCREEN) {
-	    stage.setHeight(200);
-	    scenetitle.setText("   Crouching Tiger; Hidden Calendar");
+	    stage.setHeight(HEIGHT_HIDDEN_CALENDAR);
+	    sceneTitle.setText("   Crouching Tiger; Hidden Calendar");
 	    calendarScrollPane.setDisable(true);
 	    calendarScrollPane.setVvalue(0);
 		currentState = CurrentState.VIEWING_HIDDEN;
