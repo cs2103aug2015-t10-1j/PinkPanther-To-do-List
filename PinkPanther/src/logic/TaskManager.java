@@ -26,7 +26,7 @@ public class TaskManager {
 	private SortedMap<LocalDate,ArrayList<Task>>todoList;
 	
 	private static final String MESSAGE_RETRIEVE_TASK = "called storage to retrieve task list";
-	private static final String MESSAGE_TASK_DO_NOT_EXIST = "Task or tasks do not exist";
+	private static final String MESSAGE_TASK_DO_NOT_EXIST = "   Error : Task or tasks do not exist";
 	private static final String MESSAGE_DATE_DO_NOT_EXIST = "You do not have any task on this date";
 	
 	private static final String MESSAGE_ASSERTION_NULL_INPUT = "Null input detected";
