@@ -16,6 +16,12 @@ public class SingleTimeParser implements Parser{
 	
 	private static final String MESSAGE_ASSERTION_NULL = 
 			 "Logic error. Null input is passed in as parameter!";
+	private static final String MESSAGE_LOG_PARSE_SUCCESS = 
+			"Successful parsing. Returning a LocalTime.";
+	private static final String MESSAGE_LOG_PARSE_FAIL = 
+			"Not a time. Returning null.";
+	private static final String MESSAGE_LOG_INVALID_FORMAT = 
+			"Not an accepted format of time. Returning null.";
 	
 	private static final List<String> TIME_FORMATS= 
 			Collections.unmodifiableList(Arrays.asList("h:mma", "hh:mma", 
@@ -47,7 +53,7 @@ public class SingleTimeParser implements Parser{
 		// case: times that contain a certain keyword
 		for (int i = 0; i < TIME_INDICATORS.length; i++) {
 			if (time.equals(TIME_INDICATORS[i])) {
-				log.log(Level.FINE, "Successful parsing. Returning a LocalTime.");
+				log.log(Level.FINE, MESSAGE_LOG_PARSE_SUCCESS);
 				return parseTimeWord(time);
 			}
 		}
@@ -56,13 +62,13 @@ public class SingleTimeParser implements Parser{
 		for (String timeFormat : validTimeFormats) {
 			LocalTime parsedTime = compareTimeFormat(time, timeFormat);
 			if (parsedTime != null) {
-				log.log(Level.FINE, "Successful parsing. Returning a LocalTime.");
+				log.log(Level.FINE, MESSAGE_LOG_PARSE_SUCCESS);
 				return parsedTime;
 			}
 		}
 		
 		// case: not a time
-		log.log(Level.FINE, "Not a time. Returning null.");
+		log.log(Level.FINE, MESSAGE_LOG_PARSE_FAIL);
 		return null;
 	}
 	
@@ -73,7 +79,7 @@ public class SingleTimeParser implements Parser{
 			LocalTime time = LocalTime.parse(timeString, formatter);
 			return time;
 		} catch (DateTimeException e) {
-			log.log(Level.FINE, "Not a time. Returning null.");
+			log.log(Level.FINER, MESSAGE_LOG_INVALID_FORMAT);
 			return null;
 		}
 
