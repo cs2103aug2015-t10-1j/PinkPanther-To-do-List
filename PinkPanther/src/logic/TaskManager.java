@@ -80,7 +80,7 @@ public class TaskManager {
 		return todoList.subMap(date1, date2.plusDays(1));
 	}
 	
-	// Returns a SortedMap containing dated Task objects with name that contains the input string
+	// Returns a SortedMap of dated Task objects with name that contains the input string
 	public SortedMap<LocalDate,ArrayList<Task>> getMatchedDated(String keyword){
 		SortedMap<LocalDate,ArrayList<Task>>matchedList = new TreeMap<LocalDate,ArrayList<Task>>();
 		for(LocalDate date:todoList.keySet()){
@@ -97,7 +97,7 @@ public class TaskManager {
 		return matchedList;
 	}
 	
-	// Returns an ArrayList containing undated Task objects with name that contains the input string
+	// Returns an ArrayList of undated Task objects with name that contains the input string
 	public ArrayList<Task>getMatchedFloating(String keyword){
 		ArrayList<Task>matchedFloating=new ArrayList<Task>();
 		for(Task task:todoList.get(THE_MYTH_DAY)){
@@ -111,14 +111,13 @@ public class TaskManager {
 	
 //-------------------------------Task List Modifiers ---------------------------------------
 	/**
-	 * Return true if a Task object is successfully added
+	 * Return true if a Task object is successfully added to todoList
 	 * Task object cannot be null
 	 * 
 	 * @param task	a Task object
 	 * @return	a boolean value
 	 */
-	
-	
+		
 	public boolean addTask(Task task){
 		assert task != null : MESSAGE_ASSERTION_NULL_INPUT;
 		boolean isDone = task.getDoneStatus();
@@ -223,9 +222,9 @@ public class TaskManager {
 	
 	/**
 	 * Return an ArrayList of Task objects from todoList
-	 * null is returned when commandContent is empty.
+	 * null is returned when the ArrayList is empty
 	 * 
-	 * @param pair	a holder containing a LocalDate object and an ArrayList of integer
+	 * @param pair	a holder containing a LocalDate object and an ArrayList of Integer
 	 * @return	an ArrayList of Task objects
 	 */
 	
