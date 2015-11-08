@@ -37,7 +37,7 @@ public class QueryParser implements Parser {
 	private static final String MESSAGE_LOG_INVALID_INDEX = 
 			"Invalid index detected. Returning null to logic.";
 	private static final String MESSAGE_LOG_PARSE_SUCCESS = 
-			"Returning Pair to logic.";
+			"Returning Task indices of %1$s on %2$s to logic.";
 	private static final String MESSAGE_LOG_NON_NUMERICAL_INDEX = 
 			"Non numerical index detected in list of indices.";
 
@@ -76,7 +76,8 @@ public class QueryParser implements Parser {
 		
 		if (isValidKeyword(userInfo[INDEX_KEYWORD]) 
 				&& isValidIndex(userInfo[INDEX_INDEX], indexList)) {
-			log.log(Level.INFO, MESSAGE_LOG_PARSE_SUCCESS);
+			log.log(Level.INFO, String.format(MESSAGE_LOG_PARSE_SUCCESS, 
+					indexList, keyword));
 			return new Pair<LocalDate, ArrayList<Integer>>(keyword, indexList);
 		} else if (!isValidKeyword(userInfo[INDEX_KEYWORD])) {
 			Display.setFeedBack(MESSAGE_INVALID_KEYWORD);

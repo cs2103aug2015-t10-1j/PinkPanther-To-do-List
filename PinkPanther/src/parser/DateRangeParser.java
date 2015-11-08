@@ -19,11 +19,11 @@ public class DateRangeParser implements Parser {
 	private static final String MESSAGE_ASSERTION_NULL = 
 			 "Logic error. Null input is passed in as parameter!";
 	private static final String MESSAGE_LOG_LEGIT_DATE = 
-			"A single date detected. Returning Pair to logic.";
+			"A single date detected. Returning Pair of range %1$s to %1$s to logic.";
 	private static final String MESSAGE_LOG_DATE = 
-			"A deadline detected. Returning Pair to logic anyways.";
+			"A deadline detected. Returning Pair of range %1$s to %1$s to logic anyways.";
 	private static final String MESSAGE_LOG_DATE_RANGE = 
-			"Range of dates detected. Returning Pair to logic.";
+			"Range of dates detected. Returning Pair of range %1$s to %2$s to logic.";
 	private static final String MESSAGE_LOG_PARSE_FAIL = 
 			"No dates detected. Returning null to logic.";
 	
@@ -51,13 +51,15 @@ public class DateRangeParser implements Parser {
 		int validDates = asp.countValidDates(commandContent);
 		if (validDates == SINGLE_DATE_TIME_FOUND) {
 			if (asp.getStartDate() != null) {
-				log.log(Level.INFO, MESSAGE_LOG_LEGIT_DATE);
+				log.log(Level.INFO, String.format(MESSAGE_LOG_LEGIT_DATE,
+						asp.getStartDate()));
 				return new Pair<LocalDate, LocalDate>(asp.getStartDate(), asp.getStartDate());
 			}
-			log.log(Level.INFO, MESSAGE_LOG_DATE);
+			log.log(Level.INFO, String.format(MESSAGE_LOG_DATE, asp.getEndDate()));
 			return new Pair<LocalDate, LocalDate>(asp.getEndDate(), asp.getEndDate()); 
 		} else if (validDates == DATE_TIME_RANGE_FOUND) {
-			log.log(Level.INFO, MESSAGE_LOG_DATE_RANGE);
+			log.log(Level.INFO, String.format(MESSAGE_LOG_DATE_RANGE, asp.getStartDate(),
+					asp.getEndDate()));
 			return new Pair<LocalDate, LocalDate>(asp.getStartDate(), asp.getEndDate());
 		}
 		log.log(Level.INFO, MESSAGE_LOG_PARSE_FAIL);
