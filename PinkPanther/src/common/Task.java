@@ -211,8 +211,8 @@ public class Task {
 				return name + ", " + startTime.format(timeformatter) + " to " + endTime.format(timeformatter)
 					+ ", " + startDate.format(dateformatter);
 			} else {
-				return name + ", " + startTime.format(timeformatter) + ", " + startDate.format(dateformatter) 
-					+ ", " + endTime.format(timeformatter) + ", " + endDate.format(dateformatter);
+				return name + ", " + startTime.format(timeformatter) + " to " + endTime.format(timeformatter) 
+					+ ", " + startDate.format(dateformatter) + " to " + endDate.format(dateformatter);
 			}
 		}
 	}

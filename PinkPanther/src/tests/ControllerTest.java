@@ -80,7 +80,7 @@ public class ControllerTest {
 	public void editTaskPositive(){
 		controller.addCommand("edit 7 nov,1");
 		assertEquals(state.getInputBoxText(),"do homework, 2.00PM to 5.00PM, 7/11/15");
-		assertEquals(Display.showFeedBack(),"Edit the task in text box, then press ENTER.");
+		assertEquals(Display.showFeedBack(),"Edit the task in text box, then press ENTER");
 	}
 	
 	@Test
@@ -148,7 +148,7 @@ public class ControllerTest {
 	public void randomWord(){
 		controller.addCommand("what is a quantum computer");
 		assertEquals(state.getInputBoxText(),"what is a quantum computer");
-		assertEquals(Display.showFeedBack(),"Unrecognized command. Press F2 for Help Screen.");
+		assertEquals(Display.showFeedBack(),"Unrecognized command. Press F2 for Help Screenvie ");
 	}
 	
 	@Test

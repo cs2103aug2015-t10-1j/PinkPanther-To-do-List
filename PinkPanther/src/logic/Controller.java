@@ -27,13 +27,15 @@ public class Controller {
 	
 	private static final String MESSAGE_CHANGE_VIEW = "Input 'view normal' to return to main calendar.";
 	private static final String MESSAGE_INVALID_DATE_RANGE = "Invalid view range specified!";
-	private static final String MESSAGE_CREATE_TASK = "call parser to create a task";
-	private static final String MESSAGE_CREATE_DATE_INDEX_PAIR = "called parser to create date index pair";
-	private static final String MESSAGE_CREATE_DATE_PAIR = "called parser to create date pair";
 	private static final String MESSAGE_EDIT = "Edit the task in text box, then press ENTER";
 	private static final String MESSAGE_UNRECOGNISED_COMMAND = "Unrecognized command. Press F2 for Help Screen";
 	private static final String MESSAGE_CLEAR = "All tasks have been cleared";
 	private static final String MESSAGE_INPUT_INSTRUCTION = "Input command into the field above";
+	
+	private static final String MESSAGE_LOG_CREATE_TASK = "called parser to create a task";
+	private static final String MESSAGE_LOG_CREATE_DATE_INDEX_PAIR = "called parser to create date index pair";
+	private static final String MESSAGE_LOG_CREATE_DATE_PAIR = "called parser to create date pair";
+	private static final String MESSAGE_LOG_SAVE_TASKS = "called storage to save tasks";
 	
 	public Controller(){
 		storage = new StorageControl();
@@ -75,7 +77,7 @@ public class Controller {
 			Task task = parser.createTask(command);
 			if(task!=null){
 				taskPair.setSecond(parser.createTask(command));
-				log.log(Level.FINE, MESSAGE_CREATE_TASK);
+				log.log(Level.INFO, MESSAGE_LOG_CREATE_TASK);
 				EditCommand edit = new EditCommand(manager);
 				if(edit.execute(taskPair)){
 					commandStack.addCommand(edit);
@@ -92,7 +94,7 @@ public class Controller {
 					if(add.execute(parser.createTask(parameterString))){
 						commandStack.addCommand(add);
 					}	
-					log.log(Level.FINE, MESSAGE_CREATE_TASK);
+					log.log(Level.INFO, MESSAGE_LOG_CREATE_TASK);
 					break;
 				case "edit":
 					ArrayList<Task>taskList = manager.searchTasks(parser.query(parameterString));
@@ -104,7 +106,7 @@ public class Controller {
 					} else{
 						state.setInputBoxText(command);
 					}
-					log.log(Level.FINE, MESSAGE_CREATE_DATE_INDEX_PAIR);
+					log.log(Level.INFO, MESSAGE_LOG_CREATE_DATE_INDEX_PAIR);
 					break;
 				case "done":
 					DoneCommand done = new DoneCommand(manager);
@@ -113,7 +115,7 @@ public class Controller {
 					} else{
 						state.setInputBoxText(command);
 					}
-					log.log(Level.FINE, MESSAGE_CREATE_DATE_INDEX_PAIR);
+					log.log(Level.INFO, MESSAGE_LOG_CREATE_DATE_INDEX_PAIR);
 					break;
 				case "del":
 				case "delete":
@@ -123,7 +125,7 @@ public class Controller {
 					} else{
 						state.setInputBoxText(command);
 					}
-					log.log(Level.FINE, MESSAGE_CREATE_DATE_INDEX_PAIR);
+					log.log(Level.INFO, MESSAGE_LOG_CREATE_DATE_INDEX_PAIR);
 					break;	
 				case "search":
 					state.setFLoatingList(manager.getMatchedFloating(parameterString));
@@ -174,6 +176,7 @@ public class Controller {
 	}
 	
 	private void saveToStorage(){
+		log.log(Level.INFO, MESSAGE_LOG_SAVE_TASKS);
 		storage.save(manager.getTaskArray(true),true);
 		storage.save(manager.getTaskArray(false),false);
 	}
@@ -202,7 +205,7 @@ public class Controller {
 			Display.setFeedBack(MESSAGE_CHANGE_VIEW);
 		} else if(parser.queryDateRange(mode) != null){
 			Pair<LocalDate,LocalDate>datePair = parser.queryDateRange(mode);
-			log.log(Level.FINE, MESSAGE_CREATE_DATE_PAIR);
+			log.log(Level.FINE, MESSAGE_LOG_CREATE_DATE_PAIR);
 			state.setFLoatingList(null);
 			state.setTodoList(manager.getDateRange(datePair.getFirst(), datePair.getSecond()));
 			String dateRange = datePair.getFirst().toString();
