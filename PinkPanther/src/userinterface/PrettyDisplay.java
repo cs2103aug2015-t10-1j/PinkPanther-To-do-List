@@ -44,6 +44,7 @@ public class PrettyDisplay extends Application {
     Stage objPrimaryStage;
     ProgramState programState;
     FlowPane programFeedback;
+    ConsoleInputColorizer colorizer;
     HelpScreen helpScreen = new HelpScreen();
     
     //Default strings used in various instances
@@ -52,9 +53,12 @@ public class PrettyDisplay extends Application {
     private static String STRING_DEFAULT_FEEDBACK = "Input command into the field below";
     
     //Default values for objects' positions in program window
-    private static int DEFAULT_STAGE_HEIGHT = 1060;
+    private static int DEFAULT_STAGE_HEIGHT = 1020;
+    private static int DEFAULT_STAGE_WIDTH = 1080;
     private static int DEFAULT_USER_INPUT_YPOS = 5;
     private static int DEFAULT_USER_FEEDBACK_YPOS = 2;
+    private static int PARAMETER_CALENDAR_GRID_PADDING = 10;
+    private static int PARAMETER_GRID_GAP = 1;
     
     //Enumerator and state to note which state the program is in
     private enum CurrentState {VIEWING_CALENDAR, VIEWING_HELPSCREEN, VIEWING_HIDDEN}
@@ -71,13 +75,18 @@ public class PrettyDisplay extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
-    	setProgramHeightToUserScreen();
     	objPrimaryStage = primaryStage;
     	mainController = new Controller();
-//    	primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("PPLogo.png")));
-    	primaryStage.setTitle("PinkPanther: The best to-do list");
+    	implementSceneObjects();
+        setStage(primaryStage);
+        logger.log(Level.INFO, "GUI successfully instantiated");
+    }
+    
+    private void implementSceneObjects(){
+    	setProgramHeightToUserScreen();
+    	objPrimaryStage.setTitle("PinkPanther: The best to-do list");
     	Image logoImage = new Image("PPLogo.png");
-    	primaryStage.getIcons().add(logoImage);
+    	objPrimaryStage.getIcons().add(logoImage);
         //Holds all calendar items
         implementCalendarGrid();
         //Holds content of Grid together with grid1
@@ -91,47 +100,44 @@ public class PrettyDisplay extends Application {
         //Set feedback to default string
         setUserFeedback(parseAndColorize(STRING_DEFAULT_FEEDBACK));
         //Allows keyboard inputs to be read as commands
-        implementKeystrokeEvents(primaryStage);
+        implementKeystrokeEvents(objPrimaryStage);
         //Implements the scene
         implementScene();
-        
-        setStage(primaryStage);
-        logger.log(Level.INFO, "GUI successfully instantiated");
     }
     
     private void setProgramHeightToUserScreen() {
     	Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
-        currentStageHeight = (int) (primScreenBounds.getHeight() - 10);
+        setCurrentStageHeight((int) (primScreenBounds.getHeight() - 10));
     }
 
     //Implements main Grid: Holds contents for the Calendar
-    void implementCalendarGrid() {    
+    private void implementCalendarGrid() {    
         calendarGrid = new GridPane();
         calendarGrid.setAlignment(Pos.TOP_LEFT);
-        calendarGrid.setHgap(1);
-        calendarGrid.setVgap(1);
-        calendarGrid.setPadding(new Insets(10, 10, 10, 10));
+        calendarGrid.setHgap(PARAMETER_GRID_GAP);
+        calendarGrid.setVgap(PARAMETER_GRID_GAP);
+        calendarGrid.setPadding(new Insets(PARAMETER_CALENDAR_GRID_PADDING, PARAMETER_CALENDAR_GRID_PADDING, PARAMETER_CALENDAR_GRID_PADDING, PARAMETER_CALENDAR_GRID_PADDING));
         populateGrid(calendarGrid);	
     }
     //calendarScrollPane holds mainCalendarGrid
-    void implementScrollPane() {
+    private void implementScrollPane() {
     	calendarScrollPane = new ScrollPane();
-        calendarScrollPane.setPrefSize(1080, 1060);
+        calendarScrollPane.setPrefSize(DEFAULT_STAGE_WIDTH, DEFAULT_STAGE_HEIGHT);
         calendarScrollPane.setContent(calendarGrid);
         calendarScrollPane.setStyle("-fx-background-color: transparent;");
     }
     //mainGrid holds all other grids in the program
-    void implementMainGrid() {
+    private void implementMainGrid() {
         programMainGrid = new GridPane();
         programMainGrid.setAlignment(Pos.TOP_LEFT);
-        programMainGrid.setHgap(1);
-        programMainGrid.setVgap(1);
+        programMainGrid.setHgap(PARAMETER_GRID_GAP);
+        programMainGrid.setVgap(PARAMETER_GRID_GAP);
         programMainGrid.setPadding(new Insets(25, 25, 25, 25));
         programMainGrid.add(calendarScrollPane,0,0);
         
     }
     //UserTextField is the text box that the user types in
-    void implementUserTextField() {
+    private void implementUserTextField() {
         userTextField = new TextField();
         userTextField.setStyle(""
         + "-fx-font-size: 17px;"
@@ -144,12 +150,14 @@ public class PrettyDisplay extends Application {
         programMainGrid.add(userTextField, 0, DEFAULT_USER_INPUT_YPOS);
     }
     //UserFeedback is the text that displays messages to the user, above the input box
-    void implementUserFeedback(String newInput) {
+    private void implementUserFeedback(String newInput) {
         programFeedback = new FlowPane();
         programMainGrid.add(programFeedback, 0, DEFAULT_USER_FEEDBACK_YPOS);
+        colorizer = new ConsoleInputColorizer();
+        colorizer.setController(mainController);
     }
     //This function allows program to handle keyboard presses by the user
-    void implementKeystrokeEvents(Stage primaryStage) {
+    private void implementKeystrokeEvents(Stage primaryStage) {
         userTextField.setOnKeyPressed(
         		new EventHandler<KeyEvent>()
 			        {
@@ -161,31 +169,31 @@ public class PrettyDisplay extends Application {
 			        });
     }
     //Sets scene to correct dimensions
-    void implementScene() {
+    private void implementScene() {
         scene = new Scene(programMainGrid, 720, DEFAULT_STAGE_HEIGHT);
         scene.getStylesheets().clear();
         scene.getStylesheets().add(this.getClass().getResource("PinkPanther.css").toExternalForm());
     }
     //Sets stage to correct dimensions
-    void setStage(Stage primaryStage) {
+    private void setStage(Stage primaryStage) {
         primaryStage.setResizable(false);
         primaryStage.setScene(scene);
         primaryStage.show();
         setStageHeight();
     }
-	void setStageHeight() {
-		objPrimaryStage.setHeight(currentStageHeight);
+    private void setStageHeight() {
+		objPrimaryStage.setHeight(getCurrentStageHeight());
 	}
-	void setScrollPaneHeight() {
-        calendarScrollPane.setPrefSize(1080, currentStageHeight);
-		objPrimaryStage.setHeight(currentStageHeight);
+    private void setScrollPaneHeight() {
+        calendarScrollPane.setPrefSize(DEFAULT_STAGE_WIDTH, getCurrentStageHeight());
+		objPrimaryStage.setHeight(getCurrentStageHeight());
 	}
 	
 	/* Function adds all needed objects to the scene
 	 * This function is called whenever the calendar switches view or
 	 * needs to refresh due to a change in calendar items
 	 */
-    void populateGrid(GridPane grid) {
+    private void populateGrid(GridPane grid) {
         scenetitle.setFont(Font.font("Tahoma", FontWeight.BOLD, 33));
         scenetitle.setFill(Color.DIMGRAY);
         grid.add(scenetitle, 1, 0);
@@ -204,7 +212,7 @@ public class PrettyDisplay extends Application {
     /* Function has 3 unpack calls, one for overdueTasks, another for floatingTasks,
      * and the last for datedTasks.
      */
-    void unpackTasks(GridPane grid) {
+    private void unpackTasks(GridPane grid) {
     	int currTaskIndex = 1;
     	int currentYPos = 1;
     	
@@ -218,7 +226,7 @@ public class PrettyDisplay extends Application {
     }
     
     //Function requests for the list of Overdue tasks from ProgramState and adds them to calendar grid
-    int displayNumOverdueTasks(GridPane grid, int currTaskIndex, int currentYPos) {
+    private int displayNumOverdueTasks(GridPane grid, int currTaskIndex, int currentYPos) {
 		if (programState.getTitle().equals(DEFAULT_SCENE_TITLE)) {
 	    	SortedMap<LocalDate,ArrayList<Task>> overdueList = programState.getOverdueList();
 	    	if (overdueList != null) {
@@ -243,7 +251,7 @@ public class PrettyDisplay extends Application {
     }
 
     //Function requests for the list of Undated(floating) tasks from ProgramState and adds them to calendar grid
-    int unpackDatedTasks(GridPane grid, int currTaskIndex, int currentYPos) {
+    private int unpackDatedTasks(GridPane grid, int currTaskIndex, int currentYPos) {
     	//for unpacking datedTasks
     	SortedMap<LocalDate,ArrayList<Task>> todoList = programState.getTodoList();
     	if (todoList != null) {
@@ -320,7 +328,7 @@ public class PrettyDisplay extends Application {
     }
 
     //Function requests for the list of Dated tasks from ProgramState and adds them to calendar grid
-    int unpackFloatingTasks(GridPane grid, int currTaskIndex, int currentYPos) {
+    private int unpackFloatingTasks(GridPane grid, int currTaskIndex, int currentYPos) {
     	//for unpacking floatingTasks
     	ArrayList<Task> floatingTasks = programState.getFloatingList();	
     	if (floatingTasks != null && floatingTasks.size() != 0) {
@@ -355,7 +363,7 @@ public class PrettyDisplay extends Application {
     }
 
     //Function calls Logic to process a command by user or this class itself
-    void callControllerToAddCommand() {
+    private void callControllerToAddCommand() {
     	String command = userTextField.getText();
         logger.log(Level.INFO, "Attempting to get Controller to execute command: " + command);
     	mainController.addCommand(command);
@@ -370,18 +378,16 @@ public class PrettyDisplay extends Application {
     }
     
     //This function transforms a string of text to a colorized FlowPane
-    FlowPane parseAndColorize(String text) {
+    private FlowPane parseAndColorize(String text) {
     	if (text.equals("INVALID")) {
     		text = STRING_INVALID_COMMAND;
     	}
-    	ConsoleInputColorizer colorizer = new ConsoleInputColorizer();
-    	colorizer.setController(mainController);
     	FlowPane colorizedText = colorizer.parseInputToArray(text);
     	return colorizedText;
     }
     
     //Sets userFeedBack. Input must be parsed through parseAndColorize() function first.
-    void setUserFeedback(FlowPane feedback) {
+    private void setUserFeedback(FlowPane feedback) {
     	if (!programMainGrid.getChildren().remove(programFeedback)) {
     		if (currentState != CurrentState.VIEWING_HELPSCREEN) {
     			programMainGrid.getChildren().remove(2);
@@ -392,7 +398,7 @@ public class PrettyDisplay extends Application {
     }
     
   //Sets userFeedBack as STRING_DEFAULT_FEEDBACK
-    void setUserFeedback() {
+    private void setUserFeedback() {
     	FlowPane feedback;
     	if (Display.showFeedBack() != null) {
     		feedback = parseAndColorize(Display.showFeedBack());
@@ -407,6 +413,7 @@ public class PrettyDisplay extends Application {
     public void setUserTextField(String text) {
     	if(userTextField!=null) {
     		userTextField.setText(text);
+    		userTextField.positionCaret(text.length()-1);
     	}
     }
     
@@ -415,7 +422,7 @@ public class PrettyDisplay extends Application {
     }
 	
     //Function handles all keyboard presses accordingly
-	void executeKeypress(KeyEvent ke, Stage stage) {
+    private void executeKeypress(KeyEvent ke, Stage stage) {
 		Stage primaryStage = stage;
 		
 		if (ke.getCode().equals(KeyCode.ENTER)) {
@@ -432,15 +439,15 @@ public class PrettyDisplay extends Application {
         	attemptToggleHelpScreenView();
         }
         else if (ke.getCode().equals(KeyCode.PAGE_UP) || ke.getCode().equals(KeyCode.F6)) {
-        	if (currentStageHeight > 210) {
-        		currentStageHeight -= 30;
+        	if (getCurrentStageHeight() > 210) {
+        		setCurrentStageHeight(getCurrentStageHeight() - 30);
         	}
         	setScrollPaneHeight();
         	setStageHeight();
         }
         else if (ke.getCode().equals(KeyCode.PAGE_DOWN) || ke.getCode().equals(KeyCode.F5)) {
-        	if (currentStageHeight < DEFAULT_STAGE_HEIGHT) {
-        		currentStageHeight += 30;
+        	if (getCurrentStageHeight() < DEFAULT_STAGE_HEIGHT) {
+        		setCurrentStageHeight(getCurrentStageHeight() + 30);
         	}
         	setScrollPaneHeight();
         	setStageHeight();
@@ -495,7 +502,7 @@ public class PrettyDisplay extends Application {
 		
 	}
 	
-	void processBackSpace() {
+    private void processBackSpace() {
     	String userText = userTextField.getText();
     	
     	if (userText.length() <= 1) {
@@ -508,7 +515,7 @@ public class PrettyDisplay extends Application {
     	setUserFeedback(colorizedText);
 	}
 	
-	void processNonReservedKeys(KeyEvent ke) {
+    private void processNonReservedKeys(KeyEvent ke) {
     	String userText = userTextField.getText();
     	
     	if (ke.getCode().isLetterKey()) {
@@ -526,13 +533,13 @@ public class PrettyDisplay extends Application {
 	}
 	
 	//Called when user presses ENTER button, and processes text in input box accordingly
-	void processUserEnter() {
+    private void processUserEnter() {
     	if ((userTextField.getText() != null && !userTextField.getText().isEmpty())) {
 			callControllerToAddCommand();
         }
 	}
 	
-	void scrollUp(double scrollValue) {
+    private void scrollUp(double scrollValue) {
 		switch (currentState) {
 		case VIEWING_CALENDAR: 
 			calendarScrollPane.setVvalue(calendarScrollPane.getVvalue() - scrollValue);
@@ -542,7 +549,7 @@ public class PrettyDisplay extends Application {
 			break;
 		}
 	}
-	void scrollDown(double scrollValue) {
+    private void scrollDown(double scrollValue) {
 		switch (currentState) {
 		case VIEWING_CALENDAR: 
 			calendarScrollPane.setVvalue(calendarScrollPane.getVvalue() + scrollValue);
@@ -553,7 +560,7 @@ public class PrettyDisplay extends Application {
 		}
 	}
 	
-	void attemptToggleHelpScreenView() {
+    private void attemptToggleHelpScreenView() {
 		if (currentState != CurrentState.VIEWING_HIDDEN) {
 			if (currentState == CurrentState.VIEWING_CALENDAR) {
 				viewHelpScreen();
@@ -564,14 +571,14 @@ public class PrettyDisplay extends Application {
 	}
 	
 	//Shifts program to CheatSheet screen. Only accessible in Calendar mode.
-	void viewHelpScreen() {
+    private void viewHelpScreen() {
     	programMainGrid.getChildren().remove(calendarScrollPane);
     	programMainGrid.add(helpScreen, 0, 0);
 		currentState = CurrentState.VIEWING_HELPSCREEN;
 	}
 
 	//Shifts program back to Calendar screen from CheatSheet screen.
-	void hideHelpScreen() {
+    private void hideHelpScreen() {
 		programMainGrid.getChildren().clear();
 		programMainGrid.add(calendarScrollPane,0,0);
         programMainGrid.add(userTextField, 0, DEFAULT_USER_INPUT_YPOS);
@@ -579,7 +586,7 @@ public class PrettyDisplay extends Application {
 		currentState = CurrentState.VIEWING_CALENDAR;
 	}
 
-	void attemptToggleCalendarHiddenMode(Stage stage) {
+    private void attemptToggleCalendarHiddenMode(Stage stage) {
 		if (currentState == CurrentState.VIEWING_CALENDAR) {
 			hideCalendar(stage);
 		} else if (currentState == CurrentState.VIEWING_HIDDEN) {
@@ -588,8 +595,8 @@ public class PrettyDisplay extends Application {
 	}
 	
 	//Restores screen back to last configured height and unhides calendar
-	void unHideCalendar(Stage stage) {
-        stage.setHeight(currentStageHeight);
+    private void unHideCalendar(Stage stage) {
+        stage.setHeight(getCurrentStageHeight());
         scenetitle.setText(programState.getTitle());
         calendarScrollPane.setDisable(false);
  		calendarScrollPane.setVvalue(currentScrollYPos);
@@ -598,7 +605,7 @@ public class PrettyDisplay extends Application {
 	
 	//Downsizes window and hides calendar, locking scrollbar.
 	//Can only be accessed in Calendar mode
-	void hideCalendar(Stage stage) {
+    private void hideCalendar(Stage stage) {
 		if (currentState != CurrentState.VIEWING_HELPSCREEN) {
 	    stage.setHeight(200);
 	    scenetitle.setText("   Crouching Tiger; Hidden Calendar");
@@ -611,6 +618,14 @@ public class PrettyDisplay extends Application {
 	public void closeWindow() {
         logger.log(Level.INFO, "Exit command called");
 		Platform.exit();
+	}
+
+	public int getCurrentStageHeight() {
+		return currentStageHeight;
+	}
+
+	public void setCurrentStageHeight(int currentStageHeight) {
+		this.currentStageHeight = currentStageHeight;
 	}
 
 
