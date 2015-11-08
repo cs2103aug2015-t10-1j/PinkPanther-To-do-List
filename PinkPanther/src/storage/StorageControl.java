@@ -173,7 +173,7 @@ public class StorageControl {
 		}
 	}
 
-	public ArrayList<Task> loadTaskList(boolean isDone) {
+	public ArrayList<Task> load(boolean isDone) {
 		logger.log(Level.FINE, MESSAGE_LOG_LOADING_TEXTFILES);
 		return taskFile.readFromFile(isDone);
 	}

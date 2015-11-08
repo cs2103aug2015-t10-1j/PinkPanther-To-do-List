@@ -40,8 +40,8 @@ public class TaskManager {
 		
 		
 		storage.setEnvironment();
-		addMultipleTasks(storage.loadTaskList(true));
-		addMultipleTasks(storage.loadTaskList(false));
+		addMultipleTasks(storage.load(true));
+		addMultipleTasks(storage.load(false));
 		log.log(Level.INFO, MESSAGE_RETRIEVE_TASK);
 	}
 	
