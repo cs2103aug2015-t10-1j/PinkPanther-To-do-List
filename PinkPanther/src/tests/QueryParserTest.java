@@ -70,7 +70,7 @@ public class QueryParserTest {
 		for (int i = 0; i < testInput.length; i++) {
 			testOutput[i] = qp.parse(testInput[i]);
 			assertEquals(null, testOutput[i]);
-			assertEquals("Invalid input format. Please enter only 1 comma.",
+			assertEquals("Invalid input format.",
 					Display.showFeedBack());
 		}
 	}
