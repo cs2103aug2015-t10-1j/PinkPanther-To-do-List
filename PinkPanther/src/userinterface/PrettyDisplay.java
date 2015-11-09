@@ -49,7 +49,7 @@ public class PrettyDisplay extends Application {
     
     //Default strings used in various instances
     private static String TITLE_CALENDAR_SCENE = "                         To-Do List";
-    private static String TITLE_HIDDEN_CALENDAR = "   Crouching Tiger; Hidden Calendar";
+    private static String TITLE_HIDDEN_CALENDAR = "  Crouching Panther; Hidden Calendar";
     private static String STRING_INVALID_COMMAND = "Unrecognized command. Press PAGE_UP for Help Screen.";
     private static String STRING_DEFAULT_FEEDBACK = "Input command into the field below";
     private static String STRING_DEFAULT_PROGRAM_TITLE = "PinkPanther: The best to-do list";
