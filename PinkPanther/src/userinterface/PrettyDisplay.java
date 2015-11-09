@@ -111,8 +111,7 @@ public class PrettyDisplay extends Application {
     private void implementSceneObjects(){
     	setProgramHeightToUserScreen();
     	objPrimaryStage.setTitle(STRING_DEFAULT_PROGRAM_TITLE);
-    	Image logoImage = new Image(STRING_LOGO_DIRECTORY);
-    	objPrimaryStage.getIcons().add(logoImage);
+    	loadImageIcon();
         //Holds all calendar items
         implementCalendarGrid();
         //Holds content of Grid together with grid1
@@ -129,6 +128,16 @@ public class PrettyDisplay extends Application {
         implementKeystrokeEvents(objPrimaryStage);
         //Implements the scene
         implementScene();
+    }
+    
+    private void loadImageIcon(){
+    	try{
+	    	Image logoImage = new Image(STRING_LOGO_DIRECTORY);
+	    	objPrimaryStage.getIcons().add(logoImage);
+    	} catch (Exception e){
+    		Image logoImage = new Image("file:PPLogo.png");
+	    	objPrimaryStage.getIcons().add(logoImage);
+    	}
     }
     
     private void setProgramHeightToUserScreen() {
