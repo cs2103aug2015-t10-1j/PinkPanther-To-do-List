@@ -54,6 +54,7 @@ public class PrettyDisplay extends Application {
     private static String STRING_DEFAULT_FEEDBACK = "Input command into the field below";
     private static String STRING_DEFAULT_PROGRAM_TITLE = "PinkPanther: The best to-do list";
     private static String STRING_LOGO_DIRECTORY = "PPLogo.png";
+    private static String STRING_LOGO_DIRECTORY_ALT = "file:PPLogo.png";
     
     //Strings for logging
     private static String STRING_LOGGER_GUI_INSTANTIATED = "GUI successfully instantiated";
@@ -135,7 +136,7 @@ public class PrettyDisplay extends Application {
 	    	Image logoImage = new Image(STRING_LOGO_DIRECTORY);
 	    	objPrimaryStage.getIcons().add(logoImage);
     	} catch (Exception e){
-    		Image logoImage = new Image("file:PPLogo.png");
+    		Image logoImage = new Image(STRING_LOGO_DIRECTORY_ALT);
 	    	objPrimaryStage.getIcons().add(logoImage);
     	}
     }
