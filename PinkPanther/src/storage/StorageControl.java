@@ -1,4 +1,4 @@
-/* @@author Brayton */
+/* @@author A0125250W */
 
 package storage;
 
@@ -76,7 +76,7 @@ public class StorageControl {
 	 * @param Void.
 	 * @return	String of the current directory's filepath
 	 */
-	public String setStorageEnvironmentNormal() {
+	public String setEnvironment() {
 		directory = getLatestDirectory();
 		logger.log(Level.FINE, MESSAGE_LOG_START_SET_ENVIRONMENT);
 		
@@ -173,7 +173,7 @@ public class StorageControl {
 		}
 	}
 
-	public ArrayList<Task> loadTaskList(boolean isDone) {
+	public ArrayList<Task> load(boolean isDone) {
 		logger.log(Level.FINE, MESSAGE_LOG_LOADING_TEXTFILES);
 		return taskFile.readFromFile(isDone);
 	}

@@ -11,15 +11,16 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 public class IndexBox extends StackPane{
+	//For styling of the font
 	private static int FONTSIZE_DEFAULT = 13;
 	private static Color[] COLOR_ARRAY_BOX = {(Color.web("D652FF")), Color.web("6495ED"), 
 			(Color.web("51D444")), (Color.web("D4573A")), (Color.POWDERBLUE)};
+	private static String FONT_TYPE = "Tahoma";
 
+	//These dimensions size the IndexBoxes correctly
 	private static int BOX_WIDTH_HEIGHT_DEFAULT = 20;
 	private static int BOX_ARC_SIZE_DEFAULT = 4;
 	private static float BOX_STROKE_SIZE_DEFAULT = 2.0f;
-	private static String FONT_TYPE = "Tahoma";
-	
 	
 	//Constructor for colored box according to task type
 	public IndexBox(int index, TaskType inputTaskType) {

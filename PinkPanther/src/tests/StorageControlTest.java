@@ -1,4 +1,4 @@
-/* @@author Brayton */
+/* @@author A0125250W */
 
 package tests;
 
@@ -13,7 +13,6 @@ import org.junit.Test;
 
 import com.google.gson.Gson;
 
-import common.Task;
 import storage.StorageControl;
 
 public class StorageControlTest {
@@ -26,7 +25,7 @@ public class StorageControlTest {
 	public void setStorageEnvironmentTest_NonBoundary_NoLatestDirectory() {
 		StorageControl testStorageControl = new StorageControl();
 		
-		assertEquals(testStorageControl.setStorageEnvironmentNormal(), "C:\\PPCalendar");
+		assertEquals(testStorageControl.setEnvironment(), "C:\\PPCalendar");
 		testStorageControl.deleteAllFiles();
 	}
 	
@@ -48,7 +47,7 @@ public class StorageControlTest {
 			e.printStackTrace();
 		}
 		
-		assertEquals(testStorageControl.setStorageEnvironmentNormal(), "C:\\TestTest");
+		assertEquals(testStorageControl.setEnvironment(), "C:\\TestTest");
 		testStorageControl.deleteAllFiles();
 	}
 	
@@ -65,14 +64,14 @@ public class StorageControlTest {
 			e.printStackTrace();
 		}
 		
-		assertEquals(testStorageControl.setStorageEnvironmentNormal(), "C:\\PPCalendar");
+		assertEquals(testStorageControl.setEnvironment(), "C:\\PPCalendar");
 		testStorageControl.deleteAllFiles();
 	}
 	
 	@Test
 	public void changeDirectoryTest_NonBoundary_ValidDirectory() {
 		StorageControl testStorageControl = new StorageControl();
-		testStorageControl.setStorageEnvironmentNormal();
+		testStorageControl.setEnvironment();
 		
 		assertEquals(testStorageControl.changeDirectory("C:\\PinkPantherCalendar"), true);
 		testStorageControl.deleteAllFiles();
@@ -81,7 +80,7 @@ public class StorageControlTest {
 	@Test
 	public void changeDirectoryTest_Boundary_SameAsCurrentDirectory() {
 		StorageControl testStorageControl = new StorageControl();
-		testStorageControl.setStorageEnvironmentNormal();
+		testStorageControl.setEnvironment();
 		
 		assertEquals(testStorageControl.changeDirectory("C:\\PPCalendar"), false);
 		testStorageControl.deleteAllFiles();
@@ -90,7 +89,7 @@ public class StorageControlTest {
 	@Test
 	public void changeDirectoryTest_Boundary_DirectoryExists() {
 		StorageControl testStorageControl = new StorageControl();
-		testStorageControl.setStorageEnvironmentNormal();
+		testStorageControl.setEnvironment();
 		
 		File PPCalendarTest = new File("C:\\TestCalendar");
 		PPCalendarTest.mkdir();
@@ -102,7 +101,7 @@ public class StorageControlTest {
 	@Test
 	public void changeDirectoryTest_Boundary_InvalidDirectory() {
 		StorageControl testStorageControl = new StorageControl();
-		testStorageControl.setStorageEnvironmentNormal();
+		testStorageControl.setEnvironment();
 		
 		assertEquals(testStorageControl.changeDirectory("testing"), false);
 		testStorageControl.deleteAllFiles();
