@@ -185,7 +185,7 @@ public class Task {
 	}
 	
 	public String toString(){
-		DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern("d/M/yy");
+		DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern("d/M/yyyy");
 		DateTimeFormatter timeformatter = DateTimeFormatter.ofPattern("h.mma");
 		if(type==TaskType.FLOATING){
 			return name;
