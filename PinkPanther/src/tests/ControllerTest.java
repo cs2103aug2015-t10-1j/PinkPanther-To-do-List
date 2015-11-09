@@ -79,8 +79,8 @@ public class ControllerTest {
 	@Test
 	public void editTaskPositive(){
 		controller.addCommand("edit 7 nov,1");
-		assertEquals(state.getInputBoxText(),"do homework, 2.00PM to 5.00PM, 7/11/15");
-		assertEquals(Display.showFeedBack(),"Edit the task in text box, then press ENTER.");
+		assertEquals(state.getInputBoxText(),"do homework, 2.00PM to 5.00PM, 7/11/2015");
+		assertEquals(Display.showFeedBack(),"Make changes to the task in text box, then press ENTER.");
 	}
 	
 	@Test
