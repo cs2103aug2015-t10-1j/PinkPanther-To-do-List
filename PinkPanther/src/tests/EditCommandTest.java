@@ -52,14 +52,4 @@ public class EditCommandTest {
 		testDatedList = testManager.getDated(false);
 		assertEquals(testDatedList.get(LocalDate.of(2014, 11, 19)).toString(), "[" + testModifiedTask.toString() + "]");
 	}
-	
-	@Test
-	public void execute_Boundary_NullPair() {
-		StorageControl testStorageControl = new StorageControl();
-		TaskManager testManager = new TaskManager(testStorageControl);
-		EditCommand testEditCommand = new EditCommand(testManager);
-		Pair<Task, Task> testPair = null;
-		
-		assertEquals(testEditCommand.execute(testPair), false);
-	}
 }
