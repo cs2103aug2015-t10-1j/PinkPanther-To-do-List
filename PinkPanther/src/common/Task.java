@@ -185,7 +185,7 @@ public class Task {
 	}
 	
 	public String toString(){
-		DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern("d/M/yy");
+		DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern("d/M/yyyy");
 		DateTimeFormatter timeformatter = DateTimeFormatter.ofPattern("h.mma");
 		if(type==TaskType.FLOATING){
 			return name;
@@ -225,19 +225,26 @@ public class Task {
 		if(this.getTaskType() == TaskType.FLOATING){
 			return true;
 		} else if(this.getTaskType() == TaskType.DEADLINE){
-			return this.getEndDate().equals(other.getEndDate()) && this.getEndTime().equals(other.getEndTime());
+			boolean sameDate = this.getEndDate().equals(other.getEndDate());
+			if(this.getEndTime() != null){
+				return sameDate && this.getEndTime().equals(other.getEndTime());
+			} 
+			return sameDate;	
 		} else if(this.getTaskType() == TaskType.TODO){
-			return this.getStartDate().equals(other.getStartDate()) && this.getStartTime().equals(other.getStartTime());
+			boolean sameDate = this.getStartDate().equals(other.getStartDate());
+			if(this.getStartTime() != null){
+				return sameDate && this.getStartTime().equals(other.getStartTime());
+			}
+			return sameDate;
 		} else{
 			boolean sameDate = this.getStartDate().equals(other.getStartDate()) && 
 					this.getEndDate().equals(other.getEndDate());
 			if(this.getStartTime() == null && other.getStartTime() == null){
 				return sameDate;
-			}
-			else if(this.getStartTime() != null && other.getStartTime() != null){
+			} else if(this.getStartTime() != null && other.getStartTime() != null){
 				return sameDate && this.getStartTime().equals(other.getStartTime()) &&
 						this.getEndTime().equals(other.getEndTime());
-			}else{
+			} else{
 				return false;
 			}
 		}
