@@ -172,7 +172,7 @@ public class ControllerTest {
 		state.setTitle("Viewing Helpscreen");
 		controller.addCommand("view normal");
 		assertEquals(state.getInputBoxText(),"");
-		assertEquals(Display.showFeedBack(),"Input command into the field above.");
+		assertEquals(Display.showFeedBack(),"Input command into the field below.");
 		assertEquals(state.getTitle(),"                         To-Do List");
 		assertEquals((state.getOverdueList() != null), true);
 	}
@@ -205,6 +205,22 @@ public class ControllerTest {
 		//Floating list should be null as this screen does not show floating lists
 		assertEquals(state.getFloatingList(),null);
 	}
-	
+
+	/* @@author A0122545M */
+	@Test
+	public void test_View_Normal_No_Overdue(){
+		//This test is to check if overdue tasks erroneously appears in normal view
+		Controller newController = new Controller();
+		ProgramState newState = newController.getProgramState();
+		state.setTitle("Random Title");
+		newController.addCommand("add this is a floating task");
+		newController.addCommand("add this is a dated task, tomorrow");
+		newController.addCommand("view normal");
+		assertEquals(newState.getInputBoxText(),"");
+		assertEquals(Display.showFeedBack(),"Input command into the field below.");
+		assertEquals(newState.getTitle(),"                         To-Do List");
+		newController.addCommand("del 7 nov, all");
+		assertEquals(newState.getOverdueList().isEmpty(), true);
+	}
 
 }

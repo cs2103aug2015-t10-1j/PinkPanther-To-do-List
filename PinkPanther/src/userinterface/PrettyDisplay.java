@@ -55,6 +55,12 @@ public class PrettyDisplay extends Application {
     private static String STRING_DEFAULT_PROGRAM_TITLE = "PinkPanther: The best to-do list";
     private static String STRING_LOGO_DIRECTORY = "PPLogo.png";
     
+    //Strings for logging
+    private static String STRING_LOGGER_GUI_INSTANTIATED = "GUI successfully instantiated";
+    private static String STRING_LOGGER_PROGRAM_STATE_UNPACKED = "All tasks unpacked from ProgramState";
+    private static String STRING_LOGGER_ATTEMPT_EXECUTE = "Attempting to get Controller to execute command: ";
+    private static String STRING_LOGGER_EXIT_CALLED = "Exit command called";
+    
     //Default values for objects' positions and sizes in program window
     private static int HEIGHT_STAGE_DEFAULT = 1020;
     private static int OFFSET_SCREEN_PROGRAM_BUFFER = 10;
@@ -99,7 +105,7 @@ public class PrettyDisplay extends Application {
     	mainController = new Controller();
     	implementSceneObjects();
         setStage(primaryStage);
-        logger.log(Level.INFO, "GUI successfully instantiated");
+        logger.log(Level.INFO, STRING_LOGGER_GUI_INSTANTIATED);
     }
     
     private void implementSceneObjects(){
@@ -242,7 +248,7 @@ public class PrettyDisplay extends Application {
         	currentYPos = unpackDatedTasks(grid, currTaskIndex, currentYPos);
     	}
 
-        logger.log(Level.INFO, "All tasks unpacked from ProgramState");
+        logger.log(Level.INFO, STRING_LOGGER_PROGRAM_STATE_UNPACKED);
     }
     
     //Function requests for the list of Overdue tasks from ProgramState and adds them to calendar grid
@@ -377,7 +383,7 @@ public class PrettyDisplay extends Application {
     //Function calls Logic to process a command by user or this class itself
     private void callControllerToAddCommand() {
     	String command = userTextField.getText();
-        logger.log(Level.INFO, "Attempting to get Controller to execute command: " + command);
+        logger.log(Level.INFO, STRING_LOGGER_ATTEMPT_EXECUTE + command);
     	mainController.addCommand(command);
     	setUserFeedback();
     	calendarGrid.getChildren().clear();
@@ -625,7 +631,7 @@ public class PrettyDisplay extends Application {
 	}
 
 	private void closeWindow() {
-        logger.log(Level.INFO, "Exit command called");
+        logger.log(Level.INFO, STRING_LOGGER_EXIT_CALLED);
 		Platform.exit();
 	}
 
