@@ -165,5 +165,46 @@ public class ControllerTest {
 		assertEquals(Display.showFeedBack(),"Invalid view range specified!");
 	}
 	
+	/* @@author A0122545M */
+	@Test
+	public void test_Controller_Return_To_Main_Calendar_Shortcut(){
+		//This tests if Main Calendar can be displayed correctly by a call to controller
+		state.setTitle("Viewing Helpscreen");
+		controller.addCommand("view normal");
+		assertEquals(state.getInputBoxText(),"");
+		assertEquals(Display.showFeedBack(),"Input command into the field above.");
+		assertEquals(state.getTitle(),"                         To-Do List");
+		assertEquals((state.getOverdueList() != null), true);
+	}
+	
+	/* @@author A0122545M */
+	@Test
+	public void test_Controller_View_All_Calendar_Shortcut(){
+		//This test checks if View All mode is implemented correctly, and overdue tasks should be displayed
+		for (int i=0; i<10; i++){
+			state.setTitle("Random scene name");
+			controller.addCommand("add this is an overdue task" + i);
+			controller.addCommand("view all");
+			assertEquals(state.getInputBoxText(),"");
+			assertEquals(Display.showFeedBack(),"Input 'view normal' to return to main calendar.");
+			assertEquals(state.getTitle(),"              ● Viewing: All Tasks ●");
+			assertEquals((state.getOverdueList() != null), true);
+		}
+	}
+	
+	/* @@author A0122545M */
+	@Test
+	public void test_View_Overdue_Mode(){
+		//This test is to check if program will change to Overdue mode correctly
+		state.setTitle("Viewing Helpscreen");
+		controller.addCommand("add this is a floating task");
+		controller.addCommand("view overdue");
+		assertEquals(state.getInputBoxText(),"");
+		assertEquals(Display.showFeedBack(),"Input 'view normal' to return to main calendar.");
+		assertEquals(state.getTitle(),"              ● Viewing: Overdue Tasks ●");
+		//Floating list should be null as this screen does not show floating lists
+		assertEquals(state.getFloatingList(),null);
+	}
+	
 
 }
