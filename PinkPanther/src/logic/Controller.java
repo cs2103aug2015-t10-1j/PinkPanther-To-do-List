@@ -27,7 +27,7 @@ public class Controller {
 	
 	private static final String MESSAGE_CHANGE_VIEW = "Input 'view normal' to return to main calendar.";
 	private static final String MESSAGE_INVALID_DATE_RANGE = "Invalid view range specified!";
-	private static final String MESSAGE_EDIT = "Edit the task in text box, then press ENTER.";
+	private static final String MESSAGE_EDIT = "Make changes to the task in text box, then press ENTER.";
 	private static final String MESSAGE_UNRECOGNISED_COMMAND = "Unrecognized command. Press F2 for Help Screen.";
 	private static final String MESSAGE_CLEAR = "All tasks have been cleared.";
 	private static final String MESSAGE_INPUT_INSTRUCTION = "Input command into the field above.";

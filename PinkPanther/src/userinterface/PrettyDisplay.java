@@ -34,7 +34,7 @@ public class PrettyDisplay extends Application {
     private int currentStageHeight = HEIGHT_STAGE_DEFAULT;
     
     //Instantiated objects that GUI uses and needs to point to at various instances
-	Text sceneTitle = new Text(DEFAULT_SCENE_TITLE);
+	Text sceneTitle = new Text(TITLE_CALENDAR_SCENE);
     Controller mainController;
     GridPane calendarGrid;
     GridPane programMainGrid;
@@ -48,7 +48,8 @@ public class PrettyDisplay extends Application {
     HelpScreen helpScreen = new HelpScreen();
     
     //Default strings used in various instances
-    private static String DEFAULT_SCENE_TITLE = "                         To-Do List";
+    private static String TITLE_CALENDAR_SCENE = "                         To-Do List";
+    private static String TITLE_HIDDEN_CALENDAR = "   Crouching Tiger; Hidden Calendar";
     private static String STRING_INVALID_COMMAND = "Unrecognized command. Press PAGE_UP for Help Screen.";
     private static String STRING_DEFAULT_FEEDBACK = "Input command into the field below";
     private static String STRING_DEFAULT_PROGRAM_TITLE = "PinkPanther: The best to-do list";
@@ -220,7 +221,7 @@ public class PrettyDisplay extends Application {
         try{
         	sceneTitle.setText(programState.getTitle());
         } catch (NullPointerException e) {
-        	sceneTitle.setText(DEFAULT_SCENE_TITLE);
+        	sceneTitle.setText(TITLE_CALENDAR_SCENE);
         }
         
     	programState = mainController.getProgramState();
@@ -246,7 +247,7 @@ public class PrettyDisplay extends Application {
     
     //Function requests for the list of Overdue tasks from ProgramState and adds them to calendar grid
     private int displayNumOverdueTasks(GridPane grid, int currTaskIndex, int currentYPos) {
-		if (programState.getTitle().equals(DEFAULT_SCENE_TITLE)) {
+		if (programState.getTitle().equals(TITLE_CALENDAR_SCENE)) {
 	    	SortedMap<LocalDate,ArrayList<Task>> overdueList = programState.getOverdueList();
 	    	if (overdueList != null) {
 	    		grid.add(new TransparentCircle(), POSITION_DEFAULT_X_CENTRE, currentYPos++);
@@ -616,7 +617,7 @@ public class PrettyDisplay extends Application {
     private void hideCalendar(Stage stage) {
 		if (currentState != CurrentState.VIEWING_HELPSCREEN) {
 	    stage.setHeight(HEIGHT_HIDDEN_CALENDAR);
-	    sceneTitle.setText("   Crouching Tiger; Hidden Calendar");
+	    sceneTitle.setText(TITLE_HIDDEN_CALENDAR);
 	    calendarScrollPane.setDisable(true);
 	    calendarScrollPane.setVvalue(0);
 		currentState = CurrentState.VIEWING_HIDDEN;
