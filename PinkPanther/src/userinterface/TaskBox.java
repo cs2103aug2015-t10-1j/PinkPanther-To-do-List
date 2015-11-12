@@ -115,8 +115,8 @@ public class TaskBox extends StackPane{
 		int currRectYPos = 1;
 		if (numOfColumnsName > 1 && inputTask.getTaskType() != TaskType.FLOATING) {
 			Rectangle box = createTaskHolderBox(inputTaskType);
-			grid.add(box, POSITION_DEFAULT_Y_COORD, currRectYPos++);
-			grid.add(timeSpanBoxes, POSITION_TIMESPAN_START_BOX, currRectYPos -1);
+			grid.add(box, POSITION_DEFAULT_Y_COORD, (currRectYPos) + numOfColumnsName);
+			grid.add(timeSpanBoxes, POSITION_TIMESPAN_START_BOX, (currRectYPos) + numOfColumnsName);
 		} else {
 			grid.add(timeSpanBoxes, POSITION_TIMESPAN_START_BOX, POSITION_DEFAULT_Y_COORD);
 		}

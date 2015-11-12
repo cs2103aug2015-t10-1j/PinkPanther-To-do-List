@@ -1,6 +1,6 @@
 /* @@author A0121585H */
 
-package tests;
+package testcases.testFiles;
 import logic.TaskManager;
 import storage.StorageControl;
 

@@ -1,5 +1,5 @@
 /* @@author A0126473E */
-package tests;
+package testcases.testFiles;
 
 import static org.junit.Assert.*;
 

@@ -1,6 +1,6 @@
 /* @@author A0121585H */
 
-package tests;
+package testcases;
 import logic.Controller;
 
 import static org.junit.Assert.*;

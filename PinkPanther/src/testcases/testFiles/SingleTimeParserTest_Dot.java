@@ -1,6 +1,6 @@
 /* @@author A0125250W */
 
-package tests;
+package testcases.testFiles;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
